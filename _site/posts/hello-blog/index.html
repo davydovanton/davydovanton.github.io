@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="fikys.github.io : " />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../../stylesheets/stylesheet.css">
+
+    <title>Философия блога</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <!-- <a id="forkme_banner" href="https://github.com/fikys">View on GitHub</a> -->
+
+          <a href="/"><h1 id="project_title">Антон Давыдов</h1></a>
+          <h2 id="project_tagline"></h2>
+
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+
+        <p>Любая вещь, которую делаю, я пытаюсь наделить сводом правил. Эти правила или законы, или постулаты определяют философию этой деятельности. Философия отвечает за мелкие вопросы, за стратегические решения, за то как делать и почему делать. И при этом это не подробная спецификация, а лишь небольшой свод высказываний или умозаключений, которые обычно имеют обширный характер и могут быть применимы в разных сферах деятельности и задачах.</p>
+
+<h2>Список правил для этого блога</h2>
+
+<ul>
+<li>Избыточность плоха.</li>
+<li>Эпицентр блога это пост, а не дизайн.</li>
+<li>Обратная связь имеет значение, но в Twitter или Google+.</li>
+</ul>
+
+
+<p><strong>Наследуется от Python</strong>:</p>
+
+<ul>
+<li>Разреженное лучше, чем плотное.</li>
+<li>Читаемость имеет значение.</li>
+<li>При этом практичность важнее безупречности.</li>
+<li>Если реализацию сложно объяснить — идея плоха.</li>
+<li>Если реализацию легко объяснить — идея, возможно, хороша.</li>
+</ul>
+
+
+<h3>Избыточность</h3>
+
+<p>Информация в сети избыточна. Это не секрет, что один и тот же пост публикуется на разных площадках и переводится на разные языки. Это возможно хорошо. Разная аудитория получает доступ к информации. Но по большему счету избыточность это всегда плохо - кто автор? зачем это тут? на поисковый запрос выдается одно и то же много раз. И тп.
+И по этому в этом блоге не будет чистых переводов или ctrl-c/v целых статей из сети. Но при этом я оставляю за собой право ссылаться, делать более подробные ответы на статьи и цитировать большие фрагменты других авторов.</p>
+
+<h3>Дизайн</h3>
+
+<p>Дизайн важен всегда. Дизайн создает первое впечатление и многое, многое. Но править его следует только после создания информации.</p>
+
+<h3>Этот дзен на весь путь проекта?</h3>
+
+<p>Нет. Философия проекта может меняться. Это плохо, но изменения ключ к совершенству. Рефакторинг сделал из обезьяны человека.</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="k">def</span> <span class="nf">show</span>
+  <span class="vi">@widget</span> <span class="o">=</span> <span class="no">Widget</span><span class="p">(</span><span class="n">params</span><span class="o">[</span><span class="ss">:id</span><span class="o">]</span><span class="p">)</span>
+  <span class="n">respond_to</span> <span class="k">do</span> <span class="o">|</span><span class="nb">format</span><span class="o">|</span>
+    <span class="nb">format</span><span class="o">.</span><span class="n">html</span> <span class="c1"># show.html.erb</span>
+    <span class="nb">format</span><span class="o">.</span><span class="n">json</span> <span class="p">{</span> <span class="n">render</span> <span class="ss">json</span><span class="p">:</span> <span class="vi">@widget</span> <span class="p">}</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+
+
+
+
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p>Hosted by <a href="http://pages.github.com">GitHub</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
