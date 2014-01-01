@@ -1,3 +1,6 @@
+name: Your Blog's Name
+description: A description for your blog
+url: http://fikys.github.io
 markdown: rdiscount
 pygments: true
 permalink: /posts/:title
