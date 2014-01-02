@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
-		<title>Your Blog&#39;s Name</title>
-		<description>A description for your blog</description>
+		<title>require &#39;brain&#39;</title>
+		<description>Блог о Ruby и прочих технологиях</description>
 		<link>http://fikys.github.io</link>
 		<atom:link href="http://fikys.github.io/feed.xml" rel="self" type="application/rss+xml" />
 		

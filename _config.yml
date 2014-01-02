@@ -1,5 +1,5 @@
-name: Your Blog's Name
-description: A description for your blog
+name: require 'brain'
+description: Блог о Ruby и прочих технологиях
 url: http://fikys.github.io
 markdown: rdiscount
 pygments: true
