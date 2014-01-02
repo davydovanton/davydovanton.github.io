@@ -4,4 +4,3 @@ url: http://fikys.github.io
 markdown: rdiscount
 pygments: true
 permalink: /posts/:title
-comments: true
