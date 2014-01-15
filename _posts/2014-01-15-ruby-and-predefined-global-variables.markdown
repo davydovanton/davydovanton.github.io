@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Ruby и special/predefined variables"
+title: "Ruby и special/predefined variables"
 ---
 
 Не так давно, я обнаружил интересный пример, который выглядел примерно так:
