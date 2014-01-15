@@ -8,7 +8,7 @@
 		
 			<item>
 				<title>Ruby и special/predefined variables</title>
-				<description>&lt;p&gt;Не так давно, я обнаружил интересный пример, который выглядел примерно так:&lt;/p&gt;
+				<description>&lt;p&gt;Не так давно я обнаружил интересный пример, который выглядел примерно так:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;test string in irb&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/irb/&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$&amp;amp;&lt;/span&gt;
@@ -16,9 +16,9 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Так как до этого я не часто встречался с подобными &quot;глобальными&quot; переменными, я заинтересовался этим примером и захотел решил выяснить, что же это за глобальные переменные.
-Первым делом, я решил узнать, как они называются и где их найти, так как, где есть одна, там есть и еще. Спустя несколько минут, стадо ясно, что это так называемые &quot;special variables&quot;. Не долго думая и открыв google, просмотрев пару тройку результатов, стало ясно, что кроме списка этих переменных ничего особо нет. Это не сильно меня обрадовало и стало понятно, что настало время открыть репозитарий ruby и начать искать в нем. Так же очень помогла одна не без известная &lt;a href=&quot;http://patshaughnessy.net/ruby-under-a-microscope&quot;&gt;книга&lt;/a&gt;.
-Как оказалось, ruby создает несколько специальных переменных, в зависимости от откружения, в котором запускаются программы, или же от действий, которые были выполены ранее. Кстати, это не совсем глобальные перменные, в этом можно легко убедиться, рассмотрев простой пример:&lt;/p&gt;
+&lt;p&gt;Так как до этого я не часто встречался с подобными &quot;глобальными&quot; переменными, пример заинтересовал меня и захотелось выяснить, что же это за переменные.
+Первым делом, я решил узнать, как они называются и где их можно найти. Спустя несколько минут, стало ясно, что это так называемые &quot;special variables&quot;. Не долго думая и открыв google, просмотрев пару тройку результатов, стало ясно, что кроме списка этих переменных ничего особо нет. Это не сильно меня обрадовало и стало понятно, что пришло время открыть репозитарий ruby и начать искать в нем. Так же мне очень помогла одна не без известная &lt;a href=&quot;http://patshaughnessy.net/ruby-under-a-microscope&quot;&gt;книга&lt;/a&gt;.
+Как оказалось, ruby создает несколько специальных переменных, в зависимости от откружения, в котором запускаются программы, или в зависимости от действий, которые были выполены ранее. Кстати, это не совсем глобальные перменные, в чем легко можно убедиться, рассмотрев простой пример:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;test&lt;/span&gt;
   &lt;span class=&quot;s2&quot;&gt;&amp;quot;test string in irb&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/test/&lt;/span&gt;
@@ -34,8 +34,8 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Как видно из примера, в каждом scope (main и метода), &quot;глобальная&quot; переменная отличается. Любой адекватный человек спросит: как такое, тысяча чертей, возможно? На самом деле все довольно простой, но, для полного понимания, начать придется с основ. Как многие знают, начиная с верисии 1.9 в ruby была добавлена виртуальная машина или YARV или же &lt;a href=&quot;http://atdot.net/yarv/&quot;&gt;yet another ruby virtual machine&lt;/a&gt;, называйте как хотите суть одна и та же. Смысл в том, что каждый раз, при запуске, YARV так же создается особый стек, для локальных переменных. В этом стеке указываются все локальные переменные, для каждого scope. Разделение scope-ов происходит с помощью специальной точки или указателя - environment point (далее EP). Так же, в стеке, перед каждой EP, создается специальная переменная svar, которая как раз и указывает на таблицу специальных символов. Поэтому для каждого scope могут быть свои значения спец символа, что мы видели в примере выше.
-Но самое интересное, что у обычного блока и у места, где он будет вызван scope одинаковые, в чем можно легко убедиться благодаря следующему примеру:&lt;/p&gt;
+&lt;p&gt;Как видно из примера, в каждом scope (main и метода), &quot;глобальная&quot; переменная отличается. Любой адекватный человек спросит: как такое, тысяча чертей, возможно? На самом деле все довольно простой, но, для полного понимания, начать придется с основ. Как многие знают, начиная с верисии 1.9 в ruby была добавлена виртуальная машина или YARV или же &lt;a href=&quot;http://atdot.net/yarv/&quot;&gt;yet another ruby virtual machine&lt;/a&gt;, называйте как хотите суть одна и та же. Смысл в том, что каждый раз, при запуске, YARV так же создает особый стек, для локальных переменных. В этом стеке указываются абсолютно все локальные переменные, свои для каждого scope. Разделение scope-ов происходит с помощью специальной точки или указателя - environment point (далее EP). Так же, в стеке, перед каждой EP, создается специальная переменная svar, которая как раз и указывает на таблицу специальных символов. Именно из-за этого для каждого scope могут быть свои значения специальных символа, что мы видели в примере выше.
+Но самое интересное, что у обычного блока и у места, где он будет вызван, scope одинаковый, в чем можно легко убедиться благодаря такому примеру:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;test string in irb&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/irb/&lt;/span&gt;
 
@@ -137,7 +137,7 @@
 
 &lt;h5&gt;$$&lt;/h5&gt;
 
-&lt;p&gt;Ну а эта переменная возвращает номер процесса, под которым выполняется скрипт.&lt;/p&gt;
+&lt;p&gt;Переменная возвращает номер процесса, под которым выполняется скрипт.&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;vg&quot;&gt;$$&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;#=&amp;gt; 33630 &lt;/span&gt;
@@ -150,8 +150,8 @@
 
 &lt;hr /&gt;
 
-&lt;p&gt;Так где же определены эти переменные в исходном коде ruby? Как оказалось, все не так сложно, как кажется. Определенны эти переменные в файле &lt;a href=&quot;https://github.com/ruby/ruby/blob/v2_1_0/parse.y#L7950&quot;&gt;parse.y&lt;/a&gt; примерно на 7950-той строке (да да, файл не очень большой, всего 11.5к строк кода =\ ). Для тех, кто не в курсе, файл parse.y - грамматический файл интерпритатора, благодаря которому происходит разбиение написанного вами кода на токены(лексемы, указатели), которые в последующем преобразуются в AST структуру, а затем в YARV структуру, ну а дальше в машинный код, который в последующем и будет выполняется.
-Как не трудно заметить, case функция ищет совпадение символа &quot;$&quot; и спец символов (блок case), после чего передает их функции set_yylval_name:&lt;/p&gt;
+&lt;p&gt;Так где же определены эти переменные в исходном коде ruby? Как оказалось, все не так сложно, как кажется. Определенны эти переменные в файле &lt;a href=&quot;https://github.com/ruby/ruby/blob/v2_1_0/parse.y#L7950&quot;&gt;parse.y&lt;/a&gt; примерно на 7950-той строке (да да, файл не очень большой, всего 11.5к строк кода). Для тех, кто не в курсе, parse.y - грамматический файл интерпритатора, благодаря которому происходит разбиение написанного вами кода на токены (лексемы/указатели), которые в последующем преобразуются в AST структуру, а затем в YARV структуру, ну а дальше в машинный код, который в последующем и будет выполняется.
+Как не трудно заметить, case функция ищет совпадение символа &quot;$&quot; и специальных символов (блок case), после чего передает их функции set_yylval_name:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;c&quot;&gt;&lt;span class=&quot;mi&quot;&gt;7965&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39;~&amp;#39;&lt;/span&gt;:                &lt;span class=&quot;cm&quot;&gt;/* $~: match-data */&lt;/span&gt;
 &lt;span class=&quot;mi&quot;&gt;7966&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39;*&amp;#39;&lt;/span&gt;:                &lt;span class=&quot;cm&quot;&gt;/* $*: argv */&lt;/span&gt;
@@ -181,7 +181,7 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;И в завершение, следует упомянуть специальный файл - &lt;a href=&quot;https://github.com/ruby/ruby/blob/v2_1_0/lib/English.rb&quot;&gt;English.rb&lt;/a&gt; в котором прописаны алиасы для специальных переменных, благодаря чему можно использовать более понятные переменные, нежели чем $$, $&amp;amp; и так далее(пример из документации):&lt;/p&gt;
+&lt;p&gt;И в завершение, следует упомянуть особый файл - &lt;a href=&quot;https://github.com/ruby/ruby/blob/v2_1_0/lib/English.rb&quot;&gt;English.rb&lt;/a&gt;, в котором прописаны алиасы для специальных переменных, благодаря чему можно использовать данные переменные намного понятнее, нежели чем использование $$, $&amp;amp; и так далее:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;waterbuffalo&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=~&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/buff/&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
