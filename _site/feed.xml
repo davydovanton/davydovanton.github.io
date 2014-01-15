@@ -7,58 +7,199 @@
 		<atom:link href="http://fikys.github.io/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
-				<title>Начало</title>
-				<description>&lt;p&gt;OOP
-  - что такое ООП
-  - ООП в ruby (примеры, вызовы классов)
-  - сахар, геттеры/сеттеры
-  - дерево модулей&lt;/p&gt;
+				<title>Ruby и special/predefined variables</title>
+				<description>&lt;p&gt;Не так давно, я обнаружил интересный пример, который выглядел примерно так:&lt;/p&gt;
 
-&lt;h1&gt;Jekly&lt;/h1&gt;
-
-&lt;h2&gt;Test1&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;test&lt;/li&gt;
-&lt;li&gt;test&lt;/li&gt;
-&lt;li&gt;test&lt;/li&gt;
-&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;test string in irb&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/irb/&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$&amp;amp;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; &amp;quot;irb&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;&lt;strong&gt;RubyTest&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;Так как до этого я не часто встречался с подобными &quot;глобальными&quot; переменными, я заинтересовался этим примером и захотел решил выяснить, что же это за глобальные переменные.
+Первым делом, я решил узнать, как они называются и где их найти, так как, где есть одна, там есть и еще. Спустя несколько минут, стадо ясно, что это так называемые &quot;special variables&quot;. Не долго думая и открыв google, просмотрев пару тройку результатов, стало ясно, что кроме списка этих переменных ничего особо нет. Это не сильно меня обрадовало и стало понятно, что настало время открыть репозитарий ruby и начать искать в нем. Так же очень помогла одна не без известная &lt;a href=&quot;http://patshaughnessy.net/ruby-under-a-microscope&quot;&gt;книга&lt;/a&gt;.
+Как оказалось, ruby создает несколько специальных переменных, в зависимости от откружения, в котором запускаются программы, или же от действий, которые были выполены ранее. Кстати, это не совсем глобальные перменные, в этом можно легко убедиться, рассмотрев простой пример:&lt;/p&gt;
 
-&lt;ul&gt;
-&lt;li&gt;test&lt;/li&gt;
-&lt;li&gt;test&lt;/li&gt;
-&lt;li&gt;test&lt;/li&gt;
-&lt;li&gt;test&lt;/li&gt;
-&lt;li&gt;test&lt;/li&gt;
-&lt;/ul&gt;
-
-
-&lt;h3&gt;Test2&lt;/h3&gt;
-
-&lt;p&gt;test&lt;/p&gt;
-
-&lt;p&gt;test&lt;/p&gt;
-
-&lt;h3&gt;Test3&lt;/h3&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;show&lt;/span&gt;
-  &lt;span class=&quot;vi&quot;&gt;@widget&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Widget&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;respond_to&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;html&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# show.html.erb&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;render&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@widget&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;test&lt;/span&gt;
+  &lt;span class=&quot;s2&quot;&gt;&amp;quot;test string in irb&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/test/&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;$&amp;amp; in test method &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;vg&quot;&gt;$&amp;amp;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;s2&quot;&gt;&amp;quot;test string in irb&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/irb/&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;$&amp;amp; in main &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;vg&quot;&gt;$&amp;amp;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; &amp;quot;irb&amp;quot;&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt; 
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; &amp;quot;test&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Как видно из примера, в каждом scope (main и метода), &quot;глобальная&quot; переменная отличается. Любой адекватный человек спросит: как такое, тысяча чертей, возможно? На самом деле все довольно простой, но, для полного понимания, начать придется с основ. Как многие знают, начиная с верисии 1.9 в ruby была добавлена виртуальная машина или YARV или же &lt;a href=&quot;http://atdot.net/yarv/&quot;&gt;yet another ruby virtual machine&lt;/a&gt;, называйте как хотите суть одна и та же. Смысл в том, что каждый раз, при запуске, YARV так же создается особый стек, для локальных переменных. В этом стеке указываются все локальные переменные, для каждого scope. Разделение scope-ов происходит с помощью специальной точки или указателя - environment point (далее EP). Так же, в стеке, перед каждой EP, создается специальная переменная svar, которая как раз и указывает на таблицу специальных символов. Поэтому для каждого scope могут быть свои значения спец символа, что мы видели в примере выше.
+Но самое интересное, что у обычного блока и у места, где он будет вызван scope одинаковые, в чем можно легко убедиться благодаря следующему примеру:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;test string in irb&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/irb/&lt;/span&gt;
+
+&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;times&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;s2&quot;&gt;&amp;quot;test string in irb&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/test/&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;$&amp;amp; in block &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;vg&quot;&gt;$&amp;amp;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;$&amp;amp; in main &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;vg&quot;&gt;$&amp;amp;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ruby&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rb&lt;/span&gt; 
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;$&amp;amp; in block test&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;$&amp;amp; in block test&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;$&amp;amp; in main test&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;На самом деле это логичное поведение, ибо замыкания никто не отменял.
+Как я уже говорил, таких переменных &lt;a href=&quot;http://readruby.io/globals&quot;&gt;много&lt;/a&gt;, но расскажу я о самых интересных(естественно для себя):&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h5&gt;$&amp;amp;&lt;/h5&gt;
+
+&lt;p&gt;Переменная, с которой начался наш рассказ. Хранит, как вы уже догадались, результат последнего совпадения регулярного выражения.&lt;/p&gt;
+
+&lt;h5&gt;$1 $2 $3 ...&lt;/h5&gt;
+
+&lt;p&gt;Думаю многим знакомая похожая переменная из регулярных выражений. Хотя, кого я обманываю? Это та же самая перменная, которая хранит совпадения из скобок:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;test string in irb&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/(irb)/&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$1&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; &amp;quot;irb&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h5&gt;$~&lt;/h5&gt;
+
+&lt;p&gt;Содержит объект класса MatchData, соответствующий последнему совпадению.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;test string in irb&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/(irb)/&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$~&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; #&amp;lt;MatchData &amp;quot;irb&amp;quot; 1:&amp;quot;irb&amp;quot;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$~&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; &amp;quot;irb&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$~&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_a&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; [&amp;quot;irb&amp;quot;, &amp;#39;irb&amp;#39;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h5&gt;$+&lt;/h5&gt;
+
+&lt;p&gt;Содержит значение последней круглой скобки из последнего совпадения:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;test string in irb&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/irb/&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$~&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; #&amp;lt;MatchData &amp;quot;irb&amp;quot; 1:&amp;quot;irb&amp;quot;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$+&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; nil&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&amp;quot;test in irb&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/(test) (in) (irb)/&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$~&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; #&amp;lt;MatchData &amp;quot;test in irb&amp;quot; 1:&amp;quot;test&amp;quot; 2:&amp;quot;in&amp;quot; 3:&amp;quot;irb&amp;quot;&amp;gt; &lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$+&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; &amp;quot;irb&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h5&gt;$`&lt;/h5&gt;
+
+&lt;p&gt;Содержит все то, что не совпало в последнем регулярном выражении:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;test string in irb&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/irb/&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$`&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; &amp;quot;test string in&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h5&gt;$!&lt;/h5&gt;
+
+&lt;p&gt;Содержит последнее вызванное исключение:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;rescue&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$!&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; #&amp;lt;ZeroDivisionError: divided by 0&amp;gt; &lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h5&gt;$@&lt;/h5&gt;
+
+&lt;p&gt;Ну а эта переменная содержит массив со всеми trace stack-ами из последнего исключения:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;rescue&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$@&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; [&amp;quot;&amp;lt;main&amp;gt;:4:in `/&amp;#39;&amp;quot;, &amp;quot;&amp;lt;main&amp;gt;:4:in `/&amp;#39;&amp;quot;, &amp;quot;(irb):98:in `irb_binding&amp;#39;&amp;quot;, ... ]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h5&gt;$*&lt;/h5&gt;
+
+&lt;p&gt;Эта переменная равносильна переменной ARGV, думаю этим все сказанно.&lt;/p&gt;
+
+&lt;h5&gt;$$&lt;/h5&gt;
+
+&lt;p&gt;Ну а эта переменная возвращает номер процесса, под которым выполняется скрипт.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;vg&quot;&gt;$$&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; 33630 &lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;sb&quot;&gt;`ps aux | grep irb`&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; anton           33630   0.0  0.3  2470520  24084 s008  S+    2Jan14   0:01.24 irb   &lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Так где же определены эти переменные в исходном коде ruby? Как оказалось, все не так сложно, как кажется. Определенны эти переменные в файле &lt;a href=&quot;https://github.com/ruby/ruby/blob/v2_1_0/parse.y#L7950&quot;&gt;parse.y&lt;/a&gt; примерно на 7950-той строке (да да, файл не очень большой, всего 11.5к строк кода =\ ). Для тех, кто не в курсе, файл parse.y - грамматический файл интерпритатора, благодаря которому происходит разбиение написанного вами кода на токены(лексемы, указатели), которые в последующем преобразуются в AST структуру, а затем в YARV структуру, ну а дальше в машинный код, который в последующем и будет выполняется.
+Как не трудно заметить, case функция ищет совпадение символа &quot;$&quot; и спец символов (блок case), после чего передает их функции set_yylval_name:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;c&quot;&gt;&lt;span class=&quot;mi&quot;&gt;7965&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39;~&amp;#39;&lt;/span&gt;:                &lt;span class=&quot;cm&quot;&gt;/* $~: match-data */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7966&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39;*&amp;#39;&lt;/span&gt;:                &lt;span class=&quot;cm&quot;&gt;/* $*: argv */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7967&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39;$&amp;#39;&lt;/span&gt;:                &lt;span class=&quot;cm&quot;&gt;/* $$: pid */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7968&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39;?&amp;#39;&lt;/span&gt;:                &lt;span class=&quot;cm&quot;&gt;/* $?: last status */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7969&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39;!&amp;#39;&lt;/span&gt;:                &lt;span class=&quot;cm&quot;&gt;/* $!: error string */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7970&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39;@&amp;#39;&lt;/span&gt;:                &lt;span class=&quot;cm&quot;&gt;/* $@: error position */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7971&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39;/&amp;#39;&lt;/span&gt;:                &lt;span class=&quot;cm&quot;&gt;/* $/: input record separator */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7972&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39;\\&amp;#39;&lt;/span&gt;:               &lt;span class=&quot;cm&quot;&gt;/* $\: output record separator */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7973&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39;;&amp;#39;&lt;/span&gt;:                &lt;span class=&quot;cm&quot;&gt;/* $;: field separator */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7974&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;:                &lt;span class=&quot;cm&quot;&gt;/* $,: output field separator */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7975&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39;.&amp;#39;&lt;/span&gt;:                &lt;span class=&quot;cm&quot;&gt;/* $.: last read line number */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7976&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39;=&amp;#39;&lt;/span&gt;:                &lt;span class=&quot;cm&quot;&gt;/* $=: ignorecase */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7977&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;:&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $:: load path */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7978&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39;&amp;lt;&amp;#39;&lt;/span&gt;:                &lt;span class=&quot;cm&quot;&gt;/* $&amp;lt;: reading filename */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7979&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39;&amp;gt;&amp;#39;&lt;/span&gt;:                &lt;span class=&quot;cm&quot;&gt;/* $&amp;gt;: default output handle */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7980&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39;\&amp;quot;&amp;#39;&lt;/span&gt;:                &lt;span class=&quot;cm&quot;&gt;/* $&amp;quot;: already loaded files */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7981&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;tokadd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&amp;#39;$&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7982&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;tokadd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7983&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;k&quot;&gt;goto&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gvar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;-------&lt;/span&gt;
+
+&lt;span class=&quot;mi&quot;&gt;7997&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gvar&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7998&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;set_yylval_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rb_intern3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tok&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tokidx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;current_enc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7999&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tGVAR&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;И в завершение, следует упомянуть специальный файл - &lt;a href=&quot;https://github.com/ruby/ruby/blob/v2_1_0/lib/English.rb&quot;&gt;English.rb&lt;/a&gt; в котором прописаны алиасы для специальных переменных, благодаря чему можно использовать более понятные переменные, нежели чем $$, $&amp;amp; и так далее(пример из документации):&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;waterbuffalo&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=~&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/buff/&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# With English:&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;English&amp;quot;&lt;/span&gt;
+
+&lt;span class=&quot;s2&quot;&gt;&amp;quot;waterbuffalo&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=~&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/buff/&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$LOADED_FEATURES&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$POSTMATCH&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$PID&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 
 </description>
-				<pubDate>Sat, 28 Sep 2013 00:00:00 +0400</pubDate>
-				<link>http://fikys.github.io//posts/hello-blog</link>
-				<guid isPermaLink="true">http://fikys.github.io//posts/hello-blog</guid>
+				<pubDate>Wed, 15 Jan 2014 00:00:00 +0400</pubDate>
+				<link>http://fikys.github.io//posts/ruby-and-predefined-global-variables</link>
+				<guid isPermaLink="true">http://fikys.github.io//posts/ruby-and-predefined-global-variables</guid>
 			</item>
 		
 	</channel>
