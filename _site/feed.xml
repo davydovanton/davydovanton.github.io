@@ -7,6 +7,106 @@
 		<atom:link href="http://fikys.github.io/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>Seed файл и вы</title>
+				<description>&lt;ol&gt;
+&lt;li&gt;Введение, описание проблеммы, расказ про веселье&lt;/li&gt;
+&lt;li&gt;разбираем задачу&lt;/li&gt;
+&lt;li&gt;чем пользуемся&lt;/li&gt;
+&lt;li&gt;Пишем&lt;/li&gt;
+&lt;li&gt;Что можно добавить&lt;/li&gt;
+&lt;li&gt;вывод&lt;/li&gt;
+&lt;/ol&gt;
+
+
+&lt;p&gt;Совсем не давно на работе потребовалось заполнить совсем новый проект данными для дальнейшего тестирования и разработки. Конечно же, данные должны просто быть и первое, о чем я подумал, был seed файл, поэтому сегодня мы поговорим именно о нем. Как всем известно данный файл служит для генерации данных в рельсовых приложениях. Вы пишите скрипт, выполняете &lt;code&gt;rake db:seed&lt;/code&gt; и радуетесь жизни. В моем случае данные были типовыми, а именно, нужно было сгенерировать: пользователей, посты и комментарии к этим постам. Я думаю все прекрасно понимают, как все взаимосвязанно, поэтому на этом останавливаться не вижу особого смысла.&lt;/p&gt;
+
+&lt;p&gt;Обычная практика многих людей - задать одинаковые данные для всех типов данных и наплодить их с десяток. Смотрится это обычно как-то так:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;  &lt;span class=&quot;s1&quot;&gt;&amp;#39;Jon&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;ss&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;my@email.org&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;ss&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;12345678&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;password_confirmation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;12345678&amp;#39;&lt;/span&gt;  
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;ss&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;  &lt;span class=&quot;s1&quot;&gt;&amp;#39;My Post&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;ss&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;s1&quot;&gt;&amp;#39;My body&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;comment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;comment&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;times&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;my_user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;my_post&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;my_user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create_post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;my_post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create_comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Но согласитесь, это скучно, банально и задевает чувство прекрасного. Поэтому давайте плюнем на все, и развлечемся создав свой собственный, изменяющийся из раза в раз мир :)&lt;/p&gt;
+
+&lt;p&gt;АТЕНШЕН(!!!исправить!!!): далее будет много рандома, благодаря которому поддерживать все это или искать ошибки становиться все сложнее и сложнее. Поэтому, использование генераторов основанных на рандоме не рекомендуется для продакшена. В крайнем случае использовать аккуратно и с умом.&lt;/p&gt;
+
+&lt;p&gt;Для того, что бы наш мир существовал, нам нужны люди. Наша цель - создать абсолютно разных пользователей, не похожих друг на друга. Конечно же, первое, что всплывает в голову - замечательный гем &lt;a href=&quot;https://github.com/stympy/faker&quot;&gt;faker&lt;/a&gt; который поможет нам генерировать произвольные имена и почтовые адресса для наших пользователей. Но при всем при этом, не будем забывать про нашего админа. Так же, давайте зададим рандомное количество пользователей в интервале от 18 до 25(числа, как вы догадались, могут быть абсолютно любые):&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;admin&lt;/span&gt;
+  &lt;span class=&quot;ss&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;admin&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@my_app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;
+  &lt;span class=&quot;ss&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;12345678&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;password_confirmation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;12345678&amp;#39;&lt;/span&gt;  
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;rnd&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Random&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;user_count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rnd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;18&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;23&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;user_count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;times&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;Faker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:Name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:email&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;Faker&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:Internet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;email&lt;/span&gt;  
+  &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Cобственно я уверен, faker поможет вам сгенерировать почти любую информацию, стоит только открыть доки. Ну а если вам не угодил faker, то существует достаточно &lt;a href=&quot;https://www.ruby-toolbox.com/categories/random_data_generation&quot;&gt;много&lt;/a&gt; других data генераторов.&lt;/p&gt;
+
+&lt;p&gt;Не думаю, что тут что-то было сложно, поэтому пререйдем к постам. Сказать по правде, в нашем проекте посты состояли из строго заданных кусков html-a поэтому тут ничего не оставалось, кроме как делать в лоб. Единственный момент, мы будем выбирать произвольно польователя, что бы от его имени создавать наш пост:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;posts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;ss&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;  &lt;span class=&quot;s1&quot;&gt;&amp;#39;My first Post&amp;#39;&lt;/span&gt;
+    &lt;span class=&quot;ss&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;s1&quot;&gt;&amp;#39;My body&amp;#39;&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;ss&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;  &lt;span class=&quot;s1&quot;&gt;&amp;#39;My second Post&amp;#39;&lt;/span&gt;
+    &lt;span class=&quot;ss&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;s1&quot;&gt;&amp;#39;My body&amp;#39;&lt;/span&gt;    
+  &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# Еще какое-то количество данных для постов ...&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;rnd_user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rnd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;random_user_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rnd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+  &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;random_user_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;posts&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;rand_user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rnd_user&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rnd&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rand_user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;created_post&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rand_user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create_post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+</description>
+				<pubDate>Mon, 10 Mar 2014 00:00:00 +0400</pubDate>
+				<link>http://fikys.github.io//posts/seed-and-you</link>
+				<guid isPermaLink="true">http://fikys.github.io//posts/seed-and-you</guid>
+			</item>
+		
+			<item>
 				<title>IRB и все все все</title>
 				<description>&lt;p&gt;Думаю, каждый, кто так или иначе связан с Ruby и тем более с Rails, хоть раз в жизни использовал irb. Возможности интерактивного ruby шела безграничны, поэтому сегодня я бы хотел поговорить об улучшении или кастомизации, если вам так угодно, вашего irb.&lt;/p&gt;
 
@@ -15,7 +115,7 @@
 
 &lt;p&gt;&lt;img src=&quot;http://fikys.github.io/images/2014/02/irb-and-all-all-all/jruby-irb.png&quot; alt=&quot;jruby in irb&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Дальше, думаю, следует обсудить ключи. Их много, они разные. в документации они все &lt;a href=&quot;http://www.ruby-doc.org/stdlib-2.0/libdoc/irb/rdoc/IRB.html#module-IRB-label-Command+line+options&quot;&gt;есть&lt;/a&gt;. Самые интересные, на мой взляд, - &lt;code&gt;-d&lt;/code&gt; включающий дебаг мод(аналогично &lt;code&gt;ruby -d&lt;/code&gt;) и ключ &lt;code&gt;-I path&lt;/code&gt;, загружающий указанную директорию.&lt;/p&gt;
+&lt;p&gt;Дальше, думаю, следует обсудить ключи. Их много, они разные. В документации они все &lt;a href=&quot;http://www.ruby-doc.org/stdlib-2.0/libdoc/irb/rdoc/IRB.html#module-IRB-label-Command+line+options&quot;&gt;есть&lt;/a&gt;. Самые интересные, на мой взляд, - &lt;code&gt;-d&lt;/code&gt; включающий дебаг мод(аналогично &lt;code&gt;ruby -d&lt;/code&gt;) и ключ &lt;code&gt;-I path&lt;/code&gt;, загружающий указанную директорию.&lt;/p&gt;
 
 &lt;p&gt;Ну а теперь самое интересное: поговорим о конфигурации вашего irb. Для этого необходимо создать &lt;code&gt;*rc&lt;/code&gt; аналогичный &lt;code&gt;.bashrc&lt;/code&gt; или &lt;code&gt;.vimrc&lt;/code&gt;. Существует несколько разновидностей именования этого файла, например: &lt;code&gt;.irbrc&lt;/code&gt;, &lt;code&gt;irb.rc&lt;/code&gt;, &lt;code&gt;_irbrc&lt;/code&gt; или же &lt;code&gt;$irbrc&lt;/code&gt;.&lt;/p&gt;
 
