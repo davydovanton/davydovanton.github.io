@@ -110,7 +110,7 @@
 <span class="o">]</span>
 
 <span class="k">def</span> <span class="nf">rnd_user</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">rnd</span><span class="p">)</span>
-  <span class="n">random_user_id</span> <span class="o">=</span> <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="p">(</span><span class="n">count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+  <span class="n">random_user_id</span> <span class="o">=</span> <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="n">.</span><span class="p">(</span><span class="n">count</span><span class="p">))</span>
   <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">random_user_id</span><span class="p">)</span>
 <span class="k">end</span>
 
@@ -123,6 +123,53 @@
 </code></pre></div>
 
 
+<p>Настало время самого интересного и забавного, комментарии. В данном проекте мы использовали гем <a href="https://github.com/elight/acts_as_commentable_with_threading">acts_as_commentable_with_threading</a>. Он содержит 2ух уровневую структуру комментариев, поэтому работы нам немного прибавилось. Что бы создать комментарий, нам необходимы 3 значения: пост где будет этот комментарий, пользователь, оставивший комментарий, и непосредственно сам текст комментария. Смотрится все это примерно так:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">post</span><span class="o">.</span><span class="n">build_comment</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>Ну а для "подкомментария" нам так же необходимо знать родительский комментарий, от которого ветка и пойдет, т.е. создание подобного комментария будет выглядеть примерно так:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">child_comment</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">build_comment</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
+<span class="n">child_comment</span><span class="o">.</span><span class="n">move_to_child_of</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span>
+</code></pre></div>
+
+
+<p>А теперь давайте создадим от 10 до 21 главных комментариев и до 9ти дочерних для каждого главного, при этом каждый комментарий будет оставлять рандомный пользователь:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">posts</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
+  <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
+
+  <span class="n">post</span><span class="o">[</span><span class="ss">:user_id</span><span class="o">]</span> <span class="o">=</span> <span class="n">rand_user</span><span class="o">.</span><span class="n">id</span>
+  <span class="n">created_post</span> <span class="o">=</span> <span class="n">rand_user</span><span class="o">.</span><span class="n">create_post</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+
+  <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="o">.</span><span class="n">.</span><span class="mi">21</span><span class="p">)</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
+    <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
+    <span class="n">comment</span> <span class="o">=</span> <span class="n">created_post</span><span class="o">.</span><span class="n">build_comment</span><span class="p">(</span><span class="n">rand_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;Comment body&#39;</span><span class="p">)</span>
+    <span class="n">comment</span><span class="o">.</span><span class="n">save!</span>
+
+    <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
+      <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
+      <span class="n">child_comment</span> <span class="o">=</span> <span class="n">created_post</span><span class="o">.</span><span class="n">build_comment</span><span class="p">(</span><span class="n">rand_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;Comment body&#39;</span><span class="p">)</span>
+      <span class="n">child_comment</span><span class="o">.</span><span class="n">save!</span>
+      <span class="n">child_comment</span><span class="o">.</span><span class="n">move_to_child_of</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+
+
+<p>Хм, рандомное количество комментариев мы сделали, пользователей тоже разных назначили, но вот незадача, у нас body каждого комментария одно и тоже, а именно <code>'Comment body'</code>.Что же делать, как быть? Раз уж мы договорились создать подобие "живого" приложения, то и комментарии у нас должны быть разные и тоже живые. Первое, что приходит в голову - опять использовать массив данных, но я слишков ленив, что бы все это набирать, пусть даже копипастить, и тем более придумывать. Второе, что приходит на ум, генерировать рандомную строчку текста. Да идея не плохая, как минимум нам придется писать меньше кода и он по любому будет всегда разный. Но есть одно но: мы пытаемся достигнуть абсолютной правдоподобности, а строки вида <code>'skjafnskdjn ksajdnf'</code> нам точно не подойдут как комментарии. Поэтому нам на помощь приходит отличное решение - гем <a href="https://github.com/postmodern/raingrams">raingrams</a>.</p>
+
+<p>Что же такого может этот гем, спросите Вы? На самом деле ничего особенного, Вы просто скармливаете ему текст, а он, в свою очередь, разбивает его на куски и рандомно выдает вам. В чем плюсы? Да они не отличаются от банальной генерации строки, единственное и очевидное отличие - генерируемый текст будет логичен в пределах строки.</p>
+
+<p>В документации достаточно подробно описанно как гем ставится и настраивается, но я бы хотел уделить внимание 2ум подводным камням, об которые мы споткнулись.</p>
+
+<ul>
+<li><p>Во первых, гем не поддерживает русский язык. Скажем так, он его не видит. Поэтому если для Вас важен русский язык, используйте наш <a href="https://github.com/dointeractive/raingrams">форк</a>, в котором исправлен этот косяк.</p></li>
+<li><p>Ну а второй момент, в старых версиях существовал метод <code>train_with_url</code> в который передавалась ссылка, а он уже все парсил и выдавал конечный результат. К сожалению в свежих версиях этот метод был убран, причем убран очень хитро. Если быть точным, то автор просто вырезал часть определения этого метода, а вторую забыл(а может решил стебануться над простыми парнями как мы, этого я к сожалению не знаю :) ).</p></li>
+</ul>
 
 
 
