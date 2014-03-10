@@ -164,13 +164,84 @@
 
 <p>Что же такого может этот гем, спросите Вы? На самом деле ничего особенного, Вы просто скармливаете ему текст, а он, в свою очередь, разбивает его на куски и рандомно выдает вам. В чем плюсы? Да они не отличаются от банальной генерации строки, единственное и очевидное отличие - генерируемый текст будет логичен в пределах строки.</p>
 
-<p>В документации достаточно подробно описанно как гем ставится и настраивается, но я бы хотел уделить внимание 2ум подводным камням, об которые мы споткнулись.</p>
+<p>В документации достаточно подробно описанно как гем ставится и настраивается, но я бы хотел уделить внимание 2ум подводным камням, об которые мы споткнулись:</p>
 
 <ul>
 <li><p>Во первых, гем не поддерживает русский язык. Скажем так, он его не видит. Поэтому если для Вас важен русский язык, используйте наш <a href="https://github.com/dointeractive/raingrams">форк</a>, в котором исправлен этот косяк.</p></li>
 <li><p>Ну а второй момент, в старых версиях существовал метод <code>train_with_url</code> в который передавалась ссылка, а он уже все парсил и выдавал конечный результат. К сожалению в свежих версиях этот метод был убран, причем убран очень хитро. Если быть точным, то автор просто вырезал часть определения этого метода, а вторую забыл(а может решил стебануться над простыми парнями как мы, этого я к сожалению не знаю :) ).</p></li>
 </ul>
 
+
+<p>А теперь, используя полученные знания, перепишем наш метод. В качестве текста для <code>raingrams</code> мы будем использовать комментарии из пикабу, которые предварительно распарсим:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">model</span> <span class="o">=</span> <span class="no">QuadgramModel</span><span class="o">.</span><span class="n">build</span> <span class="k">do</span> <span class="o">|</span><span class="n">model</span><span class="o">|</span>
+  <span class="n">doc</span> <span class="o">=</span> <span class="ss">Nokogiri</span><span class="p">:</span><span class="ss">:HTML</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;http://pikabu.ru/story/v_den_programmista_pro_logiku_pikabu_685289&#39;</span><span class="p">))</span>
+  <span class="n">doc</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;div.comment_desc&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">div</span><span class="o">|</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">train_with_text</span><span class="p">(</span><span class="n">div</span><span class="o">.</span><span class="n">inner_text</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">refresh</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># ....</span>
+
+<span class="n">posts</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
+  <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
+
+  <span class="n">post</span><span class="o">[</span><span class="ss">:user_id</span><span class="o">]</span> <span class="o">=</span> <span class="n">rand_user</span><span class="o">.</span><span class="n">id</span>
+  <span class="n">created_post</span> <span class="o">=</span> <span class="n">rand_user</span><span class="o">.</span><span class="n">create_post</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+
+  <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="o">.</span><span class="n">.</span><span class="mi">21</span><span class="p">)</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
+    <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
+    <span class="n">comment</span> <span class="o">=</span> <span class="n">created_post</span><span class="o">.</span><span class="n">build_comment</span><span class="p">(</span><span class="n">rand_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">random_sentence</span><span class="p">)</span>
+    <span class="n">comment</span><span class="o">.</span><span class="n">save!</span>
+
+    <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
+      <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
+      <span class="n">child_comment</span> <span class="o">=</span> <span class="n">created_post</span><span class="o">.</span><span class="n">build_comment</span><span class="p">(</span><span class="n">rand_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">random_sentence</span><span class="p">)</span>
+      <span class="n">child_comment</span><span class="o">.</span><span class="n">save!</span>
+      <span class="n">child_comment</span><span class="o">.</span><span class="n">move_to_child_of</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div>
+
+
+<p>Кстати, я уверен, что немного изменив наш скрипт, можно будет создать подобную генератию текстов непосредственно для постов.</p>
+
+<p>Выглядит здорово, да, может код не самый чистый, в целом скрипт слишком часто обращается к базе, но согласитесь, наш скрипт имитирует реальную активность пользователей. Не идеально конечно же, но все же. Думаю на этом можно было бы закончить, но остался последний момент, который хотелось бы осветить и исправить в нашем скрипте.</p>
+
+<p>Как думаете, где еще нам придется создавать пользователей, которых мы создали в самом начале? Правильно, в тестах, надо же на чем-то тестировать приложение. Так почему бы нам не убить 2ух зайцев и не заменить ручную генерацию пользователей, как это было в начале статьи, на старую добрую фабричную? Так как в нашем проекте мы используем гем  <a href="http://www.fabricationgem.org/">fabrication</a>, то и пример будет с ним. Вы так же можете использовать любую другуюю фабрику.</p>
+
+<p>Для начала определим нашего пользователя и администратора:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="no">Fabricator</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="k">do</span>
+  <span class="n">email</span> <span class="ss">Faker</span><span class="p">:</span><span class="ss">:Internet</span><span class="o">.</span><span class="n">email</span>
+  <span class="nb">name</span> <span class="ss">Faker</span><span class="p">:</span><span class="ss">:Name</span><span class="o">.</span><span class="n">name</span>
+  <span class="n">password</span> <span class="s1">&#39;12345678&#39;</span>
+  <span class="n">password_confirmation</span> <span class="s1">&#39;12345678&#39;</span>
+<span class="k">end</span>
+
+<span class="no">Fabricator</span><span class="p">(</span><span class="ss">:admin</span><span class="p">)</span> <span class="k">do</span>
+  <span class="n">email</span> <span class="s1">&#39;admin@my_app.org&#39;</span>
+  <span class="nb">name</span> <span class="s1">&#39;admin&#39;</span>
+  <span class="n">password</span> <span class="s1">&#39;12345678&#39;</span>
+  <span class="n">password_confirmation</span> <span class="s1">&#39;12345678&#39;</span>
+<span class="k">end</span>
+</code></pre></div>
+
+
+<p>Ну а теперь, воспользуемся нашей новосозданной фабрикой для избавления от лишнего кода в нашем seed файле:</p>
+
+<div class="highlight"><pre><code class="ruby"><span class="n">user_count</span> <span class="o">=</span> <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">18</span><span class="o">.</span><span class="n">.</span><span class="mi">23</span><span class="p">)</span>
+<span class="no">Fabricate</span><span class="p">(</span><span class="ss">:admin</span><span class="p">)</span>
+
+<span class="n">user_count</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span> <span class="no">Fabricate</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">}</span>
+</code></pre></div>
+
+
+<p>В итоге, мы смогли удалить достаточно приличный кусок кода + избавились от явного повтора этого же кода.</p>
+
+<p>На этом я закончу наши экспиременты. Как видите, простора для фантазии осталось еще много и так же осталось много идей для рефакторинга. В любом случае, данный пример явно показывает, что к любой, сколь скучной не была бы, задаче всегда можно применить творческий подход и не плохо развлечься :)</p>
 
 
         <br><hr>
