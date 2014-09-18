@@ -5,10 +5,16 @@ markdown: kramdown
 permalink: /posts/:title
 highlighter: pygments
 
-# Plugins
-whitelist: []
-gems:      []
-
+sitemap:
+  file: "/sitemap.xml"
+  exclude:
+      - "/atom.xml"
+      - "/feed.xml"
+      - "/feed/index.xml"
+  include_posts:
+      - "/index.html"
+  change_frequency_name: "change_frequency"
+  priority_name: "priority"
 
 # Handling Reading
 safe:         false
