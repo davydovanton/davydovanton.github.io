@@ -1,6 +1,20 @@
 name: require 'brain'
 description: Блог о Ruby и прочих технологиях
-url: http://fikys.github.io
-markdown: rdiscount
-pygments: true
+url: http://davydovanton.github.io
+markdown: kramdown
 permalink: /posts/:title
+highlighter: pygments
+
+# Plugins
+whitelist: []
+gems:      []
+
+
+# Handling Reading
+safe:         false
+include:      [".htaccess"]
+exclude:      []
+keep_files:   [".git", ".svn"]
+encoding:     "utf-8"
+markdown_ext: "markdown,mkdown,mkdn,mkd,md"
+textile_ext:  "textile"
