@@ -4,6 +4,7 @@ url: http://davydovanton.github.io
 markdown: kramdown
 permalink: /posts/:title
 highlighter: pygments
+gems: ["emoji_for_jekyll"]
 
 sitemap:
   file: "/sitemap.xml"

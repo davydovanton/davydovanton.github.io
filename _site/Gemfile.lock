@@ -11,6 +11,7 @@ GEM
       execjs
     coffee-script-source (1.8.0)
     colorator (0.1)
+    emoji_for_jekyll (0.1.0)
     execjs (2.2.1)
     fast-stemmer (1.0.2)
     ffi (1.9.3)
@@ -67,4 +68,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  emoji_for_jekyll
   jekyll
