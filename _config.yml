@@ -1,6 +1,6 @@
 name: require 'brain'
 description: Блог о Ruby и прочих технологиях
-url: http://davydovanton.github.io
+url: http://0.0.0.0:4000/
 markdown: kramdown
 permalink: /posts/:title
 highlighter: pygments
@@ -25,3 +25,6 @@ keep_files:   [".git", ".svn"]
 encoding:     "utf-8"
 markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 textile_ext:  "textile"
+
+sass:
+  sass_dir: _sass

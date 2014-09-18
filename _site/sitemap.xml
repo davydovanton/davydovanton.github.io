@@ -1,23 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://davydovanton.github.io/posts/ruby-and-predefined-global-variables</loc>
-        <lastmod>2014-09-18T23:48:42+04:00</lastmod>
+        <loc>http://0.0.0.0:4000//posts/ruby-and-predefined-global-variables</loc>
+        <lastmod>2014-09-19T03:06:36+04:00</lastmod>
     </url>
     <url>
-        <loc>http://davydovanton.github.io/posts/irb-and-all-all-all</loc>
-        <lastmod>2014-09-18T23:48:42+04:00</lastmod>
+        <loc>http://0.0.0.0:4000//posts/irb-and-all-all-all</loc>
+        <lastmod>2014-09-19T03:06:36+04:00</lastmod>
     </url>
     <url>
-        <loc>http://davydovanton.github.io/posts/seed-and-you</loc>
-        <lastmod>2014-09-18T23:48:42+04:00</lastmod>
+        <loc>http://0.0.0.0:4000//posts/seed-and-you</loc>
+        <lastmod>2014-09-19T03:06:36+04:00</lastmod>
     </url>
     <url>
-        <loc>http://davydovanton.github.io/posts/vim-history</loc>
-        <lastmod>2014-09-18T23:48:42+04:00</lastmod>
+        <loc>http://0.0.0.0:4000//posts/vim-history</loc>
+        <lastmod>2014-09-19T03:06:36+04:00</lastmod>
     </url>
     <url>
-        <loc>http://davydovanton.github.io/</loc>
-        <lastmod>2014-09-19T01:00:52+04:00</lastmod>
+        <loc>http://0.0.0.0:4000//</loc>
+        <lastmod>2014-09-19T03:17:35+04:00</lastmod>
     </url>
 </urlset>

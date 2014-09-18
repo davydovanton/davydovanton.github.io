@@ -70,3 +70,4 @@ PLATFORMS
 DEPENDENCIES
   emoji_for_jekyll
   jekyll
+  jekyll-sass-converter
