@@ -1,5 +1,8 @@
-Use 
+Use for paste gist:
 
-  {% gist 1027674 %}
+    {% gist 1027674 %}
 
-for paste gist
+For twitter:
+
+    {% tweet 512680276036968448 %}
+
