@@ -26,5 +26,10 @@ encoding:     "utf-8"
 markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 textile_ext:  "textile"
 
-sass:
-  sass_dir: _sass
+assets:
+  css_compressor: sass
+  sources:
+    - _assets/javascripts
+    - _assets/stylesheets
+    - _vendors/foundation/stylesheets
+    - _vendors/foundation/javascripts
