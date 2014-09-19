@@ -4,30 +4,33 @@ title: "require 'brain'"
 ---
 
 <div class="content">
-  <h3>Приветствую!</h3>
-  <p>Меня зовут Антон (<a href="https://github.com/davydovanton" target="_blank">GitHub</a>), и так как я изучаю и непосредственно пишу на <a href="https://www.ruby-lang.org/en/" target="_blank">Ruby</a>,
-  то и основной темой данного блога будет именно этот язык и технологии, связанные с ним.
-  Но ввиду того, что интрересуюсь я не только одним языком программирования, то писать я так же буду о тех вещах,
-  которые мне интерсны или которые меня волнуют.</p>
-
-<hr>
-
-<h3>Записи:</h3>
-
-  <div class="related">
-    <ul>
+  <div class="content__posts pure-g">
+    <ul class="posts pure-u-5-5">
     {% for post in site.posts %}
-      <li>
-        <h1><a href="{{ post.url }}">{{ post.title }}</a></h1>
-
-        {% if post.content contains '<!--more-->' %}
-            {{ post.content | split:'<!--more-->' | first }}
-            <p><a href="{{ post.url }}">Continue reading</a></p>
-        {% else %}
-            {{ post.content }}
-        {% endif %}
+      <li class="pure-g">
+        <div class="post-info pure-u-3-24"></div>
+        <div class="post pure-u-18-24">
+          <h2 class="post__title"><a href="{{ post.url }}">{{ post.title }}</a></h1>
+          <div class="post__content">
+            {% if post.content contains '<!--more-->' %}
+              {{ post.content | split:'<!--more-->' | first }}
+              <div class="post__continue pure-u-1-1">
+                <a class="pure-button pure-button-primary button-large" href="{{ post.url }}">Continue reading</a>
+              </div>
+            {% else %}
+              {{ post.content }}
+            {% endif %}
+          </div>
+        </div>
+        <div class="pure-u-3-24"></div>
       </li>
     {% endfor %}
     </ul>
+
+    <div class="pure-u-3-24"></div>
+    <div class="pure-u-6-24">
+      <a href="#" class="pure-button pure-button-disabled">Pagination button</a>
+    </div>
+    <div class="pure-u-15-24"></div>
   </div>
 </div>

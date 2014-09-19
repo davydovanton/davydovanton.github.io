@@ -1,0 +1,36 @@
+.content {
+  max-width: 70%;
+  margin: 20px auto;
+
+  .posts {
+    list-style: none;
+
+    .post {
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(0,0,0,.1);
+      text-align: left;
+
+      .post__title {
+        font-weight: 700;
+        font-size: 24px;
+        color: #333;
+        line-height: 29px;
+
+        a {
+          color: #333;
+          text-decoration: none;
+        }
+      }
+
+      .post__content {
+        font-size: 16px;
+        margin-top: 0;
+        margin-bottom: 1em;
+      }
+
+      .post__continue {
+        margin-top: 10px;
+      }
+    }
+  }
+}
