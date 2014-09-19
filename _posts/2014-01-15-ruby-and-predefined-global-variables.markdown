@@ -3,6 +3,8 @@ layout: post
 title: "Ruby и special/predefined variables"
 ---
 
+<!--more-->
+
 Не так давно я обнаружил интересный пример, который выглядел примерно так:
 
 {% highlight ruby %}

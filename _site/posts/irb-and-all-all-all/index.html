@@ -6,8 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="chrome=1" />
   <meta name="description" content="davydovanton.github.io : " />
 
-  <script src="/assets/app-b52d3ec59f93e3cdd13184801f3d39ec.js"></script>
+  <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+
   <link rel="stylesheet" href="/assets/app-8fa8cabbf1a84f68b359f9dceee9b037.css">
+  <script src="/assets/app-b52d3ec59f93e3cdd13184801f3d39ec.js"></script>
 
   <title>IRB и все все все</title>
 </head>
@@ -27,6 +29,8 @@
     <div id="content">
       <section id="main_content" class="inner">
         <p>Думаю, каждый, кто так или иначе связан с Ruby и тем более с Rails, хоть раз в жизни использовал irb. Возможности интерактивного ruby шела безграничны, поэтому сегодня я бы хотел поговорить об улучшении или кастомизации, если вам так угодно, вашего irb. </p>
+
+<!--more-->
 
 <p>Но для начала давайте посмотрим документацию, а именно откроем модуль <a href="http://www.ruby-doc.org/stdlib-2.0/libdoc/irb/rdoc/IRB.html">IRB</a> в стандартной библиотеке ruby.
 “Что интересного тут есть?”, спросите вы? Думаю стоит начать с самого начала, с запуска. Если вы просто наберете в консоли <code>irb</code>, то запустите шел с вашей текущей версией руби. Но  если у вас RVM(хотя, сказать по правде я не уверен, что это работает только с RVM), то вы можете выбрать среду для запуска из всех тех, что у вас установлены. Например вот так, я, при активном MRI 2.0, могу запустить у себя jruby:</p>
