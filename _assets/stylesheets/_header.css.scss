@@ -3,18 +3,34 @@
   background: transparent url('http://24.media.tumblr.com/ccb268832580ac12951828a1c179de69/tumblr_mo2xbk8JUK1st5lhmo1_1280.jpg') 0 0 no-repeat fixed;
   display: table;
   filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://24.media.tumblr.com/ccb268832580ac12951828a1c179de69/tumblr_mo2xbk8JUK1st5lhmo1_1280.jpg', sizingMethod='scale');
-  height: 200px;
+  height: 300px;
   margin-bottom: 3em;
   text-align: center;
   width: 100%;
 
-  .banner-head {
+  .banner__content {
+    margin: 0 auto;
+    max-width: 1000px;
+
+    .pure-g {
+      display: table;
+      height: 500px;
+      max-height: 500px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pure-u {
+      display: table-cell;
+      vertical-align: middle;
+    }
+  }
+
+  .banner__head {
     color: white;
-    display: table-cell;
-    font-size: 2em;
-    font-weight: 500;
-    margin-bottom: 0;
-    text-shadow: 0 1px 1px black;
-    vertical-align: middle;
+    font-size: 42px;
+    line-height: 58px;
+    text-align: left;
+    text-shadow: 2px 2px 0 rgba(0,0,0,.15);
   }
 }
