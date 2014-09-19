@@ -1,0 +1,24 @@
+.pure-menu.pure-menu-open {
+  background: rgba(0, 120, 231, 0);
+  border-bottom: none;
+  position: fixed;
+  z-index: 1030;
+  font-size: 16px;
+  padding: 0 15% 0 15%;
+  width: 75%;
+
+  ul {
+    float: right;
+  }
+}
+
+.pure-menu .pure-menu-heading {
+  color: #fff;
+  font-size: 22px;
+  margin-left: 15%;
+  float: left;
+}
+
+.pure-menu a {
+  color: #fff;
+}

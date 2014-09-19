@@ -7,9 +7,9 @@
   <meta name="description" content="davydovanton.github.io : " />
 
   <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+  <link rel="stylesheet" href="/assets/app-1a0ee20e35edd03812c75b944d7a24ed.css">
 
-  <link rel="stylesheet" href="/assets/app-d73cf3caea85201c5267017f17e190bf.css">
-  <script src="/assets/app-b52d3ec59f93e3cdd13184801f3d39ec.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
   <title>Seed файл и вы</title>
 </head>
@@ -21,13 +21,19 @@
 
 
     <div class="banner">
-      <h1 class="banner-head">
-        Seed файл и вы
-      </h1>
+      <div class="banner__content">
+        <div class="pure-g">
+          <div class="pure-u">
+            <h1 class="banner__head">
+              Seed файл и вы
+            </h1> 
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div id="content">
-      <section id="main_content" class="inner">
+    <main class="main-content">
+      <section id="main_content__post" class="inner">
         <p>Совсем недавно, на работе, потребовалось мне заполнить новый проект данными для дальнейшего тестирования и разработки. Конечно же, данные должны быть в любом виде, и первое, о чем я подумал, был seed файл, поэтому сегодня мы поговорим именно о нем. Как всем известно, данный файл служит для генерации данных в рельсовых приложениях. Вы пишите скрипт, выполняете <code>rake db:seed</code> и радуетесь жизни. В моем случае данные были типовыми, а именно, нужно было сгенерировать пользователей, посты и комментарии к этим постам. Я думаю все прекрасно понимают, как все взаимосвязанно, поэтому на этом останавливаться не вижу особого смысла.</p>
 
 <!--more-->
@@ -252,6 +258,8 @@
   <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 </div>
 
-    </div>
+    </main>
+
+    <script src="/assets/app-7422c173eb5b07e3664ee31fc55e4d66.js"></script>
   </body>
 </html>

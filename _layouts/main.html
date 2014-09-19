@@ -3,6 +3,18 @@
   {% include head.html %}
   <body>
     {% include yandex.html %}
+      
+    <div class="pure-menu pure-menu-open pure-menu-horizontal">
+      <a href="#" class="pure-menu-heading">Site Title</a>
+
+      <ul>
+        <li><a href="#">Finance</a></li>
+        <li><a href="#">Messenger</a></li>
+        <li><a href="#">Sports</a></li>
+        <li><a href="#">Flickr</a></li>
+        <li><a href="#">Home</a></li>
+      </ul>
+    </div>
 
     <div class="banner">
       <div class="banner__content">
@@ -19,5 +31,7 @@
       <!-- content goes here -->
       {{ content }}
     </main>
+
+    {% javascript app %}
   </body>
 </html>
