@@ -1,13 +1,25 @@
-<div class="pagination">
+<ul class="pure-paginator">
+  <li><a class="pure-button prev" href="/">&#171;</a></li>
+
   {% if paginator.previous_page %}
-    <a href="/page{{ paginator.previous_page }}" class="previous">Previous</a>
-  {% else %}
-    <span class="previous">Previous</span>
+    {% if paginator.previous_page == 1 %}
+      <li>
+        <a class="pure-button" href="/">{{ paginator.previous_page }}</a>
+      </li>
+    {% else %}
+      <li>
+        <a class="pure-button" href="/page{{ paginator.previous_page }}">{{ paginator.previous_page }}</a>
+      </li>
+    {% endif %}
   {% endif %}
-  <span class="page_number ">Page: {{ paginator.page }} of {{ paginator.total_pages }}</span>
+
+  <li><a class="pure-button pure-button-active" href="/page{{ paginator.page }}">{{ paginator.page }}</a></li>
+
   {% if paginator.next_page %}
-    <a href="/page{{ paginator.next_page }}" class="next">Next</a>
-  {% else %}
-    <span class="next ">Next</span>
+    <li>
+      <a class="pure-button" href="/page{{ paginator.next_page }}">{{ paginator.next_page }}</a>
+    </li>
   {% endif %}
-</div>
+
+  <li><a class="pure-button next" href="/page{{ paginator.total_pages }}">&#187;</a></li>
+</ul>
