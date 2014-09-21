@@ -26,5 +26,49 @@
 
 .pure-menu li a:hover,
 .pure-menu li a:focus {
-  background: rgba(255,255,255,.2);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.pure-menu .pure-menu__link {
+  padding: 8px 20px;
+
+  &:hover,
+  &:focus {
+    outline: none;
+  }
+
+  &::before,
+  &::after {
+    display: inline-block;
+    opacity: 0;
+    -webkit-transition: -webkit-transform 0.3s, opacity 0.2s;
+    -moz-transition: -moz-transform 0.3s, opacity 0.2s;
+    transition: transform 0.3s, opacity 0.2s;
+  }
+
+  &::before {
+    margin-right: 10px;
+    content: '[';
+    -webkit-transform: translateX(10px);
+    -moz-transform: translateX(10px);
+    transform: translateX(10px);
+  }
+
+  &::after {
+    margin-left: 10px;
+    content: ']';
+    -webkit-transform: translateX(-10px);
+    -moz-transform: translateX(-10px);
+    transform: translateX(-10px);
+  }
+
+  &:hover::before,
+  &:hover::after,
+  &:focus::before,
+  &:focus::after {
+    opacity: 1;
+    -webkit-transform: translateX(0px);
+    -moz-transform: translateX(0px);
+    transform: translateX(0px);
+  }
 }

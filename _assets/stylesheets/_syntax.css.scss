@@ -1,3 +1,11 @@
+code {
+  padding: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0,0,0,0.12);
+  border-radius: 3px;
+}
+
 .highlight {
   font-size: 13px;
   @include border-radius(3px);
@@ -9,6 +17,7 @@
 
   code {
     font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+    background-color: transparent;
   }
 }
 
