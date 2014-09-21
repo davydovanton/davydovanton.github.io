@@ -7,7 +7,7 @@
   <meta name="description" content="davydovanton.github.io : " />
 
   <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
-  <link rel="stylesheet" href="/assets/app-1a0ee20e35edd03812c75b944d7a24ed.css">
+  <link rel="stylesheet" href="/assets/app-b7c8c94210a534af7fbb7992aa3e4f83.css">
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
@@ -20,21 +20,39 @@
 </div>
 
 
-    <div class="banner">
-      <div class="banner__content">
-        <div class="pure-g">
-          <div class="pure-u">
-            <h1 class="banner__head">
-              Seed файл и вы
-            </h1> 
-          </div>
-        </div>
+<div class="pure-menu pure-menu-open pure-menu-horizontal">
+  <a href="#" class="pure-menu-heading">Site Title</a>
+
+  <ul>
+    <li><a href="#">Finance</a></li>
+    <li><a href="#">Messenger</a></li>
+    <li><a href="#">Sports</a></li>
+    <li><a href="#">Flickr</a></li>
+    <li><a href="#">Home</a></li>
+  </ul>
+</div>
+
+<div class="banner">
+  <div class="banner__content">
+    <div class="pure-g">
+      <div class="pure-u">
+        <h1 class="banner__head">
+          Seed файл и вы
+        </h1> 
       </div>
     </div>
+  </div>
+</div>
+
 
     <main class="main-content">
-      <section id="main_content__post" class="inner">
-        <p>Совсем недавно, на работе, потребовалось мне заполнить новый проект данными для дальнейшего тестирования и разработки. Конечно же, данные должны быть в любом виде, и первое, о чем я подумал, был seed файл, поэтому сегодня мы поговорим именно о нем. Как всем известно, данный файл служит для генерации данных в рельсовых приложениях. Вы пишите скрипт, выполняете <code>rake db:seed</code> и радуетесь жизни. В моем случае данные были типовыми, а именно, нужно было сгенерировать пользователей, посты и комментарии к этим постам. Я думаю все прекрасно понимают, как все взаимосвязанно, поэтому на этом останавливаться не вижу особого смысла.</p>
+      <div class="content">
+        <div class="content__posts pure-g">
+          <div class="post-info pure-u-3-24"></div>
+          <div class="post pure-u-18-24">
+            <h2 class="post__title"><a href=""></a></h1>
+            <div class="post__content">
+              <p>Совсем недавно, на работе, потребовалось мне заполнить новый проект данными для дальнейшего тестирования и разработки. Конечно же, данные должны быть в любом виде, и первое, о чем я подумал, был seed файл, поэтому сегодня мы поговорим именно о нем. Как всем известно, данный файл служит для генерации данных в рельсовых приложениях. Вы пишите скрипт, выполняете <code>rake db:seed</code> и радуетесь жизни. В моем случае данные были типовыми, а именно, нужно было сгенерировать пользователей, посты и комментарии к этим постам. Я думаю все прекрасно понимают, как все взаимосвязанно, поэтому на этом останавливаться не вижу особого смысла.</p>
 
 <!--more-->
 
@@ -222,8 +240,9 @@
 
 <p>На этом, пожалуй, я закончу наши эксперименты. Как видите, простора для фантазии осталось еще много и также осталось много идей для рефакторинга. В любом случае, данный пример явно показывает, что к любой, сколь скучной она не была бы, задаче всегда можно применить творческий подход и неплохо развлечься :)</p>
 
-        <br><hr>
-        <div class="share_buttons">
+
+              <div class="post__share-buttons">
+                <div class="share_buttons">
   <p>Рассказать друзьям:</p>
   <!-- AddThis Button BEGIN -->
   <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
@@ -239,9 +258,14 @@
   <!-- AddThis Button END -->
 </div>
 
-        <p><a href="/blog"><b>Назад</b></a></p>
-      </section>
-      <div class="comments">
+              </div>
+
+              <div class="post__back">
+                <a href="/" class="pure-button">Назад</a>
+              </div>
+
+              <div class="post__comments">
+                <div class="comments">
   <div id="disqus_thread"></div>
   <script type="text/javascript">
 /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
@@ -258,6 +282,12 @@
   <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 </div>
 
+              </div>
+            </div>
+          </div>
+          <div class="pure-u-3-24"></div>
+        </div>
+      </div>
     </main>
 
     <script src="/assets/app-7422c173eb5b07e3664ee31fc55e4d66.js"></script>

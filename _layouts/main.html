@@ -2,33 +2,9 @@
 <html>
   {% include head.html %}
   <body>
-    {% include yandex.html %}
-      
-    <div class="pure-menu pure-menu-open pure-menu-horizontal">
-      <a href="#" class="pure-menu-heading">Site Title</a>
-
-      <ul>
-        <li><a href="#">Finance</a></li>
-        <li><a href="#">Messenger</a></li>
-        <li><a href="#">Sports</a></li>
-        <li><a href="#">Flickr</a></li>
-        <li><a href="#">Home</a></li>
-      </ul>
-    </div>
-
-    <div class="banner">
-      <div class="banner__content">
-        <div class="pure-g">
-          <div class="pure-u">
-            <h1 class="banner__head">I am rubyist <br/>
-              and space-rocket ship builder</h1> 
-          </div>
-        </div>
-      </div>
-    </div>
+    {% include header.html %}
 
     <main class="main-content">
-      <!-- content goes here -->
       {{ content }}
     </main>
 

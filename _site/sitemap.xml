@@ -2,22 +2,22 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://0.0.0.0:4000//posts/ruby-and-predefined-global-variables</loc>
-        <lastmod>2014-09-20T01:14:18+04:00</lastmod>
+        <lastmod>2014-09-21T14:40:20+04:00</lastmod>
     </url>
     <url>
         <loc>http://0.0.0.0:4000//posts/irb-and-all-all-all</loc>
-        <lastmod>2014-09-20T01:14:18+04:00</lastmod>
+        <lastmod>2014-09-21T14:40:20+04:00</lastmod>
     </url>
     <url>
         <loc>http://0.0.0.0:4000//posts/seed-and-you</loc>
-        <lastmod>2014-09-20T01:14:18+04:00</lastmod>
+        <lastmod>2014-09-21T14:40:20+04:00</lastmod>
     </url>
     <url>
         <loc>http://0.0.0.0:4000//posts/vim-history</loc>
-        <lastmod>2014-09-20T01:14:18+04:00</lastmod>
+        <lastmod>2014-09-21T14:40:20+04:00</lastmod>
     </url>
     <url>
         <loc>http://0.0.0.0:4000//</loc>
-        <lastmod>2014-09-20T01:53:29+04:00</lastmod>
+        <lastmod>2014-09-21T14:19:02+04:00</lastmod>
     </url>
 </urlset>
