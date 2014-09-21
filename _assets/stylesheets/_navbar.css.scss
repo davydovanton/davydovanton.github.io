@@ -24,12 +24,16 @@
   color: #fff;
 }
 
+.pure-menu li.pure-menu-disabled a:hover,
+.pure-menu li.pure-menu-disabled a:focus {
+  background: rgba(255, 255, 255, 0);
+}
 .pure-menu li a:hover,
 .pure-menu li a:focus {
   background: rgba(255, 255, 255, 0.2);
 }
 
-.pure-menu .pure-menu__link {
+.pure-menu .pure-menu-enable .pure-menu__link {
   padding: 8px 20px;
 
   &:hover,

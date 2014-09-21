@@ -3,6 +3,7 @@ description: Блог о Ruby и прочих технологиях
 url: http://0.0.0.0:4000/
 markdown: kramdown
 permalink: /posts/:title
+paginate: 1
 highlighter: pygments
 gems: ["emoji_for_jekyll"]
 exclude:

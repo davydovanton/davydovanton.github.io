@@ -6,7 +6,7 @@ title: Main title
 <div class="content">
   <div class="content__posts pure-g">
     <ul class="posts pure-u-5-5">
-    {% for post in site.posts %}
+    {% for post in paginator.posts %}
       <li class="pure-g">
         <div class="post-info pure-u-3-24">
 
@@ -18,7 +18,6 @@ title: Main title
             </li>
             <li class="post-info__bubble post-info__bubble_share">
               <div class="bubble">
-                {{ post.date | date_to_string }}
               </div>
             </li>
           </ul>
@@ -46,7 +45,7 @@ title: Main title
 
     <div class="pure-u-3-24"></div>
     <div class="pure-u-6-24">
-      <a href="#" class="pure-button pure-button-disabled">Pagination button</a>
+      {% include pagination.html %}
     </div>
     <div class="pure-u-15-24"></div>
   </div>
