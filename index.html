@@ -8,8 +8,24 @@ title: Main title
     <ul class="posts pure-u-5-5">
     {% for post in site.posts %}
       <li class="pure-g">
-        <div class="post-info pure-u-3-24"></div>
+        <div class="post-info pure-u-3-24">
+
+          <ul>
+            <li class="post-info__bubble post-info__bubble_date">
+              <div class="bubble">
+                {{ post.date | date_to_string }}
+              </div>
+            </li>
+            <li class="post-info__bubble post-info__bubble_share">
+              <div class="bubble">
+                {{ post.date | date_to_string }}
+              </div>
+            </li>
+          </ul>
+
+        </div>
         <div class="post pure-u-18-24">
+
           <h2 class="post__title"><a href="{{ post.url }}">{{ post.title }}</a></h1>
           <div class="post__content">
             {% if post.content contains '<!--more-->' %}
@@ -21,6 +37,7 @@ title: Main title
               {{ post.content }}
             {% endif %}
           </div>
+
         </div>
         <div class="pure-u-3-24"></div>
       </li>
