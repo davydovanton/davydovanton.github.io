@@ -1,11 +1,11 @@
 .pure-menu.pure-menu-open {
   background: rgba(0, 120, 231, 0);
   border-bottom: none;
-  position: fixed;
-  z-index: 1030;
   font-size: 16px;
   padding: 0 15% 0 15%;
+  position: fixed;
   width: 75%;
+  z-index: 1030;
 
   ul {
     float: right;
@@ -14,11 +14,17 @@
 
 .pure-menu .pure-menu-heading {
   color: #fff;
+  float: left;
   font-size: 22px;
   margin-left: 15%;
-  float: left;
+  text-transform: none;
 }
 
 .pure-menu a {
   color: #fff;
+}
+
+.pure-menu li a:hover,
+.pure-menu li a:focus {
+  background: rgba(255,255,255,.2);
 }

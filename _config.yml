@@ -5,6 +5,10 @@ markdown: kramdown
 permalink: /posts/:title
 highlighter: pygments
 gems: ["emoji_for_jekyll"]
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
 
 sitemap:
   file: "/sitemap.xml"
@@ -14,6 +18,7 @@ sitemap:
       - "/feed/index.xml"
   include_posts:
       - "/index.html"
+      - "/blog.html"
   change_frequency_name: "change_frequency"
   priority_name: "priority"
 

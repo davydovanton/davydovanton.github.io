@@ -14,10 +14,15 @@
 
     .pure-g {
       display: table;
-      height: 500px;
-      max-height: 500px;
+      height: 300px;
+      max-height: 300px;
       position: relative;
       z-index: 1;
+    }
+
+    .banner__main {
+      height: 500px;
+      max-height: 500px;
     }
 
     .pure-u {
