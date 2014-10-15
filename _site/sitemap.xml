@@ -2,7 +2,7 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://0.0.0.0:4000//posts/ruby-and-predefined-global-variables</loc>
-        <lastmod>2014-10-16T02:13:45+04:00</lastmod>
+        <lastmod>2014-10-17T01:55:41+04:00</lastmod>
     </url>
     <url>
         <loc>http://0.0.0.0:4000//posts/irb-and-all-all-all</loc>
@@ -14,7 +14,7 @@
     </url>
     <url>
         <loc>http://0.0.0.0:4000//posts/vim-history</loc>
-        <lastmod>2014-10-16T02:13:45+04:00</lastmod>
+        <lastmod>2014-10-17T14:09:29+04:00</lastmod>
     </url>
     <url>
         <loc>http://0.0.0.0:4000//about.html</loc>
@@ -22,7 +22,7 @@
     </url>
     <url>
         <loc>http://0.0.0.0:4000//blog.html</loc>
-        <lastmod>2014-10-16T02:15:55+04:00</lastmod>
+        <lastmod>2014-10-17T14:09:29+04:00</lastmod>
     </url>
     <url>
         <loc>http://0.0.0.0:4000//contact.html</loc>
@@ -30,6 +30,6 @@
     </url>
     <url>
         <loc>http://0.0.0.0:4000//</loc>
-        <lastmod>2014-10-16T03:00:06+04:00</lastmod>
+        <lastmod>2014-10-17T14:09:29+04:00</lastmod>
     </url>
 </urlset>

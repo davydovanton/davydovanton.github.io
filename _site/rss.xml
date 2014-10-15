@@ -365,14 +365,16 @@
     <item>
       <title>Ruby и special/predefined variables</title>
       <link>http://0.0.0.0:4000//posts/ruby-and-predefined-global-variables</link>
-      <description><![CDATA[
+      <description><![CDATA[Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста.
+Не так давно я обнаружил интересный пример, который выглядел примерно так:
 
 ]]></description>
       <pubDate>Wed, 15 Jan 2014 00:00:00 +0400</pubDate>
       <guid>http://0.0.0.0:4000//posts/ruby-and-predefined-global-variables</guid>
-      <content:encoded><![CDATA[<!--more-->
+      <content:encoded><![CDATA[<p>Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста.
+Не так давно я обнаружил интересный пример, который выглядел примерно так:</p>
 
-<p>Не так давно я обнаружил интересный пример, который выглядел примерно так:</p>
+<!--more-->
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">&quot;test string in irb&quot;</span><span class="o">.</span><span class="n">match</span> <span class="sr">/irb/</span>
 <span class="nb">puts</span> <span class="vg">$&amp;</span>
@@ -391,10 +393,10 @@
 <span class="nb">puts</span> <span class="s2">&quot;$&amp; in main </span><span class="si">#{</span><span class="vg">$&amp;</span><span class="si">}</span><span class="s2">&quot;</span>
 <span class="c1">#=&gt; &quot;irb&quot;</span>
 
-<span class="nb">test</span> 
+<span class="nb">test</span>
 <span class="c1">#=&gt; &quot;test&quot;</span></code></pre></div>
 
-<p>Как видно из примера, в каждом scope (main и метода), “глобальная” переменная отличается. Любой адекватный человек спросит: как такое, тысяча чертей, возможно? На самом деле все довольно просто, но, для полного понимания, начать придется с основ. Как многие знают, начиная с верисии 1.9 в ruby была добавлена виртуальная машина или YARV или же <a href="http://atdot.net/yarv/">yet another ruby virtual machine</a>, называйте как хотите, суть одна и та же. Смысл в том, что каждый раз, при запуске, YARV так же создает особый стек, для локальных переменных. В этом стеке указываются абсолютно все локальные переменные, свои для каждого scope. Разделение scope-ов происходит с помощью специальной точки или указателя - environment point (далее EP). Так же, в стеке, перед каждой EP, создается специальная переменная svar, которая как раз и указывает на таблицу специальных символов. Именно из-за этого для каждого scope могут быть свои значения специальных символов, что мы видели в примере выше. 
+<p>Как видно из примера, в каждом scope (main и метода), “глобальная” переменная отличается. Любой адекватный человек спросит: как такое, тысяча чертей, возможно? На самом деле все довольно просто, но, для полного понимания, начать придется с основ. Как многие знают, начиная с верисии 1.9 в ruby была добавлена виртуальная машина или YARV или же <a href="http://atdot.net/yarv/">yet another ruby virtual machine</a>, называйте как хотите, суть одна и та же. Смысл в том, что каждый раз, при запуске, YARV так же создает особый стек, для локальных переменных. В этом стеке указываются абсолютно все локальные переменные, свои для каждого scope. Разделение scope-ов происходит с помощью специальной точки или указателя - environment point (далее EP). Так же, в стеке, перед каждой EP, создается специальная переменная svar, которая как раз и указывает на таблицу специальных символов. Именно из-за этого для каждого scope могут быть свои значения специальных символов, что мы видели в примере выше.
 Но самое интересное, что у обычного блока и у места, где он будет вызван, scope одинаковый, в чем можно легко убедиться благодаря такому примеру:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">&quot;test string in irb&quot;</span><span class="o">.</span><span class="n">match</span> <span class="sr">/irb/</span>
@@ -406,7 +408,7 @@
 
 <span class="nb">puts</span> <span class="s2">&quot;$&amp; in main </span><span class="si">#{</span><span class="vg">$&amp;</span><span class="si">}</span><span class="s2">&quot;</span>
 
-<span class="o">&gt;</span> <span class="n">ruby</span> <span class="nb">test</span><span class="o">.</span><span class="n">rb</span> 
+<span class="o">&gt;</span> <span class="n">ruby</span> <span class="nb">test</span><span class="o">.</span><span class="n">rb</span>
 <span class="o">&gt;&gt;</span> <span class="s2">&quot;$&amp; in block test&quot;</span>
 <span class="o">&gt;&gt;</span> <span class="s2">&quot;$&amp; in block test&quot;</span>
 <span class="o">&gt;&gt;</span> <span class="s2">&quot;$&amp; in main test&quot;</span></code></pre></div>
@@ -427,7 +429,7 @@
 <span class="c1">#=&gt; &quot;irb&quot;</span></code></pre></div>
 
 <h5 id="section-2">$~</h5>
-<p>Содержит объект класса MatchData, соответствующий последнему совпадению. </p>
+<p>Содержит объект класса MatchData, соответствующий последнему совпадению.</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">&quot;test string in irb&quot;</span><span class="o">.</span><span class="n">match</span> <span class="sr">/(irb)/</span>
 <span class="nb">puts</span> <span class="vg">$~</span>
@@ -447,7 +449,7 @@
 <span class="c1">#=&gt; nil</span>
 <span class="s2">&quot;test in irb&quot;</span><span class="o">.</span><span class="n">match</span> <span class="sr">/(test) (in) (irb)/</span>
 <span class="nb">puts</span> <span class="vg">$~</span>
-<span class="c1">#=&gt; #&lt;MatchData &quot;test in irb&quot; 1:&quot;test&quot; 2:&quot;in&quot; 3:&quot;irb&quot;&gt; </span>
+<span class="c1">#=&gt; #&lt;MatchData &quot;test in irb&quot; 1:&quot;test&quot; 2:&quot;in&quot; 3:&quot;irb&quot;&gt;</span>
 <span class="nb">puts</span> <span class="vg">$+</span>
 <span class="c1">#=&gt; &quot;irb&quot;</span></code></pre></div>
 
@@ -477,7 +479,7 @@
 <p>Переменная возвращает номер процесса, под которым выполняется скрипт.</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="vg">$$</span>
-<span class="c1">#=&gt; 33630 </span>
+<span class="c1">#=&gt; 33630</span>
 <span class="nb">puts</span> <span class="sb">`ps aux | grep irb`</span>
 <span class="c1">#=&gt; anton           33630   0.0  0.3  2470520  24084 s008  S+    2Jan14   0:01.24 irb</span></code></pre></div>
 
@@ -485,7 +487,7 @@
 
 <hr />
 
-<p>Так где же определены эти переменные в исходном коде ruby? Как оказалось, все не так сложно, как кажется. Определенны эти переменные в файле <a href="https://github.com/ruby/ruby/blob/v2_1_0/parse.y#L7950">parse.y</a> примерно на 7950-той строке (да да, файл не очень большой, всего 11.5к строк кода). Для тех, кто не в курсе, parse.y - грамматический файл интерпритатора, благодаря которому происходит разбиение написанного вами кода на токены (лексемы/указатели), которые в последующем преобразуются в AST структуру, а затем в YARV структуру, ну а дальше в машинный код, который в последующем и будет выполняется. 
+<p>Так где же определены эти переменные в исходном коде ruby? Как оказалось, все не так сложно, как кажется. Определенны эти переменные в файле <a href="https://github.com/ruby/ruby/blob/v2_1_0/parse.y#L7950">parse.y</a> примерно на 7950-той строке (да да, файл не очень большой, всего 11.5к строк кода). Для тех, кто не в курсе, parse.y - грамматический файл интерпритатора, благодаря которому происходит разбиение написанного вами кода на токены (лексемы/указатели), которые в последующем преобразуются в AST структуру, а затем в YARV структуру, ну а дальше в машинный код, который в последующем и будет выполняется.
 Как не трудно заметить, case функция ищет совпадение символа “$” и специальных символов (блок case), после чего передает их функции set_yylval_name:</p>
 
 <div class="highlight"><pre><code class="language-c" data-lang="c"><span class="mi">7965</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;~&#39;</span><span class="o">:</span>                <span class="cm">/* $~: match-data */</span>

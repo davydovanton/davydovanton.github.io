@@ -13,7 +13,7 @@ title: Main title
         <div class="post__date">
           {{ post.date | date_to_string }}
         </div>
-        <div class="post__content">
+        <div class="post__content post__content_float">
           {% if post.content contains '<!--more-->' %}
             {{ post.content | split:'<!--more-->' | first }}
             <div class="post__continue">
