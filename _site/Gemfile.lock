@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    RedCloth (4.2.9)
     blankslate (2.1.2.4)
     celluloid (0.16.0)
       timers (~> 4.0.0)
@@ -91,6 +92,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  RedCloth
   emoji_for_jekyll
   jekyll
   jekyll-assets

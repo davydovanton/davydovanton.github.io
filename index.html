@@ -3,50 +3,40 @@ layout: main
 title: Main title
 ---
 
-<div class="content">
-  <div class="content__posts pure-g">
-    <ul class="posts pure-u-5-5">
-    {% for post in paginator.posts %}
-      <li class="pure-g">
-        <div class="post-info pure-u-3-24">
-
-          <ul>
-            <li class="post-info__bubble post-info__bubble_date">
-              <div class="bubble">
-                {{ post.date | date_to_string }}
-              </div>
-            </li>
-            <li class="post-info__bubble post-info__bubble_share">
-              <div class="bubble">
-              </div>
-            </li>
-          </ul>
-
-        </div>
-        <div class="post pure-u-18-24">
-
-          <h2 class="post__title"><a href="{{ post.url }}">{{ post.title }}</a></h1>
-          <div class="post__content">
-            {% if post.content contains '<!--more-->' %}
-              {{ post.content | split:'<!--more-->' | first }}
-              <div class="post__continue pure-u-1-1">
-                <a class="pure-button pure-button-primary button-large" href="{{ post.url }}">Continue reading</a>
-              </div>
-            {% else %}
-              {{ post.content }}
-            {% endif %}
-          </div>
-
-        </div>
-        <div class="pure-u-3-24"></div>
-      </li>
-    {% endfor %}
-    </ul>
-
-    <div class="pure-u-3-24"></div>
-    <div class="pure-u-18-24">
-      {% include pagination.html %}
+{% for post in paginator.posts %}
+  <div class="row">
+    <div class="large-1 medium-1 columns">
+      <div class="post-info">
+        <ul>
+          <li class="post-info__bubble post-info__bubble_date">
+            <div class="bubble">
+              {{ post.date | date_to_string }}
+            </div>
+          </li>
+          <li class="post-info__bubble post-info__bubble_share">
+            <div class="bubble">
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
-    <div class="pure-u-3-24"></div>
+
+    <div class="large-11 medium-11 columns">
+      <div class="post">
+        <h2 class="post__title"><a href="{{ post.url }}">{{ post.title }}</a></h1>
+        <div class="post__content">
+          {% if post.content contains '<!--more-->' %}
+            {{ post.content | split:'<!--more-->' | first }}
+            <div class="post__continue">
+              <a class="button radius left" href="{{ post.url }}">Continue reading</a>
+            </div>
+          {% else %}
+            {{ post.content }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+{% endfor %}
+
+{% include pagination.html %}

@@ -1,31 +1,18 @@
 {% include yandex.html %}
 
-<div class="pure-menu pure-menu-open pure-menu-horizontal">
-  <a href="/" class="pure-menu-heading">Anton Davydov</a>
-
-  <ul>
-    <li class="pure-menu-enable"><a class="pure-menu__link" href="/">Blog</a></li>
-    <li class="pure-menu-disabled"><a class="pure-menu__link" href="#">Tutorials</a></li>
-    <li class="pure-menu-disabled"><a class="pure-menu__link" href="#">Portfolio</a></li>
-    <li class="pure-menu-enable"><a class="pure-menu__link" href="/about.html">About me</a></li>
-    <li class="pure-menu-enable"><a class="pure-menu__link" href="/contact.html">Contact</a></li>
+<nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    <li class="name">
+      <h1><a href="/">Anton Davydov</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
   </ul>
-</div>
 
-<div class="banner">
-  <div class="banner__content">
-
-    {% if page.path == 'index.html' %}
-      <div class="pure-g banner__main">
-    {% else %}
-      <div class="pure-g">
-    {% endif %}
-
-        <div class="pure-u">
-          <h1 class="banner__head">
-            {{ page.title }}
-          </h1> 
-        </div>
-      </div>
-  </div>
-</div>
+  <section class="top-bar-section">
+    <ul class="right">
+      <li ><a href="#">Right Button Active</a></li>
+      <li class="active"><a href="#">Right Button Active</a></li>
+      <li ><a href="#">Right Button Active</a></li>
+    </ul>
+  </section>
+</nav>

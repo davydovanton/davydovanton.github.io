@@ -7,7 +7,9 @@
   <meta name="description" content="davydovanton.github.io : " />
 
   <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
-  <link rel="stylesheet" href="/assets/app-12a24f9108d1f32a36229515840e6023.css">
+  <link rel="stylesheet" href="">
+  <link rel="stylesheet" href="/assets/foundation.min-2349542c28cb683e0ed4ea7c2d8700b8.css">
+  <link rel="stylesheet" href="/assets/app-9e9df81aa11f35aa9b55b8dab45bc42d.css">
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-51d703f164d65d92"></script>
@@ -21,43 +23,30 @@
 </div>
 
 
-<div class="pure-menu pure-menu-open pure-menu-horizontal">
-  <a href="/" class="pure-menu-heading">Anton Davydov</a>
-
-  <ul>
-    <li class="pure-menu-enable"><a class="pure-menu__link" href="/">Blog</a></li>
-    <li class="pure-menu-disabled"><a class="pure-menu__link" href="#">Tutorials</a></li>
-    <li class="pure-menu-disabled"><a class="pure-menu__link" href="#">Portfolio</a></li>
-    <li class="pure-menu-enable"><a class="pure-menu__link" href="/about.html">About me</a></li>
-    <li class="pure-menu-enable"><a class="pure-menu__link" href="/contact.html">Contact</a></li>
+<nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    <li class="name">
+      <h1><a href="/">Anton Davydov</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
   </ul>
-</div>
 
-<div class="banner">
-  <div class="banner__content">
-
-    
-      <div class="pure-g">
-    
-
-        <div class="pure-u">
-          <h1 class="banner__head">
-            Ruby и special/predefined variables
-          </h1> 
-        </div>
-      </div>
-  </div>
-</div>
+  <section class="top-bar-section">
+    <ul class="right">
+      <li ><a href="#">Right Button Active</a></li>
+      <li class="active"><a href="#">Right Button Active</a></li>
+      <li ><a href="#">Right Button Active</a></li>
+    </ul>
+  </section>
+</nav>
 
 
-    <main class="main-content">
-      <div class="content">
-        <div class="content__posts pure-g">
-          <div class="post-info pure-u-3-24"></div>
-          <div class="post pure-u-18-24">
-            <h2 class="post__title"><a href=""></a></h1>
-            <div class="post__content">
-              <!--more-->
+    <div class="row">
+      <div class="large-12 medium-12 columns">
+        <div class="post">
+          <h2 class="post__title"><a href=""></a></h1>
+          <div class="post__content">
+            <!--more-->
 
 <p>Не так давно я обнаружил интересный пример, который выглядел примерно так:</p>
 
@@ -215,8 +204,8 @@
 
 
 
-              <div class="post__share-buttons">
-                <div class="share_buttons">
+            <div class="post__share-buttons">
+              <div class="share_buttons">
   <p>Рассказать друзьям:</p>
   <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
     <a class="addthis_button_twitter"></a>
@@ -230,14 +219,22 @@
   </div>
 </div>
 
-              </div>
 
-              <div class="post__back">
-                <a href="/blog.html" class="pure-button">Назад</a>
-              </div>
+<button href="#" data-dropdown="drop1" aria-controls="drop1" aria-expanded="false" class="button dropdown">Dropdown Button</button><br>
+<ul id="drop1" data-dropdown-content class="f-dropdown" aria-hidden="true" tabindex="-1">
+  <li><a href="#">This is a link</a></li>
+  <li><a href="#">This is another</a></li>
+  <li><a href="#">Yet another</a></li>
+</ul>
 
-              <div class="post__comments">
-                <div class="comments">
+            </div>
+
+            <div class="post__back">
+              <a href="/" class="small secondary radius button">Назад</a>
+            </div>
+
+            <div class="post__comments">
+              <div class="comments">
   <div id="disqus_thread"></div>
   <script type="text/javascript">
   /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
@@ -254,14 +251,18 @@
   <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 </div>
 
-              </div>
             </div>
           </div>
-          <div class="pure-u-3-24"></div>
         </div>
       </div>
-    </main>
+    </div>
 
-    <script src="/assets/app-7422c173eb5b07e3664ee31fc55e4d66.js"></script>
+  <script src="js/vendor/jquery.js"></script>
+<script src="js/foundation.min.js"></script>
+<script src="/assets/app-d2afd58d91653160b34a7e6d1e8701b3.js"></script>
+<script>
+  $(document).foundation();
+</script>
+
   </body>
 </html>

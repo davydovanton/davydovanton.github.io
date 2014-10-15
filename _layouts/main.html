@@ -4,10 +4,12 @@
   <body>
     {% include header.html %}
 
-    <main class="main-content">
-      {{ content }}
-    </main>
+    <div class="row">
+      <div class="large-12 medium-12 columns">
+        {{ content }}
+      </div>
+    </div>
 
-    {% javascript app %}
+    {% include javascript.html %}
   </body>
 </html>
