@@ -1,0 +1,74 @@
+// Small screens
+@media only screen {  /* Define mobile styles */
+  .post {
+    .post__date {
+      margin-top: 3px;
+    }
+  }
+
+  .top-bar .name {
+    margin-left: 0;
+  }
+}
+
+@media only screen and (max-width: 40em) {  /* max-width 640px, mobile-only styles, use when QAing mobile issues */
+  .post {
+    .post__date {
+      margin-top: 3px;
+    }
+  }
+
+  .top-bar .name {
+    margin-left: 0;
+  }
+}
+
+// Medium screens
+@media only screen and (min-width: 40.0610em) {  /* min-width 641px, medium screens */
+  .post {
+    .post__date {
+      margin-top: 10px;
+    }
+  }
+
+  .top-bar .name {
+    margin-left: 50px;
+  }
+}
+
+@media only screen and (min-width: 40.0610em) and (max-width: 64em) { /* min-width 641px and max-width 1024px, use when QAing tablet-only issues */
+  .post {
+    .post__date {
+      margin-top: 10px;
+    }
+  }
+
+  .top-bar .name {
+    margin-left: 50px;
+  }
+}
+
+// Large screens
+@media only screen and (min-width: 64.0610em) {  /* min-width 1025px, large screens */
+  .post {
+    .post__date {
+      margin-top: 10px;
+    }
+  }
+
+  .top-bar .name {
+    margin-left: 50px;
+  }
+}
+
+@media only screen and (min-width: 64.0610em) and (max-width: 90em) {  /* min-width 1025px and max-width 1440px, use when QAing large screen-only issues */
+  .post {
+    .post__date {
+      margin-top: 10px;
+    }
+  }
+
+  .top-bar .name {
+    margin-left: 50px;
+  }
+}
