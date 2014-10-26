@@ -16,23 +16,24 @@
   }
 
   .post__date {
-    color: #333;
+    color: #666;
     float: right;
     font-size: 16px;
     line-height: 29px;
+    margin-top: 13px;
   }
 
   .post__content {
     font-size: 16px;
     margin-bottom: 1em;
-    margin-top: 0;
+    margin-top: 20px;
 
     p {
       text-align: justify !important;
+      font-size: 1.4rem;
     }
 
     img {
-      @include box-shadow(0 1px 1px 1px rgba(0,0,0,0.2));
       height: auto;
       margin: 10px 0;
       max-width: 100%;
@@ -41,6 +42,17 @@
     .post__back {
       margin: 30px 0 15px;
     }
+  }
+
+  .post__tags {
+    ul {
+      font-size: 2rem;
+    }
+  }
+
+  .post__tags-title {
+    margin-top: 40px;
+    position: absolute;
   }
 
   .post__content_float {

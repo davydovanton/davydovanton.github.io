@@ -11,12 +11,22 @@
           <div class="post__content">
             {{ content }}
 
+            <hr class="bookends-dots"/>
+
+            <div class="post__tags">
+              <ul class="inline-list">
+                {% for tag in page.tags %}
+                  <li><a href='/tag/#{{tag}}'>#{{tag}}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+
             <div class="post__share-buttons">
               {% include share_buttons.html %}
             </div>
 
             <div class="post__back">
-              <a href="/" class="small secondary radius button">Назад</a>
+              <a href="/" class="secondary radius button">Назад</a>
             </div>
 
             <div class="post__comments">
