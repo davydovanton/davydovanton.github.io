@@ -4,7 +4,6 @@
 
   .post__title {
     color: #333;
-    float: left;
     font-size: 24px;
     font-weight: 700;
     line-height: 29px;
@@ -17,7 +16,6 @@
 
   .post__date {
     color: #666;
-    float: right;
     font-size: 16px;
     line-height: 29px;
     margin-top: 13px;
@@ -26,7 +24,7 @@
   .post__content {
     font-size: 16px;
     margin-bottom: 1em;
-    margin-top: 20px;
+    margin-top: 30px;
 
     p {
       text-align: justify !important;
@@ -51,7 +49,7 @@
   }
 
   .post__tags-title {
-    margin-top: 40px;
+    margin-top: 50px;
     position: absolute;
   }
 

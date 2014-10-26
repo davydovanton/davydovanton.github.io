@@ -1,7 +1,7 @@
 code {
   background-color: rgba(0,0,0,0.12);
   border-radius: 3px;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   margin: 0;
   padding: 0.2em;
   border-color: #f8f8f8;
@@ -15,6 +15,12 @@ code {
   margin-bottom: 10px;
   padding: 5px 15px;
   white-space: pre-wrap;
+
+  pre {
+    white-space: pre;
+    overflow: auto;
+    word-wrap: normal;
+  }
 
   code {
     font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;

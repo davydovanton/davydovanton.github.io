@@ -5,35 +5,47 @@ desc: "A list of Joe's blog posts organized by tags"
 permalink: /tag/
 ---
 
-Click on a tag to see relevant list of posts.
+<div class="tags">
+  <div class="tags__cloud">
+    <ul>
+      {% for tag in site.tags %}
+        {% assign tag_name = tag | first | downcase %}
+        {% assign tag_weight = tag | first | size | times: 100 | divided_by: site.tags.size %}
 
-<ul class="tags">
-  {% for tag in site.tags %}
-    {% assign t = tag | first %}
-    <li>
-      <a href="/tag/#{{t | downcase | replace:" ","-" }}">{{ t | downcase }}</a>
-    </li>
-  {% endfor %}
-</ul>
 
-{% for tag in site.tags %}
-  <hr class="bookends-dots"/>
-  {% assign t = tag | first %}
-  {% assign posts = tag | last %}
-
-  <h4>
-    <a name="{{t | downcase | replace:" ","-" }}"></a><a class="internal" href="/tag/#{{t | downcase | replace:" ","-" }}">{{ t | downcase }}</a>
-  </h4>
-
-  <ul>
-    {% for post in posts %}
-      {% if post.tags contains t %}
         <li>
-          <a href="{{ post.url }}">{{ post.title }}</a>
-          <span class="date">{{ post.date | date: "%B %-d, %Y"  }}</span>
+          <a href="/tag/#{{tag_name | replace:" ","-" }}">
+            <span class="secondary radius label" style="font-size: {{ 200 | minus: tag_weight }}%">{{ tag_name }}</span>
+          </a>
         </li>
-      {% endif %}
-    {% endfor %}
-  </ul>
+      {% endfor %}
+    </ul>
+  </div>
 
-{% endfor %}
+  <div class="tags__list">
+    {% for tag in site.tags %}
+      {% assign t = tag | first %}
+      {% assign posts = tag | last %}
+
+      <h3 class="tags__name">
+        <a class="internal" href="/tag/#{{t | downcase | replace:" ","-" }}">
+          <span>
+            {{ t | downcase }}
+          </span>
+        </a>
+      </h3>
+
+      <ul>
+        {% for post in posts %}
+          {% if post.tags contains t %}
+            <li class="tags__post">
+              <a href="{{ post.url }}">{{ post.title }}</a>
+              <span class="date"> - {{ post.date | date: "%B %-d, %Y"  }}</span>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+
+    {% endfor %}
+  </div>
+</div>

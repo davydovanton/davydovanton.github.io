@@ -3,11 +3,31 @@
   .top-bar .name {
     margin-left: 0;
   }
+
+  .post {
+    .post__date {
+      margin-top: 0;
+    }
+
+    .post__tags-title {
+      margin-top: 0;
+    }
+  }
 }
 
 @media only screen and (max-width: 40em) {  /* max-width 640px, mobile-only styles, use when QAing mobile issues */
   .top-bar .name {
     margin-left: 0;
+  }
+
+  .post {
+    .post__date {
+      margin-top: 0;
+    }
+
+    .post__tags-title {
+      margin-top: 0;
+    }
   }
 }
 
@@ -16,11 +36,41 @@
   .top-bar .name {
     margin-left: 0;
   }
+
+  .post {
+    .post__title {
+      float: left;
+    }
+
+    .post__date {
+      margin-top: 13px;
+      float: right;
+    }
+
+    .post__tags-title {
+      margin-top: 50px;
+    }
+  }
 }
 
 @media only screen and (min-width: 40.0610em) and (max-width: 64em) { /* min-width 641px and max-width 1024px, use when QAing tablet-only issues */
   .top-bar .name {
     margin-left: 0;
+  }
+
+  .post {
+    .post__title {
+      float: left;
+    }
+
+    .post__date {
+      margin-top: 13px;
+      float: right;
+    }
+
+    .post__tags-title {
+      margin-top: 50px;
+    }
   }
 }
 
@@ -29,10 +79,40 @@
   .top-bar .name {
     margin-left: 50px;
   }
+
+  .post {
+    .post__title {
+      float: left;
+    }
+
+    .post__date {
+      float: right;
+      margin-top: 13px;
+    }
+
+    .post__tags-title {
+      margin-top: 50px;
+    }
+  }
 }
 
 @media only screen and (min-width: 64.0610em) and (max-width: 90em) {  /* min-width 1025px and max-width 1440px, use when QAing large screen-only issues */
   .top-bar .name {
     margin-left: 50px;
+  }
+
+  .post {
+    .post__title {
+      float: left;
+    }
+
+    .post__date {
+      float: right;
+      margin-top: 13px;
+    }
+
+    .post__tags-title {
+      margin-top: 50px;
+    }
   }
 }
