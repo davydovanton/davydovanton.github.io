@@ -1,35 +1,31 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://0.0.0.0:4000//posts/ruby-and-predefined-global-variables</loc>
-        <lastmod>2014-10-26T14:50:13+03:00</lastmod>
+        <loc>thhp://davydovanton.github.io/posts/ruby-and-predefined-global-variables</loc>
+        <lastmod>2014-10-26T21:47:11+03:00</lastmod>
     </url>
     <url>
-        <loc>http://0.0.0.0:4000//posts/irb-and-all-all-all</loc>
-        <lastmod>2014-10-26T17:41:10+03:00</lastmod>
+        <loc>thhp://davydovanton.github.io/posts/irb-and-all-all-all</loc>
+        <lastmod>2014-10-26T21:47:11+03:00</lastmod>
     </url>
     <url>
-        <loc>http://0.0.0.0:4000//posts/seed-and-you</loc>
-        <lastmod>2014-10-26T14:50:13+03:00</lastmod>
+        <loc>thhp://davydovanton.github.io/posts/seed-and-you</loc>
+        <lastmod>2014-10-26T21:47:11+03:00</lastmod>
     </url>
     <url>
-        <loc>http://0.0.0.0:4000//posts/vim-history</loc>
-        <lastmod>2014-10-26T14:50:13+03:00</lastmod>
+        <loc>thhp://davydovanton.github.io/posts/vim-history</loc>
+        <lastmod>2014-10-26T21:47:11+03:00</lastmod>
     </url>
     <url>
-        <loc>http://0.0.0.0:4000//about.html</loc>
-        <lastmod>2014-10-17T14:32:11+04:00</lastmod>
+        <loc>thhp://davydovanton.github.io/about/</loc>
+        <lastmod>2014-10-26T23:30:47+03:00</lastmod>
     </url>
     <url>
-        <loc>http://0.0.0.0:4000//contact.html</loc>
-        <lastmod>2014-10-17T14:32:22+04:00</lastmod>
+        <loc>thhp://davydovanton.github.io/</loc>
+        <lastmod>2014-10-26T22:47:18+03:00</lastmod>
     </url>
     <url>
-        <loc>http://0.0.0.0:4000//</loc>
-        <lastmod>2014-10-26T17:41:10+03:00</lastmod>
-    </url>
-    <url>
-        <loc>http://0.0.0.0:4000//tag/</loc>
-        <lastmod>2014-10-26T18:18:59+03:00</lastmod>
+        <loc>thhp://davydovanton.github.io/tags/</loc>
+        <lastmod>2014-10-26T22:47:18+03:00</lastmod>
     </url>
 </urlset>

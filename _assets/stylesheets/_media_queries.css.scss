@@ -13,6 +13,13 @@
       margin-top: 0;
     }
   }
+
+  .about {
+    .about__my-photo {
+      margin-bottom: 15px;
+      width: 290px;
+    }
+  }
 }
 
 @media only screen and (max-width: 40em) {  /* max-width 640px, mobile-only styles, use when QAing mobile issues */
@@ -29,6 +36,13 @@
       margin-top: 0;
     }
   }
+
+  .about {
+    .about__my-photo {
+      margin-bottom: 15px;
+      width: 290px;
+    }
+  }
 }
 
 // Medium screens
@@ -43,12 +57,20 @@
     }
 
     .post__date {
-      margin-top: 13px;
+      margin-top: 14px;
       float: right;
     }
 
     .post__tags-title {
       margin-top: 50px;
+    }
+  }
+
+  .about {
+    .about__my-photo {
+      float: right;
+      margin: 0 0 15px 15px;
+      width: 350px;
     }
   }
 }
@@ -64,12 +86,20 @@
     }
 
     .post__date {
-      margin-top: 13px;
+      margin-top: 14px;
       float: right;
     }
 
     .post__tags-title {
       margin-top: 50px;
+    }
+  }
+
+  .about {
+    .about__my-photo {
+      float: right;
+      margin: 0 0 15px 15px;
+      width: 350px;
     }
   }
 }
@@ -87,11 +117,19 @@
 
     .post__date {
       float: right;
-      margin-top: 13px;
+      margin-top: 14px;
     }
 
     .post__tags-title {
       margin-top: 50px;
+    }
+  }
+
+  .about {
+    .about__my-photo {
+      float: right;
+      margin: 0 0 15px 15px;
+      width: 350px;
     }
   }
 }
@@ -108,11 +146,19 @@
 
     .post__date {
       float: right;
-      margin-top: 13px;
+      margin-top: 14px;
     }
 
     .post__tags-title {
       margin-top: 50px;
+    }
+  }
+
+  .about {
+    .about__my-photo {
+      margin: 0 0 15px 15px;
+      float: right;
+      width: 350px;
     }
   }
 }

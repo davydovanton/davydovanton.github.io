@@ -6,14 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="chrome=1" />
   <meta name="description" content="davydovanton.github.io : " />
 
-  <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
-  <link rel="stylesheet" href="">
-  <link rel="stylesheet" href="/assets/foundation.min-2349542c28cb683e0ed4ea7c2d8700b8.css">
-  <link rel="stylesheet" href="/assets/app-bea2faf236c46f12c397f074d626bd87.css">
-
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-51d703f164d65d92" async="async"></script>
-
+  <link rel="stylesheet" href="/assets/foundation.min-7ef34c8719badc4975c3bddd29762ddc.css">
+  <link rel="stylesheet" href="/assets/app-216bb3c8773b519e72fe32a442cf51ec.css">
   <title>IRB и все все все</title>
 </head>
 
@@ -39,11 +33,7 @@
         
 
         
-          <li><a href="../contact.html">Contact</a></li>
-        
-
-        
-          <li><a href="../about.html">About</a></li>
+          <li><a href="/about">About</a></li>
         
       </ul>
     </ul>
@@ -63,7 +53,7 @@
 <p>Но для начала давайте посмотрим документацию, а именно откроем модуль <a href="http://www.ruby-doc.org/stdlib-2.0/libdoc/irb/rdoc/IRB.html">IRB</a> в стандартной библиотеке ruby.
 “Что интересного тут есть?”, спросите вы? Думаю стоит начать с самого начала, с запуска. Если вы просто наберете в консоли <code>irb</code>, то запустите шел с вашей текущей версией руби. Но  если у вас RVM(хотя, сказать по правде я не уверен, что это работает только с RVM), то вы можете выбрать среду для запуска из всех тех, что у вас установлены. Например вот так, я, при активном MRI 2.0, могу запустить у себя jruby:</p>
 
-<p><img src="http://0.0.0.0:4000//images/2014/02/irb-and-all-all-all/jruby-irb.png" alt="jruby in irb" /></p>
+<p><img src="thhp://davydovanton.github.io/images/2014/02/irb-and-all-all-all/jruby-irb.png" alt="jruby in irb" /></p>
 
 <p>Дальше, думаю, следует обсудить ключи. Их много, они разные. В документации они все <a href="http://www.ruby-doc.org/stdlib-2.0/libdoc/irb/rdoc/IRB.html#module-IRB-label-Command+line+options">есть</a>. Самые интересные, на мой взляд, - <code>-d</code> включающий дебаг мод(аналогично <code>ruby -d</code>) и ключ <code>-I path</code>, загружающий указанную директорию.</p>
 
@@ -89,7 +79,7 @@
 
 <p>Как он будет работать, спросите вы? Да все просто, берете объект и вызываете на нем данный метод:</p>
 
-<p><img src="http://0.0.0.0:4000//images/2014/02/irb-and-all-all-all/irb_local_methods.png" alt="Using local_mathods method in irb" /></p>
+<p><img src="thhp://davydovanton.github.io/images/2014/02/irb-and-all-all-all/irb_local_methods.png" alt="Using local_mathods method in irb" /></p>
 
 <p>Думаю, вы заметили цвета, которых не хватает в дефолтном irb? </p>
 
@@ -113,13 +103,13 @@
 <span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span></code></pre></div>
 
 <p>Ну а выглядеть это будет как-то так:
-<img src="http://0.0.0.0:4000//images/2014/02/irb-and-all-all-all/pry.gif" alt="Using pry in irb" /></p>
+<img src="thhp://davydovanton.github.io/images/2014/02/irb-and-all-all-all/pry.gif" alt="Using pry in irb" /></p>
 
 <p>Но самое полезное, что можно сделать, это забыть построчный ввод кода. “Как?”, спросите вы? Начну издалека: мне очень нравится vim :) Поэтому, смотря vimcasts-ы, я узнал то, что перевернуло мой мир, а именно: любой текстовый редактор можно <a href="http://vimcasts.org/episodes/running-vim-within-irb/">вызывать</a> прямо из irb. </p>
 
 <p>Делается это очень просто: нужно добавить гем <code>interactive_editor</code>. Данный гем позволяет вызывать любой текстовый редактор из вашего irb, например, набрав <code>vim</code> - откроется vim, где вы сможете набрать любой код, который выполнится после сохранения файла и закрытия редактора. </p>
 
-<p><img src="http://0.0.0.0:4000//images/2014/02/irb-and-all-all-all/vim-in-irb.gif" alt="Using vim in irb" /></p>
+<p><img src="thhp://davydovanton.github.io/images/2014/02/irb-and-all-all-all/vim-in-irb.gif" alt="Using vim in irb" /></p>
 
 <p>Собственно то же самое будет работать с sublime, textmate, emacs и <a href="https://github.com/jberkel/interactive_editor/blob/master/lib/interactive_editor.rb#L92">дургими</a> текстовыми редакторами. </p>
 
@@ -164,29 +154,16 @@
             <div class="post__tags">
               <ul class="inline-list">
                 
-                  <li><a href='/tag/#ruby'>#ruby</a></li>
+                  <li><a href='/tags/#ruby'>#ruby</a></li>
                 
-                  <li><a href='/tag/#irb'>#irb</a></li>
-                
-                  <li><a href='/tag/#new'>#new</a></li>
-                
-                  <li><a href='/tag/#post'>#post</a></li>
-                
-                  <li><a href='/tag/#more'>#more</a></li>
-                
-                  <li><a href='/tag/#tags'>#tags</a></li>
-                
-                  <li><a href='/tag/#moree'>#moree</a></li>
-                
-                  <li><a href='/tag/#moreee'>#moreee</a></li>
+                  <li><a href='/tags/#irb'>#irb</a></li>
                 
               </ul>
             </div>
 
             <div class="post__share-buttons">
               <div class="share_buttons">
-  <p>Рассказать друзьям:</p>
-  <div class="addthis_responsive_sharing"></div>
+  <div class='shareaholic-canvas' data-app='share_buttons' data-app-id='11548095'></div>
 </div>
 
             </div>
@@ -219,9 +196,9 @@
       </div>
     </div>
 
-  <script src="js/vendor/jquery.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="js/foundation.min.js"></script>
-<script src="/assets/app-d2afd58d91653160b34a7e6d1e8701b3.js"></script>
+<script src="/assets/app-f6e44558ba724f9e4fac44a917e14ba0.js"></script>
 <script>
   $(document).foundation();
 </script>
@@ -237,6 +214,25 @@
 
 </script>
 
+
+<script type="text/javascript">
+//<![CDATA[
+  (function() {
+    var shr = document.createElement('script');
+    shr.setAttribute('data-cfasync', 'false');
+    shr.src = '//dsms0mj1bbhn4.cloudfront.net/assets/pub/shareaholic.js';
+    shr.type = 'text/javascript'; shr.async = 'true';
+    shr.onload = shr.onreadystatechange = function() {
+      var rs = this.readyState;
+      if (rs && rs != 'complete' && rs != 'loaded') return;
+      var site_id = '9cc17325fe566a8d07d3ee25ce3fa991';
+      try { Shareaholic.init(site_id); } catch (e) {}
+    };
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(shr, s);
+  })();
+//]]>
+</script>
 
   </body>
 </html>
