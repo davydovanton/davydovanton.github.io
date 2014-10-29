@@ -21,13 +21,13 @@
   }
 
   .post__content {
-    font-size: 16px;
+    font-size: 22px;
     margin-bottom: 1em;
     margin-top: 30px;
 
     p {
       text-align: justify !important;
-      font-size: 1.4rem;
+      font-size: 1.7rem;
     }
 
     img {
@@ -42,6 +42,25 @@
 
     figure {
       margin: 0;
+    }
+
+    h1 {
+      font-size: 3.14444rem;
+    }
+    h2 {
+      font-size: 2.75556rem;
+    }
+    h3 {
+      font-size: 2.2rem;
+    }
+    h4 {
+      font-size: 1.97778rem;
+    }
+    h5 {
+      font-size: 1.825rem;
+    }
+    h6 {
+      font-size: 1.7rem;
     }
   }
 
