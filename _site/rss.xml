@@ -365,13 +365,22 @@
     <item>
       <title>Ruby и special/predefined variables</title>
       <link>thhp://davydovanton.github.io/posts/ruby-and-predefined-global-variables</link>
-      <description><![CDATA[Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста.
-Не так давно я обнаружил интересный пример, который выглядел примерно так:
+      <description><![CDATA[
+              
+This should be parsed as markdown man.
+  
+
 
 ]]></description>
       <pubDate>Wed, 15 Jan 2014 00:00:00 +0400</pubDate>
       <guid>thhp://davydovanton.github.io/posts/ruby-and-predefined-global-variables</guid>
-      <content:encoded><![CDATA[<p>Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста.
+      <content:encoded><![CDATA[<p></p>
+<figure class="figure">  <a class="figure__image-link" href="http://sergeykorol.ru/blog/wp-content/uploads/2014/10/IMG_3042-2.jpg ">    <img class="figure__image" src="http://sergeykorol.ru/blog/wp-content/uploads/2014/10/IMG_3042-2.jpg " alt="This should be parsed asmarkdown man." />  </a>  <figcaption class="figure__figcaption">    
+<p>This should be parsed as <em>markdown</em> <a href="http://example.com/">man</a>.</p>
+  </figcaption></figure>
+<p></p>
+
+<p>Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста. Много много много текста.
 Не так давно я обнаружил интересный пример, который выглядел примерно так:</p>
 
 <!--more-->
