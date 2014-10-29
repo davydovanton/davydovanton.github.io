@@ -1,4 +1,5 @@
-name: Anton Davydov
+name: Anton Davydov personal blog
+author: Anton Davydov
 description: Блог о Ruby и прочих технологиях
 url: thhp://davydovanton.github.io
 markdown: kramdown

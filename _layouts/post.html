@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   {% include head.html %}
-  <body>
+  <body onorientationchange="if(DISQUS) DISQUS.reset({reload: true});">
     {% include header.html %}
 
     <div class="row">
