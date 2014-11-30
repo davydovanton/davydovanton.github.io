@@ -27,7 +27,7 @@ permalink: /tags/
       {% assign t = tag | first %}
       {% assign posts = tag | last %}
 
-      <h3 class="tags__name">
+      <h3 id="{{ t | downcase }}" class="tags__name">
         <a class="internal" href="/tags/#{{t | downcase | replace:" ","-" }}">
           <span>
             {{ t | downcase }}
