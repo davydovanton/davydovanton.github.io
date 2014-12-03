@@ -49,3 +49,15 @@ http://melandri.net/2013/11/24/manage-posts-excerpt-in-jekyll/
 написать про оптимизацию
 добавить это
 http://www.thecssninja.com/javascript/pointer-events-60fps
+
+Add post tags
+https://github.com/davydovanton/davydovanton.github.io/commit/4ac16c9936e73d3843fe611f0a7b5190fdcd07dc
+
+Create jekyll plugin for create a html figure construction
+https://github.com/davydovanton/davydovanton.github.io/commit/6e91d8b18ee3c63d9b65137e45d6f894d5d21990
+
+Add twitter integration
+https://github.com/davydovanton/davydovanton.github.io/commit/0dc4746ddea7231472a9f9c52ad930bf9609c6f1
+
+Add "Read more" button functionality
+https://github.com/davydovanton/davydovanton.github.io/commit/fbf92c9796c14d10793d9ba44cb27ba67dc16f02
