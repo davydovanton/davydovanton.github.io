@@ -45,9 +45,8 @@
 
 <p>Думаю, для начала, следует указать конфигурационные значения, например, увеличить количество сохраняемых команд и записывать их в отдельный файл:</p>
 
-<div class="highlight"><pre><code class="ruby"><span class="no">IRB</span><span class="o">.</span><span class="n">conf</span><span class="o">[</span><span class="ss">:SAVE_HISTORY</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1000</span>
-<span class="no">IRB</span><span class="o">.</span><span class="n">conf</span><span class="o">[</span><span class="ss">:HISTORY_FILE</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;HOME&#39;</span><span class="o">]</span><span class="si">}</span><span class="s2">/.irb_history&quot;</span>
-</code></pre></div>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">IRB</span><span class="o">.</span><span class="n">conf</span><span class="o">[</span><span class="ss">:SAVE_HISTORY</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="no">IRB</span><span class="o">.</span><span class="n">conf</span><span class="o">[</span><span class="ss">:HISTORY_FILE</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;HOME&#39;</span><span class="o">]</span><span class="si">}</span><span class="s2">/.irb_history&quot;</span></code></pre></div>
 
 
 <p>Так же можно указать кучу других настроек, но я бы не стал писать эту статью, если бы хотел рассказать только это. Все веселье начинается тогда, когда приходит понимание того, что данный файл является обычным <code>*.rb</code> файлом, который загружается при старте вашего irb.</p>
@@ -56,13 +55,12 @@
 
 <p>Предлагаю написать, ради развлечения, метод, который возвращал бы все локальные методы объекта. Выглядеть он будет примерно так:</p>
 
-<div class="highlight"><pre><code class="ruby"><span class="c1"># .irbrc</span>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># .irbrc</span>
 <span class="k">class</span> <span class="nc">Object</span>
   <span class="k">def</span> <span class="nf">local_methods</span>
     <span class="p">(</span><span class="nb">methods</span> <span class="o">-</span> <span class="no">Object</span><span class="o">.</span><span class="n">instance_methods</span><span class="p">)</span><span class="o">.</span><span class="n">sort</span>
   <span class="k">end</span>
-<span class="k">end</span>
-</code></pre></div>
+<span class="k">end</span></code></pre></div>
 
 
 <p>Как он будет работать, спросите вы? Да все просто, берете объект и вызываете на нем данный метод:</p>
@@ -73,25 +71,23 @@
 
 <p>Да, все верно, так же можно подключать гемы, и да, есть гемы, которые добавляют ярких цветов в ваш irb, например, <a href="https://github.com/blackwinter/wirble">wirble</a>. Достаточно написать такой код:</p>
 
-<div class="highlight"><pre><code class="ruby"><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
 <span class="nb">require</span> <span class="s1">&#39;wirble&#39;</span>
 
 <span class="no">Wirble</span><span class="o">.</span><span class="n">init</span>
-<span class="no">Wirble</span><span class="o">.</span><span class="n">colorize</span>
-</code></pre></div>
+<span class="no">Wirble</span><span class="o">.</span><span class="n">colorize</span></code></pre></div>
 
 
 <p>И ваш интерактивный шел заиграет новыми красками :)</p>
 
 <p>А если вам нравится <a href="http://pryrepl.org/">pry</a>, то вам никто не запрещает его добавить, в последующем вызывая его, просто набрав <code>pry</code> во время irb сессии:</p>
 
-<div class="highlight"><pre><code class="ruby"><span class="c1">#.irbrc</span>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1">#.irbrc</span>
 <span class="nb">require</span> <span class="s1">&#39;pry&#39;</span>
 
 <span class="c1"># irb</span>
 <span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">015</span> <span class="o">&gt;</span> <span class="n">pry</span>
-<span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> 
-</code></pre></div>
+<span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span></code></pre></div>
 
 
 <p>Ну а выглядеть это будет как-то так:
@@ -107,23 +103,21 @@
 
 <p>Ну и на последок стоит рассказать про сессии в irb. Если вы используете vim или когда то использовали его, то вам знакомо такое понятие как буфер, которое чем-то похоже на сессии в irb. Ну а если нет, то краткая справка: сессия - некий сеанс интерактивного шела. Для того, что бы посмотреть список всех сессий в irb, достаточно набрать <code>jobs</code>:</p>
 
-<div class="highlight"><pre><code class="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">012</span> <span class="o">&gt;</span> <span class="n">jobs</span>
- <span class="o">=&gt;</span> <span class="c1">#0-&gt;irb on main (#&lt;Thread:0x007fcb810bcda0&gt;: running) </span>
-</code></pre></div>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">012</span> <span class="o">&gt;</span> <span class="n">jobs</span>
+ <span class="o">=&gt;</span> <span class="c1">#0-&gt;irb on main (#&lt;Thread:0x007fcb810bcda0&gt;: running)</span></code></pre></div>
 
 
 <p>Ну а если вам надо создать новую сессию, то просто наберите <code>irb</code>:</p>
 
-<div class="highlight"><pre><code class="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">013</span> <span class="o">&gt;</span> <span class="n">irb</span>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">013</span> <span class="o">&gt;</span> <span class="n">irb</span>
 <span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">001</span> <span class="o">&gt;</span> <span class="n">jobs</span>
  <span class="o">=&gt;</span> <span class="c1">#0-&gt;irb on main (#&lt;Thread:0x007fcb810bcda0&gt;: stop)</span>
-<span class="c1">#1-&gt;irb#1 on main (#&lt;Thread:0x007fcb819b7bf8&gt;: running) </span>
-</code></pre></div>
+<span class="c1">#1-&gt;irb#1 on main (#&lt;Thread:0x007fcb819b7bf8&gt;: running)</span></code></pre></div>
 
 
 <p>Как видите, irb создал новую сессию и переключился в нее. Но что делать, когда вы хотите удалить или изменить сессию? Для этого есть методы <code>kill &lt;number_session&gt;</code> и <code>fg &lt;number_session&gt;</code> соответственно:</p>
 
-<div class="highlight"><pre><code class="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">002</span> <span class="o">&gt;</span> <span class="n">jobs</span>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">002</span> <span class="o">&gt;</span> <span class="n">jobs</span>
  <span class="o">=&gt;</span> <span class="c1">#0-&gt;irb on main (#&lt;Thread:0x007fcb810bcda0&gt;: stop)</span>
 <span class="c1">#1-&gt;irb#1 on main (#&lt;Thread:0x007fcb819b7bf8&gt;: stop)</span>
 <span class="c1">#2-&gt;irb#2 on main (#&lt;Thread:0x007fcb81319238&gt;: running) </span>
@@ -141,8 +135,7 @@
 <span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">012</span> <span class="o">&gt;</span> <span class="n">kill</span> <span class="mi">1</span>
  <span class="o">=&gt;</span> <span class="c1">#&lt;IRB::Irb: @context=#&lt;IRB::Context:0x007fcb8185b2c8&gt;, @signal_status=:IN_EVAL, @scanner=#&lt;RubyLex:0x007fcb8110d5e8&gt;&gt; </span>
 <span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">014</span> <span class="o">&gt;</span> <span class="n">jobs</span>
- <span class="o">=&gt;</span> <span class="c1">#0-&gt;irb on main (#&lt;Thread:0x007fcb810bcda0&gt;: running) </span>
-</code></pre></div>
+ <span class="o">=&gt;</span> <span class="c1">#0-&gt;irb on main (#&lt;Thread:0x007fcb810bcda0&gt;: running)</span></code></pre></div>
 
 
 
