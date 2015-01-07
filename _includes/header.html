@@ -1,0 +1,28 @@
+{% include yandex.html %}
+
+<nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    <li class="name">
+    <h1><a href="/">{{ page.title }}</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="right">
+      <ul class="nav navbar-nav">
+        {% if page.active == "main" %}
+          <li class="active"><a href="#">Blog</a></li>
+        {% else %}
+          <li><a href="/">Blog</a></li>
+        {% endif %}
+
+        {% if page.active == "about" %}
+          <li class="active"><a href="#">About</a></li>
+        {% else %}
+          <li><a href="/about">About</a></li>
+        {% endif %}
+      </ul>
+    </ul>
+  </section>
+</nav>

@@ -1,6 +1,43 @@
-name: require 'brain'
+name: Anton Davydov personal blog
+author: Anton Davydov
 description: Блог о Ruby и прочих технологиях
-url: http://fikys.github.io
-markdown: rdiscount
-pygments: true
+url: thhp://davydovanton.github.io
+markdown: kramdown
 permalink: /posts/:title
+paginate: 3
+highlighter: pygments
+gems: ["emoji_for_jekyll"]
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+
+sitemap:
+  file: "/sitemap.xml"
+  exclude:
+      - "/atom.xml"
+      - "/feed.xml"
+      - "/feed/index.xml"
+  include_posts:
+      - "/index.html"
+  change_frequency_name: "change_frequency"
+  priority_name: "priority"
+
+# Handling Reading
+safe:         false
+include:      [".htaccess"]
+exclude:      []
+keep_files:   [".git", ".svn"]
+encoding:     "utf-8"
+markdown_ext: "markdown,mkdown,mkdn,mkd,md"
+textile_ext:  "textile"
+
+assets:
+  css_compressor: sass
+  sources:
+    - _assets/javascripts
+    - _assets/stylesheets
+    - _vendors/foundation/stylesheets
+    - _vendors/foundation/javascripts
+  js_compressor: 'uglifier'
+  gzip: [ text/html, text/css, application/javascript ]
