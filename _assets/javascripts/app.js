@@ -3,8 +3,8 @@
 !function () {
   'use strict';
 
-  var body = document.body,
-    timer;
+  var body = document.body
+    , timer;
 
   window.addEventListener('scroll', function() {
     clearTimeout(timer);

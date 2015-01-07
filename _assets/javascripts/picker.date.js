@@ -1429,9 +1429,4 @@ DatePicker.defaults = (function( prefix ) {
  * Extend the picker to add the date picker.
  */
 Picker.extend( 'pickadate', DatePicker )
-
-
 }));
-
-
-

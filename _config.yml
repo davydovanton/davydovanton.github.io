@@ -37,7 +37,5 @@ assets:
   sources:
     - _assets/javascripts
     - _assets/stylesheets
-    - _vendors/foundation/stylesheets
-    - _vendors/foundation/javascripts
   js_compressor: 'uglifier'
   gzip: [ text/html, text/css, application/javascript ]

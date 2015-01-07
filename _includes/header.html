@@ -1,28 +1,25 @@
 {% include yandex.html %}
 
 <nav class="top-bar" data-topbar role="navigation">
-  <ul class="title-area">
-    <li class="name">
-    <h1><a href="/">{{ page.title }}</a></h1>
-    </li>
-    <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
-  </ul>
+  <div class="nav-wrapper">
+    <a href="/">{{ page.title }}</a>
+    <ul id="nav-mobile" class="right side-nav">
+      {% if page.active == "main" %}
+        <li class="active"><a href="#">Blog</a></li>
+      {% else %}
+        <li><a href="/">Blog</a></li>
+      {% endif %}
 
-  <section class="top-bar-section">
-    <ul class="right">
-      <ul class="nav navbar-nav">
-        {% if page.active == "main" %}
-          <li class="active"><a href="#">Blog</a></li>
-        {% else %}
-          <li><a href="/">Blog</a></li>
-        {% endif %}
-
-        {% if page.active == "about" %}
-          <li class="active"><a href="#">About</a></li>
-        {% else %}
-          <li><a href="/about">About</a></li>
-        {% endif %}
-      </ul>
+      {% if page.active == "about" %}
+        <li class="active"><a href="#">About</a></li>
+      {% else %}
+        <li><a href="/about">About</a></li>
+      {% endif %}
     </ul>
-  </section>
+
+    <!-- Include this line below -->
+    <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="mdi-navigation-menu"></i></a>
+    <!-- End -->
+
+  </div>
 </nav>

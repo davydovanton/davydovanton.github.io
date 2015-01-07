@@ -23,7 +23,7 @@ active: main
           {% if post.content contains '<!--more-->' %}
             {{ post.content | split:'<!--more-->' | first }}
             <div class="post__continue">
-              <a class="radius button left" href="{{ post.url }}">Continue reading</a>
+              <a class="waves-effect waves-light btn-large" href="{{ post.url }}">Continue reading</a>
             </div>
           {% else %}
             {{ post.content }}
