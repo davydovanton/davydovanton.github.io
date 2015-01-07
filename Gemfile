@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rack'
+gem 'rake'
 gem 'jekyll'
 
 gem 'emoji_for_jekyll'
