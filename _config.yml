@@ -6,7 +6,17 @@ markdown: kramdown
 permalink: /posts/:title
 paginate: 3
 highlighter: pygments
-gems: ["emoji_for_jekyll"]
+gems: [
+  'emoji_for_jekyll',
+  'emoji_for_jekyll',
+  'jekyll-assets',
+  'jekyll-sass-converter',
+  'rack-jekyll',
+  'RedCloth',
+  'uglifier',
+  'yui-compressor'
+]
+
 exclude:
   - README.md
   - Gemfile
