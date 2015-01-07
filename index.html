@@ -1,210 +1,38 @@
-<!DOCTYPE html>
-<html>
-  <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta charset='utf-8' />
-  <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-  <meta name="description" content="davydovanton.github.io : " />
+---
+layout: main
+title: Anton Davydov
+active: main
+---
 
-  <link rel="stylesheet" href="/assets/foundation.min-7ef34c8719badc4975c3bddd29762ddc.css">
-  <link rel="stylesheet" href="/assets/app-cb2db58c473238f062a13d1e2be7e56b.css">
-  <title>Anton Davydov</title>
-</head>
-
-  <body>
-    <div class="yandex_metrica">
-  <!-- Yandex.Metrika counter --><script type="text/javascript">var yaParams = {/*Здесь параметры визита*/};</script><script type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter23652886 = new Ya.Metrika({id:23652886, webvisor:true, clickmap:true, trackLinks:true, accurateTrackBounce:true, trackHash:true,params:window.yaParams||{ }}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="//mc.yandex.ru/watch/23652886" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-</div>
-
-
-<nav class="top-bar" data-topbar role="navigation">
-  <ul class="title-area">
-    <li class="name">
-    <h1><a href="/">Anton Davydov</a></h1>
-    </li>
-    <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
-  </ul>
-
-  <section class="top-bar-section">
-    <ul class="right">
-      <ul class="nav navbar-nav">
-        
-          <li class="active"><a href="#">Blog</a></li>
-        
-
-        
-          <li><a href="/about">About</a></li>
-        
-      </ul>
-    </ul>
-  </section>
-</nav>
-
-
-    <div class="row">
-      <div class="large-12 medium-12 columns">
-        
+{% for post in paginator.posts %}
   <div class="row">
     <div class="large-12 medium-12 columns">
       <div class="post">
         <div class="post__title">
-          <h2><a href="/posts/vim-history">История vim</a></h1>
+          <h2><a href="{{ post.url }}">{{ post.title }}</a></h1>
         </div>
         <div class="post__date">
-          16 Mar 2014
+          {{ post.date | date_to_string }}
         </div>
         <div class="post__tags-title">
-          
-            <a href='/tags/#vim'>#vim</a>
-          
-            <a href='/tags/#история'>#история</a>
-          
+          {% for tag in post.tags %}
+            <a href='/tags/#{{tag}}'>#{{tag}}</a>
+          {% endfor %}
         </div>
         <div class="post__content post__content_float">
-          
-            <p>Я свято верю, что перед тем, как изучать новую технологию, необходимо узнать, зачем и в каких условиях она была создана. Думаю, данные знания позволяют в будущем не только не забивать гвозди микроскопом, но и не спрашивать, почему они так плохо забиваются. Поэтому первую запись из цикла статей, связанных с vim-ом, я бы хотел начать с истории его становления и небольшого описания его функционала.</p>
-
-
+          {% if post.content contains '<!--more-->' %}
+            {{ post.content | split:'<!--more-->' | first }}
             <div class="post__continue">
-              <a class="radius button left" href="/posts/vim-history">Continue reading</a>
+              <a class="radius button left" href="{{ post.url }}">Continue reading</a>
             </div>
-          
+          {% else %}
+            {{ post.content }}
+          {% endif %}
         </div>
       </div>
       <hr class="bookends-dots"/>
     </div>
   </div>
+{% endfor %}
 
-  <div class="row">
-    <div class="large-12 medium-12 columns">
-      <div class="post">
-        <div class="post__title">
-          <h2><a href="/posts/seed-and-you">Seed файл и вы</a></h1>
-        </div>
-        <div class="post__date">
-          10 Mar 2014
-        </div>
-        <div class="post__tags-title">
-          
-            <a href='/tags/#rails'>#rails</a>
-          
-            <a href='/tags/#seed'>#seed</a>
-          
-        </div>
-        <div class="post__content post__content_float">
-          
-            <p>Совсем недавно, на работе, потребовалось мне заполнить новый проект данными для дальнейшего тестирования и разработки. Конечно же, данные должны быть в любом виде, и первое, о чем я подумал, был seed файл, поэтому сегодня мы поговорим именно о нем. Как всем известно, данный файл служит для генерации данных в рельсовых приложениях. Вы пишите скрипт, выполняете <code>rake db:seed</code> и радуетесь жизни. В моем случае данные были типовыми, а именно, нужно было сгенерировать пользователей, посты и комментарии к этим постам. Я думаю все прекрасно понимают, как все взаимосвязанно, поэтому на этом останавливаться не вижу особого смысла.</p>
-
-
-            <div class="post__continue">
-              <a class="radius button left" href="/posts/seed-and-you">Continue reading</a>
-            </div>
-          
-        </div>
-      </div>
-      <hr class="bookends-dots"/>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="large-12 medium-12 columns">
-      <div class="post">
-        <div class="post__title">
-          <h2><a href="/posts/irb-and-all-all-all">IRB и все все все</a></h1>
-        </div>
-        <div class="post__date">
-          09 Feb 2014
-        </div>
-        <div class="post__tags-title">
-          
-            <a href='/tags/#ruby'>#ruby</a>
-          
-            <a href='/tags/#irb'>#irb</a>
-          
-        </div>
-        <div class="post__content post__content_float">
-          
-            <p>Думаю, каждый, кто так или иначе связан с Ruby и тем более с Rails, хоть раз в жизни использовал irb. Возможности интерактивного ruby шела безграничны, поэтому сегодня я бы хотел поговорить об улучшении или кастомизации, если вам так угодно, вашего irb. </p>
-
-
-            <div class="post__continue">
-              <a class="radius button left" href="/posts/irb-and-all-all-all">Continue reading</a>
-            </div>
-          
-        </div>
-      </div>
-      <hr class="bookends-dots"/>
-    </div>
-  </div>
-
-
-
-<ul class="pagination" role="menubar" aria-label="Pagination">
-  
-    <li class="arrow unavailable" aria-disabled="true"><a href="">&laquo; Previous</a></li>
-  
-
-  
-    
-    <li class="current"><a href="">1</a></li>
-    
-  
-    
-      <li>
-        <a href="/page2">2</a>
-      </li>
-    
-  
-
-  
-    <li class="arrow">
-      <a href="/page2">Next &raquo;</a>
-    </li>
-  
-</ul>
-
-
-
-      </div>
-    </div>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="js/foundation.min.js"></script>
-<script src="/assets/app-b56119d9fea611b34e72a92d7bd3066a.js"></script>
-<script>
-  $(document).foundation();
-</script>
-
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-56114525-1', 'auto');
-  ga('send', 'pageview');
-
-</script>
-
-
-<script type="text/javascript">
-//<![CDATA[
-  (function() {
-    var shr = document.createElement('script');
-    shr.setAttribute('data-cfasync', 'false');
-    shr.src = '//dsms0mj1bbhn4.cloudfront.net/assets/pub/shareaholic.js';
-    shr.type = 'text/javascript'; shr.async = 'true';
-    shr.onload = shr.onreadystatechange = function() {
-      var rs = this.readyState;
-      if (rs && rs != 'complete' && rs != 'loaded') return;
-      var site_id = '9cc17325fe566a8d07d3ee25ce3fa991';
-      try { Shareaholic.init(site_id); } catch (e) {}
-    };
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(shr, s);
-  })();
-//]]>
-</script>
-
-  </body>
-</html>
+{% include pagination.html %}
