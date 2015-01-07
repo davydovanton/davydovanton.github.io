@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset='utf-8' />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+  <meta name="description" content="davydovanton.github.io : " />
+
+  <link rel="stylesheet" href="/assets/foundation.min-7ef34c8719badc4975c3bddd29762ddc.css">
+  <link rel="stylesheet" href="/assets/app-cb2db58c473238f062a13d1e2be7e56b.css">
+  <title>История vim</title>
+</head>
+
+  <body onorientationchange="if(DISQUS) DISQUS.reset({reload: true});">
+    <div class="yandex_metrica">
+  <!-- Yandex.Metrika counter --><script type="text/javascript">var yaParams = {/*Здесь параметры визита*/};</script><script type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter23652886 = new Ya.Metrika({id:23652886, webvisor:true, clickmap:true, trackLinks:true, accurateTrackBounce:true, trackHash:true,params:window.yaParams||{ }}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="//mc.yandex.ru/watch/23652886" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+</div>
+
+
+<nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    <li class="name">
+    <h1><a href="/">История vim</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="right">
+      <ul class="nav navbar-nav">
+        
+          <li><a href="/">Blog</a></li>
+        
+
+        
+          <li><a href="/about">About</a></li>
+        
+      </ul>
+    </ul>
+  </section>
+</nav>
+
+
+    <div class="row">
+      <div class="large-12 medium-12 columns">
+        <div class="post">
+          <h2 class="post__title"><a href=""></a></h1>
+          <div class="post__content">
+            <p>Я свято верю, что перед тем, как изучать новую технологию, необходимо узнать, зачем и в каких условиях она была создана. Думаю, данные знания позволяют в будущем не только не забивать гвозди микроскопом, но и не спрашивать, почему они так плохо забиваются. Поэтому первую запись из цикла статей, связанных с vim-ом, я бы хотел начать с истории его становления и небольшого описания его функционала.</p>
+
+<!--more-->
+
+<p>Представьте себе: 70тые годы, расцвет unix машин, на данный момент существует только текстовый редактор <a href="http://en.wikipedia.org/wiki/Ed_(text_editor)">ed</a>, который является командно-ориентированным, а за ним появляется редактор <a href="http://en.wikipedia.org/wiki/Ex_(text_editor)">ex</a>. Во времена первого никто не слышал о мониторах, поэтому использовали для ввода телетайпы, из-за чего ed имеет командно-ориентированный интерфейс. А ex, в свою очередь, являлся улучшеным ed. Поэтому в нем появились такие штуки как экранное редактирование и работа с несколькими файлами, что для тех времен является прорывом. В это время многие программисты начинают писать свои редакторы, и один из них, <a href="http://en.wikipedia.org/wiki/Bill_Joy">Билл Джой</a>, придумывает логичную и простую концепцию поверх редактора ex. Во первых, было бы логично воспринимать текст как объект, к которому применяются команды редактирования. Во вторых, использование unix идеологии о простоте и взаимности комманд. Так, в 1976 году, появляется первая версия текстового редактора vi, сокращено от (visual). Давайте рассмотрим каждую из концепций отдельно.</p>
+
+<p>Во первых, человек часто мыслит абстрактно, поэтому мы никогда не воспринимает набор последовательных символов как непосредственно набор последовательных символов. Наш разум создает абстракции, такие как слова, предложения, параграфы или абзацы и тому подобные. Так почему бы нам не реализовать эту же идею в текстовом редакторе? Думаю, этим же вопросом задался Билл Джой, и поэтому vi оперирует не просто с набором символов, как многие другие текстовые редакторы, а оперирует непосредственно объектами-абстракциями: словами, строками, параграфами.</p>
+
+<p>Допустим, мы смогли реализовать такую идею внутри редактора, но теперь встает вопрос, что делать с этими объектами? Да собственно то же самое, что мы, доблестные воины клавиатуры и текста, делаем с ними каждый день - изменять их посредством передачи в функций. Кстати, часть функций можно позаимствовать из unix-а, например, sort и ему подобные. Поэтому на данный момент наше взаимодействие с редактором можно описать простым набором функций вида: [комманда] [объект].</p>
+
+<p>А теперь самое интересное, как мы реализуем такое количество комманд и способов выбора объектов, и при этом нам надо как то печатать обычный текст. Думаю, многие понимают, что использовать все клавиши для комманд и для набора текста - не реально вообще никак. А тем более на такой клавиатуре, которую использовали в терминалах того времени.</p>
+
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/KB_Terminal_ADM3A.svg/1000px-KB_Terminal_ADM3A.svg.png" alt="old unix keybord" /></p>
+
+<p>Кстати, небольшой оффтоп, вы никогда не задумывались, откуда пошло, что символ ‘~’ в nix like системах обозначает home дирикторию? Посмотрите внимательно на клавиатуру выше, а именно на клавишу home ;)</p>
+
+<p>Так вот, тут-то мы и приходим к модальному интерфейсу. Что же это значит? Это значит, что существует несколько режимов, в которых различные клавиши выполняют различные комманды. В vi было целых 2 режима: режим вставки, в котором пользователь мог набирать текст, и коммандный режим, в котором пользователь, посредством нажатия комбинаций клавиш, работает с текстом.</p>
+
+<p>Вся прелесть данного текстового редактора была не только в его инновациях, но и в его открытости, что позволило в 1991 году <a href="http://en.wikipedia.org/wiki/Bram_Moolenaar">Браму Мооленару</a> создать первую версию vim, которая расшифровывается как <strong>V</strong>i <strong>im</strong>proved. В нем было очень много нового, например, визуальный режим, макросы, работа с кучей файлов одновременно, итеграция с ОС и так далее.</p>
+
+<p>Так что же это все дает нам, обычным программистам? Во первых, мы можем приобщиться к истории, а если серьезно - ввиду того, что раньше не было мыши, то все комманды печатались на клавиатуре, и никакие Васи не тыкали мышкой в кнопочки на экране. Ну а так как тыкаться мышкой в интерфейсе дольше, чем использовать хоткеи, то мы получаем довольно сильный профит в скорости. Во вторых, интерфейс не перегружен излишней функциональностью, как во многих IDE или текстовых редакторах. Предлагаю вам сравнить скриншоты vim-а и какого-нибудь eclipse. </p>
+
+<p><img src="http://2.bp.blogspot.com/_ZzOZmj1dP0c/TNcTx8DygaI/AAAAAAAAA0Q/Ar2BsQs11VI/s1600/gvim.png" alt="Vim" />
+<img src="http://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Eclipse_4.3.Kepler_screenshot.png/800px-Eclipse_4.3.Kepler_screenshot.png" alt="Eclipse" /></p>
+
+<p>Сказать по правде, я давно хотел спросить, вы часто тыкаете во все эти кнопки в cтроке наверху?</p>
+
+<p>В третьих, вы получаете необычный, и оттого интересный, удобный, после привыкания, способ взаимодействия с текстом. Подумайте сами, вы взаимодействуете с текстом как с объектом, а не как с набором символов, что позволяет вам выбирать не просто последовательность символов, а целые слова, параграфы, линии, блоки текста и оперировать с ними как захотите.</p>
+
+<p>Но для начала стоит вернуться к режимам. В vim-е их 4: нормальный, в котором вы посредством хоткеев выполняете операции над текстом; коммандный, в котором вы можете вводить комманды как в консоли(и, кстати, выполнять консольные комманды тоже); режим вставки, в котором вы можете набирать текст и оперировать им, как в обычном текстовом редакторе, а-ля sublime; ну и последний, визуальный, в котором вы можете выбирать текст для дальнейшего взаимодействия с ним. Стоит отметить, что визуальных режимов 3 - обычный, в котором вы выбираете текст посимвольно, строчный, в котором вы вы выбираете текст построчно, и блочный, в этом режиме вы задаете 2 точки прямоугольника, весь текст в котором выделяется и пригоден для взаимодействия. ( Сказать по правде, есть еще один режим, режим эмуляции ex редактора. Вызывается он с помощью <code>Q</code>, обязательно с шифтом, после чего вы попадаете в отдельное окно, в котором вы можете вводить комманды без префикса <code>:</code>. Чтобы выйти из этого режима достаточно набрать <code>visual</code> или <code>vi</code>. Для справки советую набрать <code>:h Ex-mode</code> в vim. )</p>
+
+<p>Исходя из всего, что я написал выше - вам придется полностью изменить свое отношение к взаимодействию с текстом, что, в свою очередь, позволит вам увеличить вашу скорость редактирования/поиска текста. Скажу сразу, это непривычно, но с другой стороны, это как изучение нового языка программирования. Вы можете оставаться в собственной зоне комфорта, а можете сломать свой мозг, изучив какой-нибудь lisp или haskell. Тут то же самое, вы можете всю жизнь использовать привычный sublime, а можете попробовать что-то новое. Ну а в следующей записи мы более детально обсудим редактор и рассмотрим, как же он может облегчить нам жизнь.</p>
+
+
+            <hr class="bookends-dots"/>
+
+            <div class="post__tags">
+              <ul class="inline-list">
+                
+                  <li><a href='/tags/#vim'>#vim</a></li>
+                
+                  <li><a href='/tags/#история'>#история</a></li>
+                
+              </ul>
+            </div>
+
+            <div class="post__share-buttons">
+              <div class="share_buttons">
+  <div class='shareaholic-canvas' data-app='share_buttons' data-app-id='11548095'></div>
+</div>
+
+            </div>
+
+            <div class="post__back">
+              <a href="/" class="secondary radius button">Назад</a>
+            </div>
+
+            <div class="post__comments">
+              <div id="hypercomments_widget"></div>
+<script type="text/javascript">
+_hcwp = window._hcwp || [];
+_hcwp.push({widget:"Stream", widget_id: 22788});
+(function() {
+if("HC_LOAD_INIT" in window)return;
+HC_LOAD_INIT = true;
+var lang = (navigator.language || navigator.systemLanguage || navigator.userLanguage || "en").substr(0, 2).toLowerCase();
+var hcc = document.createElement("script"); hcc.type = "text/javascript"; hcc.async = true;
+hcc.src = ("https:" == document.location.protocol ? "https" : "http")+"://w.hypercomments.com/widget/hc/22788/"+lang+"/widget.js";
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hcc, s.nextSibling);
+})();
+</script>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="js/foundation.min.js"></script>
+<script src="/assets/app-b56119d9fea611b34e72a92d7bd3066a.js"></script>
+<script>
+  $(document).foundation();
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56114525-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+<script type="text/javascript">
+//<![CDATA[
+  (function() {
+    var shr = document.createElement('script');
+    shr.setAttribute('data-cfasync', 'false');
+    shr.src = '//dsms0mj1bbhn4.cloudfront.net/assets/pub/shareaholic.js';
+    shr.type = 'text/javascript'; shr.async = 'true';
+    shr.onload = shr.onreadystatechange = function() {
+      var rs = this.readyState;
+      if (rs && rs != 'complete' && rs != 'loaded') return;
+      var site_id = '9cc17325fe566a8d07d3ee25ce3fa991';
+      try { Shareaholic.init(site_id); } catch (e) {}
+    };
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(shr, s);
+  })();
+//]]>
+</script>
+
+  </body>
+</html>

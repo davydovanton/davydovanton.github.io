@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset='utf-8' />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+  <meta name="description" content="davydovanton.github.io : " />
+
+  <link rel="stylesheet" href="/assets/foundation.min-7ef34c8719badc4975c3bddd29762ddc.css">
+  <link rel="stylesheet" href="/assets/app-cb2db58c473238f062a13d1e2be7e56b.css">
+  <title>Ruby и special/predefined variables</title>
+</head>
+
+  <body onorientationchange="if(DISQUS) DISQUS.reset({reload: true});">
+    <div class="yandex_metrica">
+  <!-- Yandex.Metrika counter --><script type="text/javascript">var yaParams = {/*Здесь параметры визита*/};</script><script type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter23652886 = new Ya.Metrika({id:23652886, webvisor:true, clickmap:true, trackLinks:true, accurateTrackBounce:true, trackHash:true,params:window.yaParams||{ }}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="//mc.yandex.ru/watch/23652886" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+</div>
+
+
+<nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    <li class="name">
+    <h1><a href="/">Ruby и special/predefined variables</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="right">
+      <ul class="nav navbar-nav">
+        
+          <li><a href="/">Blog</a></li>
+        
+
+        
+          <li><a href="/about">About</a></li>
+        
+      </ul>
+    </ul>
+  </section>
+</nav>
+
+
+    <div class="row">
+      <div class="large-12 medium-12 columns">
+        <div class="post">
+          <h2 class="post__title"><a href=""></a></h1>
+          <div class="post__content">
+            <p>Не так давно я обнаружил интересный пример в одной замечательной книге. С этого примера, я бы и хотел начать наш разговор.</p>
+
+<!--more-->
+
+<p>Выглядел примерно так:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">&quot;test string in irb&quot;</span><span class="o">.</span><span class="n">match</span> <span class="sr">/irb/</span>
+<span class="nb">puts</span> <span class="vg">$&amp;</span>
+<span class="c1">#=&gt; &quot;irb&quot;</span></code></pre></div>
+
+<p>Так как до этого я не часто встречался с подобными “глобальными” переменными, пример заинтересовал меня и захотелось выяснить, что же это за переменные.
+Первым делом, я решил узнать, как они называются и где их можно найти. Спустя несколько минут, стало ясно, что это так называемые “special variables”. Не долго думая и открыв google, просмотрев пару тройку результатов, стало ясно, что кроме списка этих переменных ничего особо нет. Это не сильно меня обрадовало и стало понятно, что пришло время открыть репозитарий ruby и начать искать в нем. Так же мне очень помогла одна небезизвестная <a href="http://patshaughnessy.net/ruby-under-a-microscope">книга</a>.
+Как оказалось, ruby создает несколько специальных переменных, в зависимости от откружения, в котором запускаются программы, или в зависимости от действий, которые были выполены ранее. Кстати, это не совсем глобальные перменные, в чем легко можно убедиться, рассмотрев простой пример:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">test</span>
+  <span class="s2">&quot;test string in irb&quot;</span><span class="o">.</span><span class="n">match</span> <span class="sr">/test/</span>
+  <span class="nb">puts</span> <span class="s2">&quot;$&amp; in test method </span><span class="si">#{</span><span class="vg">$&amp;</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">end</span>
+
+<span class="s2">&quot;test string in irb&quot;</span><span class="o">.</span><span class="n">match</span> <span class="sr">/irb/</span>
+<span class="nb">puts</span> <span class="s2">&quot;$&amp; in main </span><span class="si">#{</span><span class="vg">$&amp;</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="c1">#=&gt; &quot;irb&quot;</span>
+
+<span class="nb">test</span>
+<span class="c1">#=&gt; &quot;test&quot;</span></code></pre></div>
+
+<p>Как видно из примера, в каждом scope (main и метода), “глобальная” переменная отличается. Любой адекватный человек спросит: как такое, тысяча чертей, возможно? На самом деле все довольно просто, но, для полного понимания, начать придется с основ. Как многие знают, начиная с верисии 1.9 в ruby была добавлена виртуальная машина или YARV или же <a href="http://atdot.net/yarv/">yet another ruby virtual machine</a>, называйте как хотите, суть одна и та же. Смысл в том, что каждый раз, при запуске, YARV так же создает особый стек, для локальных переменных. В этом стеке указываются абсолютно все локальные переменные, свои для каждого scope. Разделение scope-ов происходит с помощью специальной точки или указателя - environment point (далее EP). Так же, в стеке, перед каждой EP, создается специальная переменная svar, которая как раз и указывает на таблицу специальных символов. Именно из-за этого для каждого scope могут быть свои значения специальных символов, что мы видели в примере выше.
+Но самое интересное, что у обычного блока и у места, где он будет вызван, scope одинаковый, в чем можно легко убедиться благодаря такому примеру:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">&quot;test string in irb&quot;</span><span class="o">.</span><span class="n">match</span> <span class="sr">/irb/</span>
+
+<span class="mi">1</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
+  <span class="s2">&quot;test string in irb&quot;</span><span class="o">.</span><span class="n">match</span> <span class="sr">/test/</span>
+  <span class="nb">puts</span> <span class="s2">&quot;$&amp; in block </span><span class="si">#{</span><span class="vg">$&amp;</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">end</span>
+
+<span class="nb">puts</span> <span class="s2">&quot;$&amp; in main </span><span class="si">#{</span><span class="vg">$&amp;</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="o">&gt;</span> <span class="n">ruby</span> <span class="nb">test</span><span class="o">.</span><span class="n">rb</span>
+<span class="o">&gt;&gt;</span> <span class="s2">&quot;$&amp; in block test&quot;</span>
+<span class="o">&gt;&gt;</span> <span class="s2">&quot;$&amp; in block test&quot;</span>
+<span class="o">&gt;&gt;</span> <span class="s2">&quot;$&amp; in main test&quot;</span></code></pre></div>
+
+<p>На самом деле это логичное поведение, ибо замыкания никто не отменял.
+Как я уже говорил, таких переменных <a href="http://readruby.io/globals">много</a>, но расскажу я о самых интересных(естественно для себя):</p>
+
+<hr />
+
+<h5 id="section">$&amp;</h5>
+<p>Переменная, с которой начался наш рассказ. Хранит, как вы уже догадались, результат последнего совпадения регулярного выражения.</p>
+
+<h5 id="section-1">$1 $2 $3 …</h5>
+<p>Думаю, многим знакомая похожая переменная из регулярных выражений. Хотя, кого я обманываю? Это та же самая перменная, которая хранит совпадения из скобок:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">&quot;test string in irb&quot;</span><span class="o">.</span><span class="n">match</span> <span class="sr">/(irb)/</span>
+<span class="nb">puts</span> <span class="vg">$1</span>
+<span class="c1">#=&gt; &quot;irb&quot;</span></code></pre></div>
+
+<h5 id="section-2">$~</h5>
+<p>Содержит объект класса MatchData, соответствующий последнему совпадению.</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">&quot;test string in irb&quot;</span><span class="o">.</span><span class="n">match</span> <span class="sr">/(irb)/</span>
+<span class="nb">puts</span> <span class="vg">$~</span>
+<span class="c1">#=&gt; #&lt;MatchData &quot;irb&quot; 1:&quot;irb&quot;&gt;</span>
+<span class="nb">puts</span> <span class="vg">$~</span><span class="o">.</span><span class="n">to_s</span>
+<span class="c1">#=&gt; &quot;irb&quot;</span>
+<span class="nb">puts</span> <span class="vg">$~</span><span class="o">.</span><span class="n">to_a</span>
+<span class="c1">#=&gt; [&quot;irb&quot;, &#39;irb&#39;]</span></code></pre></div>
+
+<h5 id="section-3">$+</h5>
+<p>Содержит значение последней круглой скобки из последнего совпадения:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">&quot;test string in irb&quot;</span><span class="o">.</span><span class="n">match</span> <span class="sr">/irb/</span>
+<span class="nb">puts</span> <span class="vg">$~</span>
+<span class="c1">#=&gt; #&lt;MatchData &quot;irb&quot; 1:&quot;irb&quot;&gt;</span>
+<span class="nb">puts</span> <span class="vg">$+</span>
+<span class="c1">#=&gt; nil</span>
+<span class="s2">&quot;test in irb&quot;</span><span class="o">.</span><span class="n">match</span> <span class="sr">/(test) (in) (irb)/</span>
+<span class="nb">puts</span> <span class="vg">$~</span>
+<span class="c1">#=&gt; #&lt;MatchData &quot;test in irb&quot; 1:&quot;test&quot; 2:&quot;in&quot; 3:&quot;irb&quot;&gt;</span>
+<span class="nb">puts</span> <span class="vg">$+</span>
+<span class="c1">#=&gt; &quot;irb&quot;</span></code></pre></div>
+
+<h5 id="section-4">$`</h5>
+<p>Содержит все то, что не совпало в последнем регулярном выражении:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">&quot;test string in irb&quot;</span><span class="o">.</span><span class="n">match</span> <span class="sr">/irb/</span>
+<span class="nb">puts</span> <span class="vg">$`</span>
+<span class="c1">#=&gt; &quot;test string in&quot;</span></code></pre></div>
+
+<h5 id="section-5">$!</h5>
+<p>Содержит последнее вызванное исключение:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">1</span> <span class="o">/</span> <span class="mi">0</span> <span class="k">rescue</span> <span class="vg">$!</span>
+<span class="c1">#=&gt; #&lt;ZeroDivisionError: divided by 0&gt;</span></code></pre></div>
+
+<h5 id="section-6">$@</h5>
+<p>Ну а эта переменная содержит массив со всеми trace stack-ами из последнего исключения:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">1</span> <span class="o">/</span> <span class="mi">0</span> <span class="k">rescue</span> <span class="vg">$@</span>
+<span class="c1">#=&gt; [&quot;&lt;main&gt;:4:in `/&#39;&quot;, &quot;&lt;main&gt;:4:in `/&#39;&quot;, &quot;(irb):98:in `irb_binding&#39;&quot;, ... ]</span></code></pre></div>
+
+<h5 id="section-7">$*</h5>
+<p>Эта переменная равносильна переменной ARGV, думаю этим все сказанно.</p>
+
+<h5 id="section-8">$$</h5>
+<p>Переменная возвращает номер процесса, под которым выполняется скрипт.</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="vg">$$</span>
+<span class="c1">#=&gt; 33630</span>
+<span class="nb">puts</span> <span class="sb">`ps aux | grep irb`</span>
+<span class="c1">#=&gt; anton           33630   0.0  0.3  2470520  24084 s008  S+    2Jan14   0:01.24 irb</span></code></pre></div>
+
+<p>.</p>
+
+<hr />
+
+<p>Так где же определены эти переменные в исходном коде ruby? Как оказалось, все не так сложно, как кажется. Определенны эти переменные в файле <a href="https://github.com/ruby/ruby/blob/v2_1_0/parse.y#L7950">parse.y</a> примерно на 7950-той строке (да да, файл не очень большой, всего 11.5к строк кода). Для тех, кто не в курсе, parse.y - грамматический файл интерпритатора, благодаря которому происходит разбиение написанного вами кода на токены (лексемы/указатели), которые в последующем преобразуются в AST структуру, а затем в YARV структуру, ну а дальше в машинный код, который в последующем и будет выполняется.
+Как не трудно заметить, case функция ищет совпадение символа “$” и специальных символов (блок case), после чего передает их функции set_yylval_name:</p>
+
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="mi">7965</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;~&#39;</span><span class="o">:</span>                <span class="cm">/* $~: match-data */</span>
+<span class="mi">7966</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;*&#39;</span><span class="o">:</span>                <span class="cm">/* $*: argv */</span>
+<span class="mi">7967</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;$&#39;</span><span class="o">:</span>                <span class="cm">/* $$: pid */</span>
+<span class="mi">7968</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;?&#39;</span><span class="o">:</span>                <span class="cm">/* $?: last status */</span>
+<span class="mi">7969</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;!&#39;</span><span class="o">:</span>                <span class="cm">/* $!: error string */</span>
+<span class="mi">7970</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;@&#39;</span><span class="o">:</span>                <span class="cm">/* $@: error position */</span>
+<span class="mi">7971</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;/&#39;</span><span class="o">:</span>                <span class="cm">/* $/: input record separator */</span>
+<span class="mi">7972</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;\\&#39;</span><span class="o">:</span>               <span class="cm">/* $\: output record separator */</span>
+<span class="mi">7973</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;;&#39;</span><span class="o">:</span>                <span class="cm">/* $;: field separator */</span>
+<span class="mi">7974</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;,&#39;</span><span class="o">:</span>                <span class="cm">/* $,: output field separator */</span>
+<span class="mi">7975</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;.&#39;</span><span class="o">:</span>                <span class="cm">/* $.: last read line number */</span>
+<span class="mi">7976</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;=&#39;</span><span class="o">:</span>                <span class="cm">/* $=: ignorecase */</span>
+<span class="mi">7977</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;:&#39;</span><span class="o">:</span>                <span class="cm">/* $:: load path */</span>
+<span class="mi">7978</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;&lt;&#39;</span><span class="o">:</span>                <span class="cm">/* $&lt;: reading filename */</span>
+<span class="mi">7979</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;&gt;&#39;</span><span class="o">:</span>                <span class="cm">/* $&gt;: default output handle */</span>
+<span class="mi">7980</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;\&quot;&#39;</span><span class="o">:</span>                <span class="cm">/* $&quot;: already loaded files */</span>
+<span class="mi">7981</span><span class="o">:</span>   <span class="n">tokadd</span><span class="p">(</span><span class="sc">&#39;$&#39;</span><span class="p">);</span>
+<span class="mi">7982</span><span class="o">:</span>   <span class="n">tokadd</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+<span class="mi">7983</span><span class="o">:</span>   <span class="k">goto</span> <span class="n">gvar</span><span class="p">;</span>
+
+<span class="o">-------</span>
+
+<span class="mi">7997</span><span class="o">:</span> <span class="nl">gvar</span><span class="p">:</span>
+<span class="mi">7998</span><span class="o">:</span> <span class="n">set_yylval_name</span><span class="p">(</span><span class="n">rb_intern3</span><span class="p">(</span><span class="n">tok</span><span class="p">(),</span> <span class="n">tokidx</span><span class="p">,</span> <span class="n">current_enc</span><span class="p">));</span>
+<span class="mi">7999</span><span class="o">:</span> <span class="k">return</span> <span class="n">tGVAR</span></code></pre></div>
+
+<p>И в завершение, следует упомянуть особый файл - <a href="https://github.com/ruby/ruby/blob/v2_1_0/lib/English.rb">English.rb</a>, в котором прописаны алиасы для специальных переменных, благодаря чему можно использовать данные переменные намного понятнее, нежели чем использование $$, $&amp; и так далее:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">&quot;waterbuffalo&quot;</span> <span class="o">=~</span> <span class="sr">/buff/</span>
+<span class="nb">print</span> <span class="vg">$&quot;</span><span class="p">,</span> <span class="vg">$&#39;</span><span class="p">,</span> <span class="vg">$$</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+<span class="c1"># With English:</span>
+
+<span class="nb">require</span> <span class="s2">&quot;English&quot;</span>
+
+<span class="s2">&quot;waterbuffalo&quot;</span> <span class="o">=~</span> <span class="sr">/buff/</span>
+<span class="nb">print</span> <span class="vg">$LOADED_FEATURES</span><span class="p">,</span> <span class="vg">$POSTMATCH</span><span class="p">,</span> <span class="vg">$PID</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span></code></pre></div>
+
+
+
+            <hr class="bookends-dots"/>
+
+            <div class="post__tags">
+              <ul class="inline-list">
+                
+                  <li><a href='/tags/#ruby'>#ruby</a></li>
+                
+                  <li><a href='/tags/#core'>#core</a></li>
+                
+              </ul>
+            </div>
+
+            <div class="post__share-buttons">
+              <div class="share_buttons">
+  <div class='shareaholic-canvas' data-app='share_buttons' data-app-id='11548095'></div>
+</div>
+
+            </div>
+
+            <div class="post__back">
+              <a href="/" class="secondary radius button">Назад</a>
+            </div>
+
+            <div class="post__comments">
+              <div id="hypercomments_widget"></div>
+<script type="text/javascript">
+_hcwp = window._hcwp || [];
+_hcwp.push({widget:"Stream", widget_id: 22788});
+(function() {
+if("HC_LOAD_INIT" in window)return;
+HC_LOAD_INIT = true;
+var lang = (navigator.language || navigator.systemLanguage || navigator.userLanguage || "en").substr(0, 2).toLowerCase();
+var hcc = document.createElement("script"); hcc.type = "text/javascript"; hcc.async = true;
+hcc.src = ("https:" == document.location.protocol ? "https" : "http")+"://w.hypercomments.com/widget/hc/22788/"+lang+"/widget.js";
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hcc, s.nextSibling);
+})();
+</script>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="js/foundation.min.js"></script>
+<script src="/assets/app-b56119d9fea611b34e72a92d7bd3066a.js"></script>
+<script>
+  $(document).foundation();
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56114525-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+<script type="text/javascript">
+//<![CDATA[
+  (function() {
+    var shr = document.createElement('script');
+    shr.setAttribute('data-cfasync', 'false');
+    shr.src = '//dsms0mj1bbhn4.cloudfront.net/assets/pub/shareaholic.js';
+    shr.type = 'text/javascript'; shr.async = 'true';
+    shr.onload = shr.onreadystatechange = function() {
+      var rs = this.readyState;
+      if (rs && rs != 'complete' && rs != 'loaded') return;
+      var site_id = '9cc17325fe566a8d07d3ee25ce3fa991';
+      try { Shareaholic.init(site_id); } catch (e) {}
+    };
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(shr, s);
+  })();
+//]]>
+</script>
+
+  </body>
+</html>

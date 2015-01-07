@@ -1,0 +1,38 @@
+---
+layout: main
+title: Anton Davydov
+active: main
+---
+
+{% for post in paginator.posts %}
+  <div class="row">
+    <div class="large-12 medium-12 columns">
+      <div class="post">
+        <div class="post__title">
+          <h2><a href="{{ post.url }}">{{ post.title }}</a></h1>
+        </div>
+        <div class="post__date">
+          {{ post.date | date_to_string }}
+        </div>
+        <div class="post__tags-title">
+          {% for tag in post.tags %}
+            <a href='/tags/#{{tag}}'>#{{tag}}</a>
+          {% endfor %}
+        </div>
+        <div class="post__content post__content_float">
+          {% if post.content contains '<!--more-->' %}
+            {{ post.content | split:'<!--more-->' | first }}
+            <div class="post__continue">
+              <a class="radius button left" href="{{ post.url }}">Continue reading</a>
+            </div>
+          {% else %}
+            {{ post.content }}
+          {% endif %}
+        </div>
+      </div>
+      <hr class="bookends-dots"/>
+    </div>
+  </div>
+{% endfor %}
+
+{% include pagination.html %}

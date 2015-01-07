@@ -102,6 +102,7 @@ DEPENDENCIES
   jekyll
   jekyll-assets
   jekyll-sass-converter
+  rack
   rack-jekyll
   uglifier
   yui-compressor

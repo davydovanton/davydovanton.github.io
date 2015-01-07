@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset='utf-8' />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+  <meta name="description" content="davydovanton.github.io : " />
+
+  <link rel="stylesheet" href="/assets/foundation.min-7ef34c8719badc4975c3bddd29762ddc.css">
+  <link rel="stylesheet" href="/assets/app-cb2db58c473238f062a13d1e2be7e56b.css">
+  <title>Seed файл и вы</title>
+</head>
+
+  <body onorientationchange="if(DISQUS) DISQUS.reset({reload: true});">
+    <div class="yandex_metrica">
+  <!-- Yandex.Metrika counter --><script type="text/javascript">var yaParams = {/*Здесь параметры визита*/};</script><script type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter23652886 = new Ya.Metrika({id:23652886, webvisor:true, clickmap:true, trackLinks:true, accurateTrackBounce:true, trackHash:true,params:window.yaParams||{ }}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="//mc.yandex.ru/watch/23652886" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+</div>
+
+
+<nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    <li class="name">
+    <h1><a href="/">Seed файл и вы</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="right">
+      <ul class="nav navbar-nav">
+        
+          <li><a href="/">Blog</a></li>
+        
+
+        
+          <li><a href="/about">About</a></li>
+        
+      </ul>
+    </ul>
+  </section>
+</nav>
+
+
+    <div class="row">
+      <div class="large-12 medium-12 columns">
+        <div class="post">
+          <h2 class="post__title"><a href=""></a></h1>
+          <div class="post__content">
+            <p>Совсем недавно, на работе, потребовалось мне заполнить новый проект данными для дальнейшего тестирования и разработки. Конечно же, данные должны быть в любом виде, и первое, о чем я подумал, был seed файл, поэтому сегодня мы поговорим именно о нем. Как всем известно, данный файл служит для генерации данных в рельсовых приложениях. Вы пишите скрипт, выполняете <code>rake db:seed</code> и радуетесь жизни. В моем случае данные были типовыми, а именно, нужно было сгенерировать пользователей, посты и комментарии к этим постам. Я думаю все прекрасно понимают, как все взаимосвязанно, поэтому на этом останавливаться не вижу особого смысла.</p>
+
+<!--more-->
+
+<p>Обычная практика многих людей - задать одинаковые данные для всех типов данных и наплодить их с десяток. Смотрится это обычно как-то так:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">user</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nb">name</span><span class="p">:</span>  <span class="s1">&#39;Jon&#39;</span>
+  <span class="ss">email</span><span class="p">:</span> <span class="s1">&#39;my@email.org&#39;</span>
+  <span class="ss">password</span><span class="p">:</span> <span class="s1">&#39;12345678&#39;</span><span class="p">,</span>
+  <span class="ss">password_confirmation</span><span class="p">:</span> <span class="s1">&#39;12345678&#39;</span>  
+  <span class="p">}</span>
+
+<span class="n">post</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="ss">title</span><span class="p">:</span>  <span class="s1">&#39;My Post&#39;</span>
+  <span class="ss">body</span><span class="p">:</span>   <span class="s1">&#39;My body&#39;</span>
+  <span class="p">}</span>
+
+<span class="n">comment</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">body</span><span class="p">:</span> <span class="s1">&#39;comment&#39;</span> <span class="p">}</span>
+
+<span class="mi">10</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
+  <span class="n">my_user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+  <span class="n">my_post</span> <span class="o">=</span> <span class="n">my_user</span><span class="o">.</span><span class="n">create_post</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+  <span class="n">my_post</span><span class="o">.</span><span class="n">create_comment</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">comment</span><span class="p">)</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Но согласитесь, это скучно, банально и задевает чувство прекрасного. Поэтому давайте плюнем на все и развлечемся, создав свой собственный, изменяющийся из раза в раз мир :)</p>
+
+<p><em><strong>ATTENTION</strong>: далее будет много рандома, благодаря которому поддерживать все это или искать ошибки становится все сложнее и сложнее. Поэтому, использование генераторов, основанных на рандоме не рекомендуется для продакшена. В крайнем, случае использовать аккуратно и с умом.</em></p>
+
+<p>Для того, чтобы наш воображаемый мир существовал, нам, естественно, нужны пользователи. И наша цель - создать абсолютно разных пользователей, не похожих друг на друга. Конечно же, первое, что всплывает в голову - замечательный гем <a href="https://github.com/stympy/faker">faker</a>, который поможет нам генерировать произвольные имена и почтовые адресса для наших пользователей. Но при всем при этом, не будем забывать про нашего админа. Так же, давайте зададим рандомное количество записей в интервале от 18 до 25 штук (числа, как вы догадались, могут быть абсолютно любые):</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">user</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nb">name</span><span class="p">:</span>  <span class="n">admin</span>
+  <span class="ss">email</span><span class="p">:</span> <span class="n">admin</span><span class="vi">@my_app</span><span class="o">.</span><span class="n">com</span>
+  <span class="ss">password</span><span class="p">:</span> <span class="s1">&#39;12345678&#39;</span><span class="p">,</span>
+  <span class="ss">password_confirmation</span><span class="p">:</span> <span class="s1">&#39;12345678&#39;</span>  
+  <span class="p">}</span>
+
+<span class="n">rnd</span> <span class="o">=</span> <span class="no">Random</span><span class="o">.</span><span class="n">new</span>
+<span class="n">user_count</span> <span class="o">=</span> <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">18</span><span class="o">.</span><span class="n">.</span><span class="mi">23</span><span class="p">)</span>
+<span class="no">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+
+<span class="n">user_count</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
+  <span class="n">user</span><span class="o">[</span><span class="ss">:name</span><span class="o">]</span>  <span class="o">=</span> <span class="no">Faker</span><span class="o">::</span><span class="no">Name</span><span class="o">.</span><span class="n">name</span>
+  <span class="n">user</span><span class="o">[</span><span class="ss">:email</span><span class="o">]</span> <span class="o">=</span> <span class="no">Faker</span><span class="o">::</span><span class="no">Internet</span><span class="o">.</span><span class="n">email</span>  
+  <span class="no">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Cобственно я уверен, faker поможет вам сгенерировать почти любую информацию, стоит только открыть доки. Ну а если вам не угодил этот гем, то существует достаточно <a href="https://www.ruby-toolbox.com/categories/random_data_generation">много</a> других data генераторов.</p>
+
+<p>Не думаю, что тут что-то было сложно, поэтому пререйдем к постам. Сказать по правде, в нашем проекте посты состояли из строго заданных кусков html-a, поэтому тут ничего не оставалось, кроме как делать в лоб. Единственный момент, мы будем выбирать произвольно пользователя, чтобы от его имени создавать наш пост:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">posts</span> <span class="o">=</span> <span class="o">[</span>
+  <span class="p">{</span>
+    <span class="ss">title</span><span class="p">:</span>  <span class="s1">&#39;My first Post&#39;</span>
+    <span class="ss">body</span><span class="p">:</span>   <span class="s1">&#39;My body&#39;</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="ss">title</span><span class="p">:</span>  <span class="s1">&#39;My second Post&#39;</span>
+    <span class="ss">body</span><span class="p">:</span>   <span class="s1">&#39;My body&#39;</span>    
+  <span class="p">},</span>
+  <span class="c1"># Еще какое-то количество данных для постов ...</span>
+<span class="o">]</span>
+
+<span class="k">def</span> <span class="nf">rnd_user</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">rnd</span><span class="p">)</span>
+  <span class="n">random_user_id</span> <span class="o">=</span> <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="n">.</span><span class="p">(</span><span class="n">count</span><span class="p">))</span>
+  <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">random_user_id</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="n">posts</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
+  <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
+
+  <span class="n">post</span><span class="o">[</span><span class="ss">:user_id</span><span class="o">]</span> <span class="o">=</span> <span class="n">rand_user</span><span class="o">.</span><span class="n">id</span>
+  <span class="n">created_post</span> <span class="o">=</span> <span class="n">rand_user</span><span class="o">.</span><span class="n">create_post</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Настало время самого интересного и забавного, комментарии. В данном проекте мы использовали гем <a href="https://github.com/elight/acts_as_commentable_with_threading">acts_as_commentable_with_threading</a>. Он содержит 2ух уровневую структуру комментариев, поэтому работы нам немного прибавилось. Чтобы создать комментарий, нам необходимы 3 значения: пост, где будет этот комментарий, пользователь, оставивший комментарий, и непосредственно сам текст комментария. Смотрится все это примерно так:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">post</span><span class="o">.</span><span class="n">build_comment</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span></code></pre></div>
+
+<p>Ну а для “подкомментария” нам так же необходимо знать родительский комментарий, от которого ветка и пойдет, т.е. создание подобного комментария будет выглядеть примерно так:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">child_comment</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">build_comment</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
+<span class="n">child_comment</span><span class="o">.</span><span class="n">move_to_child_of</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span></code></pre></div>
+
+<p>А теперь давайте создадим от 10 до 21 главных комментариев и до 9ти дочерних для каждого главного, при этом каждый комментарий будет оставлять рандомный пользователь:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">posts</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
+  <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
+
+  <span class="n">post</span><span class="o">[</span><span class="ss">:user_id</span><span class="o">]</span> <span class="o">=</span> <span class="n">rand_user</span><span class="o">.</span><span class="n">id</span>
+  <span class="n">created_post</span> <span class="o">=</span> <span class="n">rand_user</span><span class="o">.</span><span class="n">create_post</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+
+  <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="o">.</span><span class="n">.</span><span class="mi">21</span><span class="p">)</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
+    <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
+    <span class="n">comment</span> <span class="o">=</span> <span class="n">created_post</span><span class="o">.</span><span class="n">build_comment</span><span class="p">(</span><span class="n">rand_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;Comment body&#39;</span><span class="p">)</span>
+    <span class="n">comment</span><span class="o">.</span><span class="n">save!</span>
+
+    <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
+      <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
+      <span class="n">child_comment</span> <span class="o">=</span> <span class="n">created_post</span><span class="o">.</span><span class="n">build_comment</span><span class="p">(</span><span class="n">rand_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;Comment body&#39;</span><span class="p">)</span>
+      <span class="n">child_comment</span><span class="o">.</span><span class="n">save!</span>
+      <span class="n">child_comment</span><span class="o">.</span><span class="n">move_to_child_of</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Хм, рандомное количество комментариев мы сделали, пользователей тоже разных назначили, но вот незадача, у нас body каждого комментария одно и тоже, а именно <code>'Comment body'</code>.Что же делать и как нам быть? Раз уж мы договорились создать подобие “живого” приложения, то и комментарии у нас должны быть разные и тоже живые. Первое, что приходит в голову, - опять использовать массив данных, но я слишков ленив (да и не путь самурая это), чтобы все это набирать, пусть даже копипастить и тем более придумывать. Второе, что приходит на ум, генерировать рандомную строчку текста. Да, идея не плохая, как минимум, нам придется писать меньше кода, и он по-любому будет всегда разный. Но есть одно но: мы пытаемся достигнуть абсолютной правдоподобности, а строки вида <code>'skjafnskdjn ksajdnf'</code> нам точно не подойдут как комментарии. Поэтому нам на помощь приходит отличное решение - гем <a href="https://github.com/postmodern/raingrams">raingrams</a>.</p>
+
+<p>Что же такого может этот гем, спросите Вы? На самом деле, ничего особенного, Вы просто скармливаете ему текст, а он, в свою очередь, разбивает его на куски и рандомно выдает обратно. В чем плюсы? Да, они не отличаются от банальной генерации строки, единственное и очевидное отличие - генерируемый текст будет логичен в пределах строки. </p>
+
+<p>В документации достаточно подробно описано, как гем ставится и настраивается, но я бы хотел уделить внимание 2ум подводным камням, с которыми мы столкнулись:</p>
+
+<ul>
+  <li>
+    <p>Во первых, гем не поддерживает русский язык. Скажем так, он его не видит. Поэтому, если для Вас важен русский язык, используйте наш <a href="https://github.com/dointeractive/raingrams">форк</a>, в котором исправлен этот косяк. </p>
+  </li>
+  <li>
+    <p>Ну а второй момент, в старых версиях существовал метод <code>train_with_url</code>, в который передавалась ссылка, а он уже все парсил и выдавал конечный результат. К сожалению, в свежих версиях этот метод был убран, причем убран очень хитро. Если быть точным, то автор просто вырезал часть этого метода, а вторую забыл(а может, решил стебануться над простыми парнями как мы, этого я, к сожалению, не знаю :) ). </p>
+  </li>
+</ul>
+
+<p>А теперь, используя полученные знания, перепишем наш метод. В качестве текста для raingrams мы будем использовать комментарии из пикабу, которые предварительно распарсим:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">model</span> <span class="o">=</span> <span class="no">QuadgramModel</span><span class="o">.</span><span class="n">build</span> <span class="k">do</span> <span class="o">|</span><span class="n">model</span><span class="o">|</span>
+  <span class="n">doc</span> <span class="o">=</span> <span class="no">Nokogiri</span><span class="o">::</span><span class="no">HTML</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;http://pikabu.ru/story/v_den_programmista_pro_logiku_pikabu_685289&#39;</span><span class="p">))</span>
+  <span class="n">doc</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;div.comment_desc&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">div</span><span class="o">|</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">train_with_text</span><span class="p">(</span><span class="n">div</span><span class="o">.</span><span class="n">inner_text</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">refresh</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="c1"># ....</span>
+
+<span class="n">posts</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
+  <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
+
+  <span class="n">post</span><span class="o">[</span><span class="ss">:user_id</span><span class="o">]</span> <span class="o">=</span> <span class="n">rand_user</span><span class="o">.</span><span class="n">id</span>
+  <span class="n">created_post</span> <span class="o">=</span> <span class="n">rand_user</span><span class="o">.</span><span class="n">create_post</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+
+  <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="o">.</span><span class="n">.</span><span class="mi">21</span><span class="p">)</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
+    <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
+    <span class="n">comment</span> <span class="o">=</span> <span class="n">created_post</span><span class="o">.</span><span class="n">build_comment</span><span class="p">(</span><span class="n">rand_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">random_sentence</span><span class="p">)</span>
+    <span class="n">comment</span><span class="o">.</span><span class="n">save!</span>
+
+    <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
+      <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
+      <span class="n">child_comment</span> <span class="o">=</span> <span class="n">created_post</span><span class="o">.</span><span class="n">build_comment</span><span class="p">(</span><span class="n">rand_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">random_sentence</span><span class="p">)</span>
+      <span class="n">child_comment</span><span class="o">.</span><span class="n">save!</span>
+      <span class="n">child_comment</span><span class="o">.</span><span class="n">move_to_child_of</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Кстати, я уверен, что немного изменив наш скрипт, можно будет создать подобную генератию текстов непосредственно для постов.</p>
+
+<p>Выглядит здорово. Да, может, код не самый чистый, и в целом скрипт слишком часто обращается к базе, но согласитесь, наше творение имитирует реальную активность пользователей. Не идеально, конечно, но все же. Думаю, на этом можно было бы закончить рассказ, но остался последний момент, который хотелось бы осветить и исправить в нашем скрипте.</p>
+
+<p>Как думаете, где еще нам придется создавать пользователей (и не только их), которых мы создали в самом начале? Правильно, в тестах, надо же на чем-то тестировать приложение. Так почему бы нам не убить 2ух зайцев и не заменить ручную генерацию, как это было в начале статьи, на старую добрую фабричную? Так как в нашем проекте мы используем гем  <a href="http://www.fabricationgem.org/">fabrication</a>, то и пример будет с ним. Вы также можете использовать любую другуюю фабрику, которая вам по вкусу.</p>
+
+<p>Для начала определим нашего пользователя и администратора:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Fabricator</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="k">do</span>
+  <span class="n">email</span> <span class="no">Faker</span><span class="o">::</span><span class="no">Internet</span><span class="o">.</span><span class="n">email</span>
+  <span class="nb">name</span> <span class="no">Faker</span><span class="o">::</span><span class="no">Name</span><span class="o">.</span><span class="n">name</span>
+  <span class="n">password</span> <span class="s1">&#39;12345678&#39;</span>
+  <span class="n">password_confirmation</span> <span class="s1">&#39;12345678&#39;</span>
+<span class="k">end</span>
+
+<span class="no">Fabricator</span><span class="p">(</span><span class="ss">:admin</span><span class="p">)</span> <span class="k">do</span>
+  <span class="n">email</span> <span class="s1">&#39;admin@my_app.org&#39;</span>
+  <span class="nb">name</span> <span class="s1">&#39;admin&#39;</span>
+  <span class="n">password</span> <span class="s1">&#39;12345678&#39;</span>
+  <span class="n">password_confirmation</span> <span class="s1">&#39;12345678&#39;</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Ну а теперь, воспользуемся нашей новосозданной фабрикой для избавления от лишнего кода в seed файле:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">user_count</span> <span class="o">=</span> <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">18</span><span class="o">.</span><span class="n">.</span><span class="mi">23</span><span class="p">)</span>
+<span class="no">Fabricate</span><span class="p">(</span><span class="ss">:admin</span><span class="p">)</span>
+
+<span class="n">user_count</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span> <span class="no">Fabricate</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">}</span></code></pre></div>
+
+<p>В итоге, мы смогли убрать достаточно приличный кусок cкрипта, избавшись от явного повтора кода. </p>
+
+<p>На этом, пожалуй, я закончу наши эксперименты. Как видите, простора для фантазии осталось еще много и также осталось много идей для рефакторинга. В любом случае, данный пример явно показывает, что к любой, сколь скучной она не была бы, задаче всегда можно применить творческий подход и неплохо развлечься :)</p>
+
+
+            <hr class="bookends-dots"/>
+
+            <div class="post__tags">
+              <ul class="inline-list">
+                
+                  <li><a href='/tags/#rails'>#rails</a></li>
+                
+                  <li><a href='/tags/#seed'>#seed</a></li>
+                
+              </ul>
+            </div>
+
+            <div class="post__share-buttons">
+              <div class="share_buttons">
+  <div class='shareaholic-canvas' data-app='share_buttons' data-app-id='11548095'></div>
+</div>
+
+            </div>
+
+            <div class="post__back">
+              <a href="/" class="secondary radius button">Назад</a>
+            </div>
+
+            <div class="post__comments">
+              <div id="hypercomments_widget"></div>
+<script type="text/javascript">
+_hcwp = window._hcwp || [];
+_hcwp.push({widget:"Stream", widget_id: 22788});
+(function() {
+if("HC_LOAD_INIT" in window)return;
+HC_LOAD_INIT = true;
+var lang = (navigator.language || navigator.systemLanguage || navigator.userLanguage || "en").substr(0, 2).toLowerCase();
+var hcc = document.createElement("script"); hcc.type = "text/javascript"; hcc.async = true;
+hcc.src = ("https:" == document.location.protocol ? "https" : "http")+"://w.hypercomments.com/widget/hc/22788/"+lang+"/widget.js";
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hcc, s.nextSibling);
+})();
+</script>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="js/foundation.min.js"></script>
+<script src="/assets/app-b56119d9fea611b34e72a92d7bd3066a.js"></script>
+<script>
+  $(document).foundation();
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56114525-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+<script type="text/javascript">
+//<![CDATA[
+  (function() {
+    var shr = document.createElement('script');
+    shr.setAttribute('data-cfasync', 'false');
+    shr.src = '//dsms0mj1bbhn4.cloudfront.net/assets/pub/shareaholic.js';
+    shr.type = 'text/javascript'; shr.async = 'true';
+    shr.onload = shr.onreadystatechange = function() {
+      var rs = this.readyState;
+      if (rs && rs != 'complete' && rs != 'loaded') return;
+      var site_id = '9cc17325fe566a8d07d3ee25ce3fa991';
+      try { Shareaholic.init(site_id); } catch (e) {}
+    };
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(shr, s);
+  })();
+//]]>
+</script>
+
+  </body>
+</html>

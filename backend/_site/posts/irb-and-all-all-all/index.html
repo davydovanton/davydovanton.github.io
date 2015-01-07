@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset='utf-8' />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+  <meta name="description" content="davydovanton.github.io : " />
+
+  <link rel="stylesheet" href="/assets/foundation.min-7ef34c8719badc4975c3bddd29762ddc.css">
+  <link rel="stylesheet" href="/assets/app-cb2db58c473238f062a13d1e2be7e56b.css">
+  <title>IRB и все все все</title>
+</head>
+
+  <body onorientationchange="if(DISQUS) DISQUS.reset({reload: true});">
+    <div class="yandex_metrica">
+  <!-- Yandex.Metrika counter --><script type="text/javascript">var yaParams = {/*Здесь параметры визита*/};</script><script type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter23652886 = new Ya.Metrika({id:23652886, webvisor:true, clickmap:true, trackLinks:true, accurateTrackBounce:true, trackHash:true,params:window.yaParams||{ }}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="//mc.yandex.ru/watch/23652886" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+</div>
+
+
+<nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    <li class="name">
+    <h1><a href="/">IRB и все все все</a></h1>
+    </li>
+    <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+  </ul>
+
+  <section class="top-bar-section">
+    <ul class="right">
+      <ul class="nav navbar-nav">
+        
+          <li><a href="/">Blog</a></li>
+        
+
+        
+          <li><a href="/about">About</a></li>
+        
+      </ul>
+    </ul>
+  </section>
+</nav>
+
+
+    <div class="row">
+      <div class="large-12 medium-12 columns">
+        <div class="post">
+          <h2 class="post__title"><a href=""></a></h1>
+          <div class="post__content">
+            <p>Думаю, каждый, кто так или иначе связан с Ruby и тем более с Rails, хоть раз в жизни использовал irb. Возможности интерактивного ruby шела безграничны, поэтому сегодня я бы хотел поговорить об улучшении или кастомизации, если вам так угодно, вашего irb. </p>
+
+<!--more-->
+
+<p>Но для начала давайте посмотрим документацию, а именно откроем модуль <a href="http://www.ruby-doc.org/stdlib-2.0/libdoc/irb/rdoc/IRB.html">IRB</a> в стандартной библиотеке ruby.
+“Что интересного тут есть?”, спросите вы? Думаю стоит начать с самого начала, с запуска. Если вы просто наберете в консоли <code>irb</code>, то запустите шел с вашей текущей версией руби. Но  если у вас RVM(хотя, сказать по правде я не уверен, что это работает только с RVM), то вы можете выбрать среду для запуска из всех тех, что у вас установлены. Например вот так, я, при активном MRI 2.0, могу запустить у себя jruby:</p>
+
+<p><img src="thhp://davydovanton.github.io/images/2014/02/irb-and-all-all-all/jruby-irb.png" alt="jruby in irb" /></p>
+
+<p>Дальше, думаю, следует обсудить ключи. Их много, они разные. В документации они все <a href="http://www.ruby-doc.org/stdlib-2.0/libdoc/irb/rdoc/IRB.html#module-IRB-label-Command+line+options">есть</a>. Самые интересные, на мой взляд, - <code>-d</code> включающий дебаг мод(аналогично <code>ruby -d</code>) и ключ <code>-I path</code>, загружающий указанную директорию.</p>
+
+<p>Ну а теперь самое интересное: поговорим о конфигурации вашего irb. Для этого необходимо создать <code>*rc</code> аналогичный <code>.bashrc</code> или <code>.vimrc</code>. Существует несколько разновидностей именования этого файла, например: <code>.irbrc</code>, <code>irb.rc</code>, <code>_irbrc</code> или же <code>$irbrc</code>. </p>
+
+<p>Думаю, для начала, следует указать конфигурационные значения, например, увеличить количество сохраняемых команд и записывать их в отдельный файл:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">IRB</span><span class="o">.</span><span class="n">conf</span><span class="o">[</span><span class="ss">:SAVE_HISTORY</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="no">IRB</span><span class="o">.</span><span class="n">conf</span><span class="o">[</span><span class="ss">:HISTORY_FILE</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;HOME&#39;</span><span class="o">]</span><span class="si">}</span><span class="s2">/.irb_history&quot;</span></code></pre></div>
+
+<p>Так же можно указать кучу других настроек, но я бы не стал писать эту статью, если бы хотел рассказать только это. Все веселье начинается тогда, когда приходит понимание того, что данный файл является обычным <code>*.rb</code> файлом, который загружается при старте вашего irb. </p>
+
+<p>Думаю, все догадались, что дальше будет? :)</p>
+
+<p>Предлагаю написать, ради развлечения, метод, который возвращал бы все локальные методы объекта. Выглядеть он будет примерно так:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># .irbrc</span>
+<span class="k">class</span> <span class="nc">Object</span>
+  <span class="k">def</span> <span class="nf">local_methods</span>
+    <span class="p">(</span><span class="nb">methods</span> <span class="o">-</span> <span class="no">Object</span><span class="o">.</span><span class="n">instance_methods</span><span class="p">)</span><span class="o">.</span><span class="n">sort</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Как он будет работать, спросите вы? Да все просто, берете объект и вызываете на нем данный метод:</p>
+
+<p><img src="thhp://davydovanton.github.io/images/2014/02/irb-and-all-all-all/irb_local_methods.png" alt="Using local_mathods method in irb" /></p>
+
+<p>Думаю, вы заметили цвета, которых не хватает в дефолтном irb? </p>
+
+<p>Да, все верно, так же можно подключать гемы, и да, есть гемы, которые добавляют ярких цветов в ваш irb, например, <a href="https://github.com/blackwinter/wirble">wirble</a>. Достаточно написать такой код: </p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;wirble&#39;</span>
+
+<span class="no">Wirble</span><span class="o">.</span><span class="n">init</span>
+<span class="no">Wirble</span><span class="o">.</span><span class="n">colorize</span></code></pre></div>
+
+<p>И ваш интерактивный шел заиграет новыми красками :)</p>
+
+<p>А если вам нравится <a href="http://pryrepl.org/">pry</a>, то вам никто не запрещает его добавить, в последующем вызывая его, просто набрав <code>pry</code> во время irb сессии:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1">#.irbrc</span>
+<span class="nb">require</span> <span class="s1">&#39;pry&#39;</span>
+
+<span class="c1"># irb</span>
+<span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">015</span> <span class="o">&gt;</span> <span class="n">pry</span>
+<span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span></code></pre></div>
+
+<p>Ну а выглядеть это будет как-то так:
+<img src="thhp://davydovanton.github.io/images/2014/02/irb-and-all-all-all/pry.gif" alt="Using pry in irb" /></p>
+
+<p>Но самое полезное, что можно сделать, это забыть построчный ввод кода. “Как?”, спросите вы? Начну издалека: мне очень нравится vim :) Поэтому, смотря vimcasts-ы, я узнал то, что перевернуло мой мир, а именно: любой текстовый редактор можно <a href="http://vimcasts.org/episodes/running-vim-within-irb/">вызывать</a> прямо из irb. </p>
+
+<p>Делается это очень просто: нужно добавить гем <code>interactive_editor</code>. Данный гем позволяет вызывать любой текстовый редактор из вашего irb, например, набрав <code>vim</code> - откроется vim, где вы сможете набрать любой код, который выполнится после сохранения файла и закрытия редактора. </p>
+
+<p><img src="thhp://davydovanton.github.io/images/2014/02/irb-and-all-all-all/vim-in-irb.gif" alt="Using vim in irb" /></p>
+
+<p>Собственно то же самое будет работать с sublime, textmate, emacs и <a href="https://github.com/jberkel/interactive_editor/blob/master/lib/interactive_editor.rb#L92">дургими</a> текстовыми редакторами. </p>
+
+<p>Ну и на последок стоит рассказать про сессии в irb. Если вы используете vim или когда то использовали его, то вам знакомо такое понятие как буфер, которое чем-то похоже на сессии в irb. Ну а если нет, то краткая справка: сессия - некий сеанс интерактивного шела. Для того, что бы посмотреть список всех сессий в irb, достаточно набрать <code>jobs</code>:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">012</span> <span class="o">&gt;</span> <span class="n">jobs</span>
+ <span class="o">=&gt;</span> <span class="c1">#0-&gt;irb on main (#&lt;Thread:0x007fcb810bcda0&gt;: running)</span></code></pre></div>
+
+<p>Ну а если вам надо создать новую сессию, то просто наберите <code>irb</code>:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">013</span> <span class="o">&gt;</span> <span class="n">irb</span>
+<span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">001</span> <span class="o">&gt;</span> <span class="n">jobs</span>
+ <span class="o">=&gt;</span> <span class="c1">#0-&gt;irb on main (#&lt;Thread:0x007fcb810bcda0&gt;: stop)</span>
+<span class="c1">#1-&gt;irb#1 on main (#&lt;Thread:0x007fcb819b7bf8&gt;: running)</span></code></pre></div>
+
+<p>Как видите, irb создал новую сессию и переключился в нее. Но что делать, когда вы хотите удалить или изменить сессию? Для этого есть методы <code>kill &lt;number_session&gt;</code> и <code>fg &lt;number_session&gt;</code> соответственно:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">002</span> <span class="o">&gt;</span> <span class="n">jobs</span>
+ <span class="o">=&gt;</span> <span class="c1">#0-&gt;irb on main (#&lt;Thread:0x007fcb810bcda0&gt;: stop)</span>
+<span class="c1">#1-&gt;irb#1 on main (#&lt;Thread:0x007fcb819b7bf8&gt;: stop)</span>
+<span class="c1">#2-&gt;irb#2 on main (#&lt;Thread:0x007fcb81319238&gt;: running) </span>
+<span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">003</span> <span class="o">&gt;</span> <span class="n">fg</span> <span class="mi">1</span>
+ <span class="o">=&gt;</span> <span class="c1">#&lt;IRB::Irb: @context=#&lt;IRB::Context:0x007fcb819b7a40&gt;, @signal_status=:IN_EVAL, @scanner=#&lt;RubyLex:0x007fcb819b74c8&gt;&gt; </span>
+<span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">00</span><span class="mi">9</span> <span class="o">&gt;</span> <span class="n">jobs</span>
+ <span class="o">=&gt;</span> <span class="c1">#0-&gt;irb on main (#&lt;Thread:0x007fcb810bcda0&gt;: stop)</span>
+<span class="c1">#1-&gt;irb#1 on main (#&lt;Thread:0x007fcb819b7bf8&gt;: running)</span>
+<span class="c1">#2-&gt;irb#2 on main (#&lt;Thread:0x007fcb81319238&gt;: stop) </span>
+<span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">010</span> <span class="o">&gt;</span> <span class="n">kill</span> <span class="mi">2</span>
+ <span class="o">=&gt;</span> <span class="o">[</span><span class="mi">2</span><span class="o">]</span> 
+<span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">011</span> <span class="o">&gt;</span> <span class="n">jobs</span>
+ <span class="o">=&gt;</span> <span class="c1">#0-&gt;irb on main (#&lt;Thread:0x007fcb810bcda0&gt;: stop)</span>
+<span class="c1">#1-&gt;irb#1 on main (#&lt;Thread:0x007fcb819b7bf8&gt;: running) </span>
+<span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">012</span> <span class="o">&gt;</span> <span class="n">kill</span> <span class="mi">1</span>
+ <span class="o">=&gt;</span> <span class="c1">#&lt;IRB::Irb: @context=#&lt;IRB::Context:0x007fcb8185b2c8&gt;, @signal_status=:IN_EVAL, @scanner=#&lt;RubyLex:0x007fcb8110d5e8&gt;&gt; </span>
+<span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">014</span> <span class="o">&gt;</span> <span class="n">jobs</span>
+ <span class="o">=&gt;</span> <span class="c1">#0-&gt;irb on main (#&lt;Thread:0x007fcb810bcda0&gt;: running)</span></code></pre></div>
+
+
+
+            <hr class="bookends-dots"/>
+
+            <div class="post__tags">
+              <ul class="inline-list">
+                
+                  <li><a href='/tags/#ruby'>#ruby</a></li>
+                
+                  <li><a href='/tags/#irb'>#irb</a></li>
+                
+              </ul>
+            </div>
+
+            <div class="post__share-buttons">
+              <div class="share_buttons">
+  <div class='shareaholic-canvas' data-app='share_buttons' data-app-id='11548095'></div>
+</div>
+
+            </div>
+
+            <div class="post__back">
+              <a href="/" class="secondary radius button">Назад</a>
+            </div>
+
+            <div class="post__comments">
+              <div id="hypercomments_widget"></div>
+<script type="text/javascript">
+_hcwp = window._hcwp || [];
+_hcwp.push({widget:"Stream", widget_id: 22788});
+(function() {
+if("HC_LOAD_INIT" in window)return;
+HC_LOAD_INIT = true;
+var lang = (navigator.language || navigator.systemLanguage || navigator.userLanguage || "en").substr(0, 2).toLowerCase();
+var hcc = document.createElement("script"); hcc.type = "text/javascript"; hcc.async = true;
+hcc.src = ("https:" == document.location.protocol ? "https" : "http")+"://w.hypercomments.com/widget/hc/22788/"+lang+"/widget.js";
+var s = document.getElementsByTagName("script")[0];
+s.parentNode.insertBefore(hcc, s.nextSibling);
+})();
+</script>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="js/foundation.min.js"></script>
+<script src="/assets/app-b56119d9fea611b34e72a92d7bd3066a.js"></script>
+<script>
+  $(document).foundation();
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56114525-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+<script type="text/javascript">
+//<![CDATA[
+  (function() {
+    var shr = document.createElement('script');
+    shr.setAttribute('data-cfasync', 'false');
+    shr.src = '//dsms0mj1bbhn4.cloudfront.net/assets/pub/shareaholic.js';
+    shr.type = 'text/javascript'; shr.async = 'true';
+    shr.onload = shr.onreadystatechange = function() {
+      var rs = this.readyState;
+      if (rs && rs != 'complete' && rs != 'loaded') return;
+      var site_id = '9cc17325fe566a8d07d3ee25ce3fa991';
+      try { Shareaholic.init(site_id); } catch (e) {}
+    };
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(shr, s);
+  })();
+//]]>
+</script>
+
+  </body>
+</html>
