@@ -7,6 +7,6 @@ task :publish do
   FileUtils.cp_r './', '../../frontend.io'
   cd '../../frontend.io'
   puts 'Commiting with Current Timestamp…'
-  sh "git add . ; git commit -m \"#{ Time.new }\" ; "
+  sh "git add . ; git commit -m \"#{ Time.new }\" ; git push origin master"
   puts 'Done.'
 end
