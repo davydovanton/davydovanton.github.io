@@ -6,17 +6,17 @@
   xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
   <channel>
     <title>Anton Davydov personal blog</title>
-    <link>thhp://davydovanton.github.io</link>
+    <link>http://davydovanton.github.io</link>
     <description>Блог о Ruby и прочих технологиях</description>
     <pubDate>Sun, 16 Mar 2014 00:00:00 +0400</pubDate>
     <item>
       <title>История vim</title>
-      <link>thhp://davydovanton.github.io/posts/vim-history</link>
+      <link>http://davydovanton.github.io/posts/vim-history</link>
       <description><![CDATA[Я свято верю, что перед тем, как изучать новую технологию, необходимо узнать, зачем и в каких условиях она была создана. Думаю, данные знания позволяют в будущем не только не забивать гвозди микроскопом, но и не спрашивать, почему они так плохо забиваются. Поэтому первую запись из цикла статей, связанных с vim-ом, я бы хотел начать с истории его становления и небольшого описания его функционала.
 
 ]]></description>
       <pubDate>Sun, 16 Mar 2014 00:00:00 +0400</pubDate>
-      <guid>thhp://davydovanton.github.io/posts/vim-history</guid>
+      <guid>http://davydovanton.github.io/posts/vim-history</guid>
       <content:encoded><![CDATA[<p>Я свято верю, что перед тем, как изучать новую технологию, необходимо узнать, зачем и в каких условиях она была создана. Думаю, данные знания позволяют в будущем не только не забивать гвозди микроскопом, но и не спрашивать, почему они так плохо забиваются. Поэтому первую запись из цикла статей, связанных с vim-ом, я бы хотел начать с истории его становления и небольшого описания его функционала.</p>
 
 <!--more-->
@@ -54,12 +54,12 @@
     </item>
     <item>
       <title>Seed файл и вы</title>
-      <link>thhp://davydovanton.github.io/posts/seed-and-you</link>
+      <link>http://davydovanton.github.io/posts/seed-and-you</link>
       <description><![CDATA[Совсем недавно, на работе, потребовалось мне заполнить новый проект данными для дальнейшего тестирования и разработки. Конечно же, данные должны быть в любом виде, и первое, о чем я подумал, был seed файл, поэтому сегодня мы поговорим именно о нем. Как всем известно, данный файл служит для генерации данных в рельсовых приложениях. Вы пишите скрипт, выполняете rake db:seed и радуетесь жизни. В моем случае данные были типовыми, а именно, нужно было сгенерировать пользователей, посты и комментарии к этим постам. Я думаю все прекрасно понимают, как все взаимосвязанно, поэтому на этом останавливаться не вижу особого смысла.
 
 ]]></description>
       <pubDate>Mon, 10 Mar 2014 00:00:00 +0400</pubDate>
-      <guid>thhp://davydovanton.github.io/posts/seed-and-you</guid>
+      <guid>http://davydovanton.github.io/posts/seed-and-you</guid>
       <content:encoded><![CDATA[<p>Совсем недавно, на работе, потребовалось мне заполнить новый проект данными для дальнейшего тестирования и разработки. Конечно же, данные должны быть в любом виде, и первое, о чем я подумал, был seed файл, поэтому сегодня мы поговорим именно о нем. Как всем известно, данный файл служит для генерации данных в рельсовых приложениях. Вы пишите скрипт, выполняете <code>rake db:seed</code> и радуетесь жизни. В моем случае данные были типовыми, а именно, нужно было сгенерировать пользователей, посты и комментарии к этим постам. Я думаю все прекрасно понимают, как все взаимосвязанно, поэтому на этом останавливаться не вижу особого смысла.</p>
 
 <!--more-->
@@ -252,12 +252,12 @@
     </item>
     <item>
       <title>IRB и все все все</title>
-      <link>thhp://davydovanton.github.io/posts/irb-and-all-all-all</link>
+      <link>http://davydovanton.github.io/posts/irb-and-all-all-all</link>
       <description><![CDATA[Думаю, каждый, кто так или иначе связан с Ruby и тем более с Rails, хоть раз в жизни использовал irb. Возможности интерактивного ruby шела безграничны, поэтому сегодня я бы хотел поговорить об улучшении или кастомизации, если вам так угодно, вашего irb. 
 
 ]]></description>
       <pubDate>Sun, 09 Feb 2014 00:00:00 +0400</pubDate>
-      <guid>thhp://davydovanton.github.io/posts/irb-and-all-all-all</guid>
+      <guid>http://davydovanton.github.io/posts/irb-and-all-all-all</guid>
       <content:encoded><![CDATA[<p>Думаю, каждый, кто так или иначе связан с Ruby и тем более с Rails, хоть раз в жизни использовал irb. Возможности интерактивного ruby шела безграничны, поэтому сегодня я бы хотел поговорить об улучшении или кастомизации, если вам так угодно, вашего irb. </p>
 
 <!--more-->
@@ -265,7 +265,7 @@
 <p>Но для начала давайте посмотрим документацию, а именно откроем модуль <a href="http://www.ruby-doc.org/stdlib-2.0/libdoc/irb/rdoc/IRB.html">IRB</a> в стандартной библиотеке ruby.
 “Что интересного тут есть?”, спросите вы? Думаю стоит начать с самого начала, с запуска. Если вы просто наберете в консоли <code>irb</code>, то запустите шел с вашей текущей версией руби. Но  если у вас RVM(хотя, сказать по правде я не уверен, что это работает только с RVM), то вы можете выбрать среду для запуска из всех тех, что у вас установлены. Например вот так, я, при активном MRI 2.0, могу запустить у себя jruby:</p>
 
-<p><img src="thhp://davydovanton.github.io/images/2014/02/irb-and-all-all-all/jruby-irb.png" alt="jruby in irb" /></p>
+<p><img src="http://davydovanton.github.io/images/2014/02/irb-and-all-all-all/jruby-irb.png" alt="jruby in irb" /></p>
 
 <p>Дальше, думаю, следует обсудить ключи. Их много, они разные. В документации они все <a href="http://www.ruby-doc.org/stdlib-2.0/libdoc/irb/rdoc/IRB.html#module-IRB-label-Command+line+options">есть</a>. Самые интересные, на мой взляд, - <code>-d</code> включающий дебаг мод(аналогично <code>ruby -d</code>) и ключ <code>-I path</code>, загружающий указанную директорию.</p>
 
@@ -291,7 +291,7 @@
 
 <p>Как он будет работать, спросите вы? Да все просто, берете объект и вызываете на нем данный метод:</p>
 
-<p><img src="thhp://davydovanton.github.io/images/2014/02/irb-and-all-all-all/irb_local_methods.png" alt="Using local_mathods method in irb" /></p>
+<p><img src="http://davydovanton.github.io/images/2014/02/irb-and-all-all-all/irb_local_methods.png" alt="Using local_mathods method in irb" /></p>
 
 <p>Думаю, вы заметили цвета, которых не хватает в дефолтном irb? </p>
 
@@ -315,13 +315,13 @@
 <span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span></code></pre></div>
 
 <p>Ну а выглядеть это будет как-то так:
-<img src="thhp://davydovanton.github.io/images/2014/02/irb-and-all-all-all/pry.gif" alt="Using pry in irb" /></p>
+<img src="http://davydovanton.github.io/images/2014/02/irb-and-all-all-all/pry.gif" alt="Using pry in irb" /></p>
 
 <p>Но самое полезное, что можно сделать, это забыть построчный ввод кода. “Как?”, спросите вы? Начну издалека: мне очень нравится vim :) Поэтому, смотря vimcasts-ы, я узнал то, что перевернуло мой мир, а именно: любой текстовый редактор можно <a href="http://vimcasts.org/episodes/running-vim-within-irb/">вызывать</a> прямо из irb. </p>
 
 <p>Делается это очень просто: нужно добавить гем <code>interactive_editor</code>. Данный гем позволяет вызывать любой текстовый редактор из вашего irb, например, набрав <code>vim</code> - откроется vim, где вы сможете набрать любой код, который выполнится после сохранения файла и закрытия редактора. </p>
 
-<p><img src="thhp://davydovanton.github.io/images/2014/02/irb-and-all-all-all/vim-in-irb.gif" alt="Using vim in irb" /></p>
+<p><img src="http://davydovanton.github.io/images/2014/02/irb-and-all-all-all/vim-in-irb.gif" alt="Using vim in irb" /></p>
 
 <p>Собственно то же самое будет работать с sublime, textmate, emacs и <a href="https://github.com/jberkel/interactive_editor/blob/master/lib/interactive_editor.rb#L92">дургими</a> текстовыми редакторами. </p>
 
@@ -364,12 +364,12 @@
     </item>
     <item>
       <title>Ruby и special/predefined variables</title>
-      <link>thhp://davydovanton.github.io/posts/ruby-and-predefined-global-variables</link>
+      <link>http://davydovanton.github.io/posts/ruby-and-predefined-global-variables</link>
       <description><![CDATA[Не так давно я обнаружил интересный пример в одной замечательной книге. С этого примера, я бы и хотел начать наш разговор.
 
 ]]></description>
       <pubDate>Wed, 15 Jan 2014 00:00:00 +0400</pubDate>
-      <guid>thhp://davydovanton.github.io/posts/ruby-and-predefined-global-variables</guid>
+      <guid>http://davydovanton.github.io/posts/ruby-and-predefined-global-variables</guid>
       <content:encoded><![CDATA[<p>Не так давно я обнаружил интересный пример в одной замечательной книге. С этого примера, я бы и хотел начать наш разговор.</p>
 
 <!--more-->

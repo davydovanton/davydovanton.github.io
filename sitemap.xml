@@ -1,31 +1,31 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>thhp://davydovanton.github.io/posts/ruby-and-predefined-global-variables</loc>
+        <loc>http://davydovanton.github.io/posts/ruby-and-predefined-global-variables</loc>
         <lastmod>2015-01-07T22:15:52+03:00</lastmod>
     </url>
     <url>
-        <loc>thhp://davydovanton.github.io/posts/irb-and-all-all-all</loc>
+        <loc>http://davydovanton.github.io/posts/irb-and-all-all-all</loc>
         <lastmod>2015-01-07T22:15:52+03:00</lastmod>
     </url>
     <url>
-        <loc>thhp://davydovanton.github.io/posts/seed-and-you</loc>
+        <loc>http://davydovanton.github.io/posts/seed-and-you</loc>
         <lastmod>2015-01-07T22:15:52+03:00</lastmod>
     </url>
     <url>
-        <loc>thhp://davydovanton.github.io/posts/vim-history</loc>
+        <loc>http://davydovanton.github.io/posts/vim-history</loc>
         <lastmod>2015-01-07T22:15:52+03:00</lastmod>
     </url>
     <url>
-        <loc>thhp://davydovanton.github.io/about/</loc>
+        <loc>http://davydovanton.github.io/about/</loc>
         <lastmod>2015-01-07T22:15:52+03:00</lastmod>
     </url>
     <url>
-        <loc>thhp://davydovanton.github.io/</loc>
+        <loc>http://davydovanton.github.io/</loc>
         <lastmod>2015-01-07T23:47:13+03:00</lastmod>
     </url>
     <url>
-        <loc>thhp://davydovanton.github.io/tags/</loc>
+        <loc>http://davydovanton.github.io/tags/</loc>
         <lastmod>2015-01-07T22:15:52+03:00</lastmod>
     </url>
 </urlset>
