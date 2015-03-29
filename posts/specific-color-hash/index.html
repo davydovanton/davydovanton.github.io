@@ -9,10 +9,11 @@
   <link rel="stylesheet" href="/assets/foundation.min-7ef34c8719badc4975c3bddd29762ddc.css">
   <link rel="stylesheet" href="/assets/app-a70dccae4e489fbc3278eb1136079428.css">
 
-  <title>Anton Davydov</title>
+  <title>Создание color hash-а для любой строки</title>
 </head>
 
-  <body>
+
+  <body onorientationchange="if(DISQUS) DISQUS.reset({reload: true});">
     <div class="yandex_metrica">
 <!-- Yandex.Metrika counter --><script type="text/javascript">var yaParams = {/*Здесь параметры визита*/};</script><script type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter23652886 = new Ya.Metrika({id:23652886, webvisor:true, clickmap:true, trackLinks:true, accurateTrackBounce:true, trackHash:true,params:window.yaParams||{ }}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="//mc.yandex.ru/watch/23652886" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 </div>
@@ -21,7 +22,7 @@
 <nav class="top-bar" data-topbar role="navigation">
   <ul class="title-area">
     <li class="name">
-      <h1><a href="/">Anton Davydov</a></h1>
+      <h1><a href="/">Создание color hash-а для любой строки</a></h1>
     </li>
     <li class="toggle-topbar menu-icon">
       <a href="#"><span></span></a>
@@ -32,7 +33,7 @@
     <ul class="right">
       <ul class="nav navbar-nav">
         
-          <li class="active"><a href="#">Blog</a></li>
+          <li><a href="/">Blog</a></li>
         
 
         
@@ -46,105 +47,65 @@
 
     <div class="row">
       <div class="large-12 medium-12 columns">
-        
-  <div class="row">
-    <div class="large-12 medium-12 columns">
-      <div class="post">
-        <div class="post__title">
-          <h2><a href="/posts/irb-and-all-all-all">IRB и все все все</a></h1>
-        </div>
+        <div class="post">
+          <h2 class="post__title"><a href=""></a></h1>
+          <div class="post__content">
+            <p>Так случатся, что иногда нужно из строки сделать color hash. Как мне кажется, самый простой способ - использовать <code>Digest::MD5</code>. Ддя этого достаточно вызывать метод <code>hexdigest</code> и передать в него нужную строку:</p>
 
-        <div class="post__date">
-          09 Feb 2014
-        </div>
+<p><code>ruby
+Digest::MD5.hexdigest('My string')[0..5] # =&gt; 'a537d0'
+</code></p>
 
-        <div class="post__tags-title">
-          
-            <a href='/tags/#ruby'>#ruby</a>
-          
-            <a href='/tags/#irb'>#irb</a>
-          
-        </div>
+<p>Ну а если вы хотите сделать rgb, то достаточно каждые 2 симвора из color hash переобразовать в 10 ричную сисему с помощью <code>to_i(16)</code>:</p>
 
-        <div class="post__content post__content_float">
-          
-            <p>Думаю, каждый, кто так или иначе связан с Ruby и тем более с Rails, хоть раз в жизни использовал irb. Возможности интерактивного ruby шела безграничны, поэтому сегодня я бы хотел поговорить об улучшении или кастомизации, если вам так угодно, вашего irb.</p>
+<p><code>ruby
+Digest::MD5.hexdigest(worker)[0..5]
+  .scan(/../)
+  .map{ |color| color.to_i(16) }
+</code></p>
 
 
-            <div class="post__continue">
-              <a class="radius button left" href="/posts/irb-and-all-all-all">Continue reading</a>
+            <hr class="bookends-dots"/>
+
+            <div class="post__tags">
+              <ul class="inline-list">
+                
+                  <li><a href='/tags/#ruby'>#ruby</a></li>
+                
+              </ul>
             </div>
-          
-        </div>
-      </div>
-      <hr class="bookends-dots"/>
-    </div>
-  </div>
 
-  <div class="row">
-    <div class="large-12 medium-12 columns">
-      <div class="post">
-        <div class="post__title">
-          <h2><a href="/posts/ruby-and-predefined-global-variables">Ruby и special/predefined variables</a></h1>
-        </div>
+            <div class="post__share-buttons">
+              <div class="share_buttons">
+  <div class='shareaholic-canvas' data-app='share_buttons' data-app-id='11548095'></div>
+</div>
 
-        <div class="post__date">
-          15 Jan 2014
-        </div>
-
-        <div class="post__tags-title">
-          
-            <a href='/tags/#ruby'>#ruby</a>
-          
-            <a href='/tags/#core'>#core</a>
-          
-        </div>
-
-        <div class="post__content post__content_float">
-          
-            <p>Не так давно я обнаружил интересный пример в одной замечательной книге. С этого примера, я бы и хотел начать наш разговор.</p>
-
-
-            <div class="post__continue">
-              <a class="radius button left" href="/posts/ruby-and-predefined-global-variables">Continue reading</a>
             </div>
-          
+
+            <div class="post__back">
+              <a href="/" class="secondary radius button">Назад</a>
+            </div>
+
+            <div class="post__comments">
+              <div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'fikysmyblog'; // required: replace example with your forum shortname
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+            </div>
+          </div>
         </div>
-      </div>
-      <hr class="bookends-dots"/>
-    </div>
-  </div>
-
-
-
-  <ul class="pagination" role="menubar" aria-label="Pagination">
-    
-      <li class="arrow" aria-disabled="false">
-        <a href="/index.html">&laquo; Previous</a>
-      </li>
-    
-
-    
-      
-        <li>
-          <a href="/index.html">1</a>
-        </li>
-      
-    
-      
-      <li class="current"><a href="">2</a></li>
-      
-    
-
-    
-      <li class="arrow">
-        <a href="">Next &raquo;</a>
-      </li>
-    
-  </ul>
-
-
-
       </div>
     </div>
 

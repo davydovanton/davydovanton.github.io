@@ -50,7 +50,7 @@
         <div class="post">
           <h2 class="post__title"><a href=""></a></h1>
           <div class="post__content">
-            <p>Думаю, каждый, кто так или иначе связан с Ruby и тем более с Rails, хоть раз в жизни использовал irb. Возможности интерактивного ruby шела безграничны, поэтому сегодня я бы хотел поговорить об улучшении или кастомизации, если вам так угодно, вашего irb. </p>
+            <p>Думаю, каждый, кто так или иначе связан с Ruby и тем более с Rails, хоть раз в жизни использовал irb. Возможности интерактивного ruby шела безграничны, поэтому сегодня я бы хотел поговорить об улучшении или кастомизации, если вам так угодно, вашего irb.</p>
 
 <!--more-->
 
@@ -63,14 +63,14 @@
 
 <p>Дальше, думаю, следует обсудить ключи. Их много, они разные. В документации они все <a href="http://www.ruby-doc.org/stdlib-2.0/libdoc/irb/rdoc/IRB.html#module-IRB-label-Command+line+options">есть</a>. Самые интересные, на мой взляд, - <code>-d</code> включающий дебаг мод(аналогично <code>ruby -d</code>) и ключ <code>-I path</code>, загружающий указанную директорию.</p>
 
-<p>Ну а теперь самое интересное: поговорим о конфигурации вашего irb. Для этого необходимо создать <code>*rc</code> аналогичный <code>.bashrc</code> или <code>.vimrc</code>. Существует несколько разновидностей именования этого файла, например: <code>.irbrc</code>, <code>irb.rc</code>, <code>_irbrc</code> или же <code>$irbrc</code>. </p>
+<p>Ну а теперь самое интересное: поговорим о конфигурации вашего irb. Для этого необходимо создать <code>*rc</code> аналогичный <code>.bashrc</code> или <code>.vimrc</code>. Существует несколько разновидностей именования этого файла, например: <code>.irbrc</code>, <code>irb.rc</code>, <code>_irbrc</code> или же <code>$irbrc</code>.</p>
 
 <p>Думаю, для начала, следует указать конфигурационные значения, например, увеличить количество сохраняемых команд и записывать их в отдельный файл:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">IRB</span><span class="o">.</span><span class="n">conf</span><span class="o">[</span><span class="ss">:SAVE_HISTORY</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1000</span>
 <span class="no">IRB</span><span class="o">.</span><span class="n">conf</span><span class="o">[</span><span class="ss">:HISTORY_FILE</span><span class="o">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;HOME&#39;</span><span class="o">]</span><span class="si">}</span><span class="s2">/.irb_history&quot;</span></code></pre></div>
 
-<p>Так же можно указать кучу других настроек, но я бы не стал писать эту статью, если бы хотел рассказать только это. Все веселье начинается тогда, когда приходит понимание того, что данный файл является обычным <code>*.rb</code> файлом, который загружается при старте вашего irb. </p>
+<p>Так же можно указать кучу других настроек, но я бы не стал писать эту статью, если бы хотел рассказать только это. Все веселье начинается тогда, когда приходит понимание того, что данный файл является обычным <code>*.rb</code> файлом, который загружается при старте вашего irb.</p>
 
 <p>Думаю, все догадались, что дальше будет? :)</p>
 
@@ -89,9 +89,9 @@
 <img src="http://davydovanton.github.io/images/2014/02/irb-and-all-all-all/irb_local_methods.png" alt="Using local_mathods method in irb" />
 </a></p>
 
-<p>Думаю, вы заметили цвета, которых не хватает в дефолтном irb? </p>
+<p>Думаю, вы заметили цвета, которых не хватает в дефолтном irb?</p>
 
-<p>Да, все верно, так же можно подключать гемы, и да, есть гемы, которые добавляют ярких цветов в ваш irb, например, <a href="https://github.com/blackwinter/wirble">wirble</a>. Достаточно написать такой код: </p>
+<p>Да, все верно, так же можно подключать гемы, и да, есть гемы, которые добавляют ярких цветов в ваш irb, например, <a href="https://github.com/blackwinter/wirble">wirble</a>. Достаточно написать такой код:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">&#39;rubygems&#39;</span>
 <span class="nb">require</span> <span class="s1">&#39;wirble&#39;</span>
@@ -115,15 +115,15 @@
 <img src="http://davydovanton.github.io/images/2014/02/irb-and-all-all-all/pry.gif" alt="Using pry in irb" />
 </a></p>
 
-<p>Но самое полезное, что можно сделать, это забыть построчный ввод кода. “Как?”, спросите вы? Начну издалека: мне очень нравится vim :) Поэтому, смотря vimcasts-ы, я узнал то, что перевернуло мой мир, а именно: любой текстовый редактор можно <a href="http://vimcasts.org/episodes/running-vim-within-irb/">вызывать</a> прямо из irb. </p>
+<p>Но самое полезное, что можно сделать, это забыть построчный ввод кода. “Как?”, спросите вы? Начну издалека: мне очень нравится vim :) Поэтому, смотря vimcasts-ы, я узнал то, что перевернуло мой мир, а именно: любой текстовый редактор можно <a href="http://vimcasts.org/episodes/running-vim-within-irb/">вызывать</a> прямо из irb.</p>
 
-<p>Делается это очень просто: нужно добавить гем <code>interactive_editor</code>. Данный гем позволяет вызывать любой текстовый редактор из вашего irb, например, набрав <code>vim</code> - откроется vim, где вы сможете набрать любой код, который выполнится после сохранения файла и закрытия редактора. </p>
+<p>Делается это очень просто: нужно добавить гем <code>interactive_editor</code>. Данный гем позволяет вызывать любой текстовый редактор из вашего irb, например, набрав <code>vim</code> - откроется vim, где вы сможете набрать любой код, который выполнится после сохранения файла и закрытия редактора.</p>
 
 <p><a class="lightbox" href="http://davydovanton.github.io/images/2014/02/irb-and-all-all-all/vim-in-irb.gif">
 <img src="http://davydovanton.github.io/images/2014/02/irb-and-all-all-all/vim-in-irb.gif" alt="Using vim in irb" />
 </a></p>
 
-<p>Собственно то же самое будет работать с sublime, textmate, emacs и <a href="https://github.com/jberkel/interactive_editor/blob/master/lib/interactive_editor.rb#L92">дургими</a> текстовыми редакторами. </p>
+<p>Собственно то же самое будет работать с sublime, textmate, emacs и <a href="https://github.com/jberkel/interactive_editor/blob/master/lib/interactive_editor.rb#L92">дургими</a> текстовыми редакторами.</p>
 
 <p>Ну и на последок стоит рассказать про сессии в irb. Если вы используете vim или когда то использовали его, то вам знакомо такое понятие как буфер, которое чем-то похоже на сессии в irb. Ну а если нет, то краткая справка: сессия - некий сеанс интерактивного шела. Для того, что бы посмотреть список всех сессий в irb, достаточно набрать <code>jobs</code>:</p>
 
