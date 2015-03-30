@@ -8,7 +8,46 @@
     <title>Anton Davydov personal blog</title>
     <link>http://davydovanton.github.io</link>
     <description>Блог о Ruby и прочих технологиях</description>
-    <pubDate>Sun, 29 Mar 2015 00:00:00 +0300</pubDate>
+    <pubDate>Mon, 30 Mar 2015 00:00:00 +0300</pubDate>
+    <item>
+      <title>Рендеринг блока в erb</title>
+      <link>http://davydovanton.github.io/posts/render-block-in-erb</link>
+      <description><![CDATA[Если вы создали методы которые возвращатю содержимое блока и вызываете их в erb (slim, haml, etc) у вас могут возникнуть проблемы. Например - репитинг контента или еще что хуже. 
+Пускай наши методы выглядят так:
+
+]]></description>
+      <pubDate>Mon, 30 Mar 2015 00:00:00 +0300</pubDate>
+      <guid>http://davydovanton.github.io/posts/render-block-in-erb</guid>
+      <content:encoded><![CDATA[<p>Если вы создали методы которые возвращатю содержимое блока и вызываете их в erb (slim, haml, etc) у вас могут возникнуть проблемы. Например - репитинг контента или еще что хуже. 
+Пускай наши методы выглядят так:</p>
+
+<p>``` ruby
+def add_to_head(&amp;block)
+  @head_html ||= []
+  @head_html « block if block_given?
+end</p>
+
+<p>def display_custom_head
+  return unless @head_html
+  @head_html.map(&amp;:call).join
+end
+```</p>
+
+<p>Вы можете использовать метод <code>captire</code> который включен в <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-capture">rails</a> и <a href="https://github.com/sinatra/sinatra-contrib#common-extensions">sinatra-contrib</a> библиотеки. Но что делать, если у вас нет возможности использовать эти методы или они имеют слишком большой оверхед для конкретной задачи?
+Как раз такой случай возник у меня в pull request-е в sidekiq, где я написал простой вариант метода <code>capture</code> для erb файлов:</p>
+
+<p><code>ruby
+def capture(&amp;block)
+  block.call
+  eval('', block.binding)
+end
+</code></p>
+
+<p>Надеюсь это будет вам полезно.
+Happy hacking!</p>
+]]></content:encoded>
+      <dc:date>2015-03-30T00:00:00+03:00</dc:date>
+    </item>
     <item>
       <title>Создание color hash-а для любой строки</title>
       <link>http://davydovanton.github.io/posts/specific-color-hash</link>
@@ -567,6 +606,6 @@ Digest::MD5.hexdigest(worker)[0..5]
 ]]></content:encoded>
       <dc:date>2014-01-15T00:00:00+04:00</dc:date>
     </item>
-    <dc:date>2015-03-29T00:00:00+03:00</dc:date>
+    <dc:date>2015-03-30T00:00:00+03:00</dc:date>
   </channel>
 </rss>
