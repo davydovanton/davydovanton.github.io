@@ -8,7 +8,57 @@
     <title>Anton Davydov personal blog</title>
     <link>http://davydovanton.github.io</link>
     <description>Блог о Ruby и прочих технологиях</description>
-    <pubDate>Mon, 30 Mar 2015 00:00:00 +0300</pubDate>
+    <pubDate>Sun, 05 Apr 2015 00:00:00 +0300</pubDate>
+    <item>
+      <title>Memory profiler tools for ruby</title>
+      <link>http://davydovanton.github.io/posts/ruby-memory-profiller-tools</link>
+      <description><![CDATA[Так получилось, что мне нужно было узнать сколько объектов создает каждый вызов руби метода mperham/sidekiq#2288. Поэтому я решил составить список инструментов которые помогут узнать всю необходимую информацию.
+
+]]></description>
+      <pubDate>Sun, 05 Apr 2015 00:00:00 +0300</pubDate>
+      <guid>http://davydovanton.github.io/posts/ruby-memory-profiller-tools</guid>
+      <content:encoded><![CDATA[<p>Так получилось, что мне нужно было узнать сколько объектов создает каждый вызов руби метода <a href="https://github.com/mperham/sidekiq/pull/2288">mperham/sidekiq#2288</a>. Поэтому я решил составить список инструментов которые помогут узнать всю необходимую информацию.</p>
+
+<h2 id="gc">1. Стандартный GC</h2>
+<p>Sam Saffron написал отличный <a href="http://samsaffron.com/archive/2013/11/22/demystifying-the-ruby-gc">пост</a>, в котором рассказывается о GC и замечательном методе <code>GC.stat</code> который возвращает хеш со значениями:</p>
+
+<p><code>
+2.2.0 :001 &gt; GC.stat
+=&gt; {:count=&gt;21, :heap_allocated_pages=&gt;236, :heap_sorted_length=&gt;237, :heap_allocatable_pages=&gt;0, :heap_available_slots=&gt;96193, :heap_live_slots=&gt;95354, ... }
+</code></p>
+
+<p>Так же, автор упоминает о замечательном модуле <a href="http://ruby-doc.org/core-2.2.0/ObjectSpace.html"><code>ObjectSpace</code></a> который позволяет узнать информацию о object/memory management. Например, вы можете лекго узнать общее число созданных объектов, для этого достаточно вызвать следующий метод:</p>
+
+<p><code>
+2.2.0 :002 &gt; ObjectSpace.count_objects[:TOTAL]
+=&gt; 96193
+</code></p>
+
+<h2 id="ruby-memory-profiler">2. Ruby Memory Profiler</h2>
+<p>Так же Sam написал отличную тулзу, <a href="https://github.com/SamSaffron/memory_profiler">ruby-memory-profiler</a>, которая позволяет легко выводить практически всю необходимую информацию для любого блока кода. Например, что бы узнать количество аллокаций при вызове sidekiq метода <code>perform_async</code> я писал следующее
+<code>ruby
+MemoryProfiler.report{ 100.times{ HardWorker.perform_async } }.pretty_print
+</code></p>
+
+<h2 id="ruby-prof">3. ruby-prof</h2>
+<p>Основные фишки в поддержке различных <a href="https://github.com/ruby-prof/ruby-prof#reports">способов</a> вывода отчета, достаточно быстр, легко профилирует rails. Запускается тоже достаточно просто:
+```
+require ‘ruby-prof’</p>
+
+<h1 id="profile-the-code">Profile the code</h1>
+<p>RubyProf.start
+[code to profile]
+RubyProf.pause
+[other code]
+RubyProf.resume
+[code to profile]
+result = RubyProf.stop
+```</p>
+
+<p><strong>Выводы</strong>: Профилировать руби не так сложно, как кажется на первый взгляд. Есть множество великолепных библиотек. Единственное, чего не хватает мне - профилирование кода из файла, но я уверен, что это скоро добавят (возможно это добавлю я сам :) ).</p>
+]]></content:encoded>
+      <dc:date>2015-04-05T00:00:00+03:00</dc:date>
+    </item>
     <item>
       <title>Рендеринг блока в erb</title>
       <link>http://davydovanton.github.io/posts/render-block-in-erb</link>
@@ -606,6 +656,6 @@ Digest::MD5.hexdigest(worker)[0..5]
 ]]></content:encoded>
       <dc:date>2014-01-15T00:00:00+04:00</dc:date>
     </item>
-    <dc:date>2015-03-30T00:00:00+03:00</dc:date>
+    <dc:date>2015-04-05T00:00:00+03:00</dc:date>
   </channel>
 </rss>
