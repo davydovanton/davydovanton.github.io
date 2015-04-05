@@ -19,6 +19,8 @@
       <guid>http://davydovanton.github.io/posts/ruby-memory-profiller-tools</guid>
       <content:encoded><![CDATA[<p>Так получилось, что мне нужно было узнать сколько объектов создает каждый вызов руби метода <a href="https://github.com/mperham/sidekiq/pull/2288">mperham/sidekiq#2288</a>. Поэтому я решил составить список инструментов которые помогут узнать всю необходимую информацию.</p>
 
+<!--more-->
+
 <h2 id="gc">1. Стандартный GC</h2>
 <p>Sam Saffron написал отличный <a href="http://samsaffron.com/archive/2013/11/22/demystifying-the-ruby-gc">пост</a>, в котором рассказывается о GC и замечательном методе <code>GC.stat</code> который возвращает хеш со значениями:</p>
 
