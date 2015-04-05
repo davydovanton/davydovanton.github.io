@@ -76,19 +76,19 @@ MemoryProfiler.report{ 100.times{ HardWorker.perform_async } }.pretty_print
 </code></p>
 
 <h2 id="ruby-prof">3. ruby-prof</h2>
-<p>Основные фишки в поддержке различных <a href="https://github.com/ruby-prof/ruby-prof#reports">способов</a> вывода отчета, достаточно быстр, легко профилирует rails. Запускается тоже достаточно просто:
-```
-require ‘ruby-prof’</p>
+<p>Основные фишки в поддержке различных <a href="https://github.com/ruby-prof/ruby-prof#reports">способов</a> вывода отчета, достаточно быстр, легко профилирует rails. Запускается тоже достаточно просто:</p>
 
-<h1 id="profile-the-code">Profile the code</h1>
-<p>RubyProf.start
+<p><code>
+require 'ruby-prof'
+# Profile the code
+RubyProf.start
 [code to profile]
 RubyProf.pause
 [other code]
 RubyProf.resume
 [code to profile]
 result = RubyProf.stop
-```</p>
+</code></p>
 
 <p><strong>Выводы</strong>: Профилировать руби не так сложно, как кажется на первый взгляд. Есть множество великолепных библиотек. Единственное, чего не хватает мне - профилирование кода из файла, но я уверен, что это скоро добавят (возможно это добавлю я сам :) ).</p>
 
