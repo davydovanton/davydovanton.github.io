@@ -8,7 +8,28 @@
     <title>Anton Davydov personal blog</title>
     <link>http://davydovanton.github.io</link>
     <description>Блог о Ruby и прочих технологиях</description>
-    <pubDate>Sun, 05 Apr 2015 00:00:00 +0300</pubDate>
+    <pubDate>Fri, 10 Apr 2015 00:00:00 +0300</pubDate>
+    <item>
+      <title>Кастомная локаль в запросе minitest #get метода</title>
+      <link>http://davydovanton.github.io/posts/custom-locale-for-minitest-get-method</link>
+      <description><![CDATA[Иногда необходимо, в minitest тестах, сделать запрос, например get с определенным списком локалей. Это легко сделать следующим способом:
+
+]]></description>
+      <pubDate>Fri, 10 Apr 2015 00:00:00 +0300</pubDate>
+      <guid>http://davydovanton.github.io/posts/custom-locale-for-minitest-get-method</guid>
+      <content:encoded><![CDATA[<p>Иногда необходимо, в minitest тестах, сделать запрос, например <code>get</code> с определенным списком локалей. Это легко сделать следующим способом:</p>
+
+<p>``` ruby
+it ‘yout test description’ do
+  rackenv = {‘HTTP_ACCEPT_LANGUAGE’ =&gt; ‘ru,en’}
+  get ‘/’, {}, rackenv</p>
+
+<p>…
+end
+```</p>
+]]></content:encoded>
+      <dc:date>2015-04-10T00:00:00+03:00</dc:date>
+    </item>
     <item>
       <title>Memory profiler tools for ruby</title>
       <link>http://davydovanton.github.io/posts/ruby-memory-profiller-tools</link>
@@ -658,6 +679,6 @@ Digest::MD5.hexdigest(worker)[0..5]
 ]]></content:encoded>
       <dc:date>2014-01-15T00:00:00+04:00</dc:date>
     </item>
-    <dc:date>2015-04-05T00:00:00+03:00</dc:date>
+    <dc:date>2015-04-10T00:00:00+03:00</dc:date>
   </channel>
 </rss>

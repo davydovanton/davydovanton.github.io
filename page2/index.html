@@ -51,6 +51,46 @@
     <div class="large-12 medium-12 columns">
       <div class="post">
         <div class="post__title">
+          <h2><a href="/posts/specific-color-hash">Создание color hash-а для любой строки</a></h1>
+        </div>
+
+        <div class="post__date">
+          29 Mar 2015
+        </div>
+
+        <div class="post__tags-title">
+          
+            <a href='/tags/#ruby'>#ruby</a>
+          
+        </div>
+
+        <div class="post__content post__content_float">
+          
+            <p>Так случатся, что иногда нужно из строки сделать color hash. Как мне кажется, самый простой способ - использовать <code>Digest::MD5</code>. Ддя этого достаточно вызывать метод <code>hexdigest</code> и передать в него нужную строку:</p>
+
+<p><code>ruby
+Digest::MD5.hexdigest('My string')[0..5] # =&gt; 'a537d0'
+</code></p>
+
+<p>Ну а если вы хотите сделать rgb, то достаточно каждые 2 симвора из color hash переобразовать в 10 ричную сисему с помощью <code>to_i(16)</code>:</p>
+
+<p><code>ruby
+Digest::MD5.hexdigest(worker)[0..5]
+  .scan(/../)
+  .map{ |color| color.to_i(16) }
+</code></p>
+
+          
+        </div>
+      </div>
+      <hr class="bookends-dots"/>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="large-12 medium-12 columns">
+      <div class="post">
+        <div class="post__title">
           <h2><a href="/posts/vim-history">История vim</a></h1>
         </div>
 
@@ -107,40 +147,6 @@
 
             <div class="post__continue">
               <a class="radius button left" href="/posts/seed-and-you">Continue reading</a>
-            </div>
-          
-        </div>
-      </div>
-      <hr class="bookends-dots"/>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="large-12 medium-12 columns">
-      <div class="post">
-        <div class="post__title">
-          <h2><a href="/posts/irb-and-all-all-all">IRB и все все все</a></h1>
-        </div>
-
-        <div class="post__date">
-          09 Feb 2014
-        </div>
-
-        <div class="post__tags-title">
-          
-            <a href='/tags/#ruby'>#ruby</a>
-          
-            <a href='/tags/#irb'>#irb</a>
-          
-        </div>
-
-        <div class="post__content post__content_float">
-          
-            <p>Думаю, каждый, кто так или иначе связан с Ruby и тем более с Rails, хоть раз в жизни использовал irb. Возможности интерактивного ruby шела безграничны, поэтому сегодня я бы хотел поговорить об улучшении или кастомизации, если вам так угодно, вашего irb.</p>
-
-
-            <div class="post__continue">
-              <a class="radius button left" href="/posts/irb-and-all-all-all">Continue reading</a>
             </div>
           
         </div>

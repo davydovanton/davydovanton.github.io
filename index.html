@@ -51,6 +51,47 @@
     <div class="large-12 medium-12 columns">
       <div class="post">
         <div class="post__title">
+          <h2><a href="/posts/custom-locale-for-minitest-get-method">Кастомная локаль в запросе minitest #get метода</a></h1>
+        </div>
+
+        <div class="post__date">
+          10 Apr 2015
+        </div>
+
+        <div class="post__tags-title">
+          
+            <a href='/tags/#ruby'>#ruby</a>
+          
+            <a href='/tags/#mititest'>#mititest</a>
+          
+            <a href='/tags/#test'>#test</a>
+          
+        </div>
+
+        <div class="post__content post__content_float">
+          
+            <p>Иногда необходимо, в minitest тестах, сделать запрос, например <code>get</code> с определенным списком локалей. Это легко сделать следующим способом:</p>
+
+<p>``` ruby
+it ‘yout test description’ do
+  rackenv = {‘HTTP_ACCEPT_LANGUAGE’ =&gt; ‘ru,en’}
+  get ‘/’, {}, rackenv</p>
+
+<p>…
+end
+```</p>
+
+          
+        </div>
+      </div>
+      <hr class="bookends-dots"/>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="large-12 medium-12 columns">
+      <div class="post">
+        <div class="post__title">
           <h2><a href="/posts/ruby-memory-profiller-tools">Memory profiler tools for ruby</a></h1>
         </div>
 
@@ -129,46 +170,6 @@ end
 
 <p>Надеюсь это будет вам полезно.
 Happy hacking!</p>
-
-          
-        </div>
-      </div>
-      <hr class="bookends-dots"/>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="large-12 medium-12 columns">
-      <div class="post">
-        <div class="post__title">
-          <h2><a href="/posts/specific-color-hash">Создание color hash-а для любой строки</a></h1>
-        </div>
-
-        <div class="post__date">
-          29 Mar 2015
-        </div>
-
-        <div class="post__tags-title">
-          
-            <a href='/tags/#ruby'>#ruby</a>
-          
-        </div>
-
-        <div class="post__content post__content_float">
-          
-            <p>Так случатся, что иногда нужно из строки сделать color hash. Как мне кажется, самый простой способ - использовать <code>Digest::MD5</code>. Ддя этого достаточно вызывать метод <code>hexdigest</code> и передать в него нужную строку:</p>
-
-<p><code>ruby
-Digest::MD5.hexdigest('My string')[0..5] # =&gt; 'a537d0'
-</code></p>
-
-<p>Ну а если вы хотите сделать rgb, то достаточно каждые 2 симвора из color hash переобразовать в 10 ричную сисему с помощью <code>to_i(16)</code>:</p>
-
-<p><code>ruby
-Digest::MD5.hexdigest(worker)[0..5]
-  .scan(/../)
-  .map{ |color| color.to_i(16) }
-</code></p>
 
           
         </div>
