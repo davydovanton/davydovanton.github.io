@@ -1,256 +1,38 @@
-<!DOCTYPE html>
-<html>
-  <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta charset='utf-8' />
-  <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-  <meta name="description" content="davydovanton.github.io : " />
+---
+layout: default
+title: Home
+---
 
-  <link rel="stylesheet" href="/assets/foundation.min-7ef34c8719badc4975c3bddd29762ddc.css">
-  <link rel="stylesheet" href="/assets/app-a70dccae4e489fbc3278eb1136079428.css">
+<div class="posts">
+  {% for post in paginator.posts %}
+  <div class="post">
+    <h1 class="post-title">
+      <a href="{{ post.url }}">
+        {{ post.title }}
+      </a>
+    </h1>
 
-  <title>Anton Davydov</title>
-</head>
+    <span class="post-date">{{ post.date | date_to_string }}</span>
 
-  <body>
-    <div class="yandex_metrica">
-<!-- Yandex.Metrika counter --><script type="text/javascript">var yaParams = {/*Здесь параметры визита*/};</script><script type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter23652886 = new Ya.Metrika({id:23652886, webvisor:true, clickmap:true, trackLinks:true, accurateTrackBounce:true, trackHash:true,params:window.yaParams||{ }}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="//mc.yandex.ru/watch/23652886" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    {{ post.content }}
+  </div>
+  {% endfor %}
 </div>
 
+<div class="pagination">
+  {% if paginator.next_page %}
+    <a class="pagination-item older" href="/page{{paginator.next_page}}">Older</a>
+  {% else %}
+    <span class="pagination-item older">Older</span>
+  {% endif %}
+  {% if paginator.previous_page %}
+    {% if paginator.page == 2 %}
+      <a class="pagination-item newer" href="/">Newer</a>
+    {% else %}
+      <a class="pagination-item newer" href="/page{{paginator.previous_page}}">Newer</a>
+    {% endif %}
+  {% else %}
+    <span class="pagination-item newer">Newer</span>
+  {% endif %}
+</div>
 
-<nav class="top-bar" data-topbar role="navigation">
-  <ul class="title-area">
-    <li class="name">
-      <h1><a href="/">Anton Davydov</a></h1>
-    </li>
-    <li class="toggle-topbar menu-icon">
-      <a href="#"><span></span></a>
-    </li>
-  </ul>
-
-  <section class="top-bar-section">
-    <ul class="right">
-      <ul class="nav navbar-nav">
-        
-          <li class="active"><a href="#">Blog</a></li>
-        
-
-        
-          <li><a href="/about">About</a></li>
-        
-      </ul>
-    </ul>
-  </section>
-</nav>
-
-
-    <div class="row">
-      <div class="large-12 medium-12 columns">
-        
-  <div class="row">
-    <div class="large-12 medium-12 columns">
-      <div class="post">
-        <div class="post__title">
-          <h2><a href="/posts/custom-locale-for-minitest-get-method">Кастомная локаль в запросе minitest #get метода</a></h1>
-        </div>
-
-        <div class="post__date">
-          10 Apr 2015
-        </div>
-
-        <div class="post__tags-title">
-          
-            <a href='/tags/#ruby'>#ruby</a>
-          
-            <a href='/tags/#mititest'>#mititest</a>
-          
-            <a href='/tags/#test'>#test</a>
-          
-        </div>
-
-        <div class="post__content post__content_float">
-          
-            <p>Иногда необходимо, в minitest тестах, сделать запрос, например <code>get</code> с определенным списком локалей. Это легко сделать следующим способом:</p>
-
-<p>``` ruby
-it ‘yout test description’ do
-  rackenv = {‘HTTP_ACCEPT_LANGUAGE’ =&gt; ‘ru,en’}
-  get ‘/’, {}, rackenv</p>
-
-<p>…
-end
-```</p>
-
-          
-        </div>
-      </div>
-      <hr class="bookends-dots"/>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="large-12 medium-12 columns">
-      <div class="post">
-        <div class="post__title">
-          <h2><a href="/posts/ruby-memory-profiller-tools">Memory profiler tools for ruby</a></h1>
-        </div>
-
-        <div class="post__date">
-          05 Apr 2015
-        </div>
-
-        <div class="post__tags-title">
-          
-            <a href='/tags/#ruby'>#ruby</a>
-          
-            <a href='/tags/#memory'>#memory</a>
-          
-        </div>
-
-        <div class="post__content post__content_float">
-          
-            <p>Так получилось, что мне нужно было узнать сколько объектов создает каждый вызов руби метода <a href="https://github.com/mperham/sidekiq/pull/2288">mperham/sidekiq#2288</a>. Поэтому я решил составить список инструментов которые помогут узнать всю необходимую информацию.</p>
-
-
-            <div class="post__continue">
-              <a class="radius button left" href="/posts/ruby-memory-profiller-tools">Continue reading</a>
-            </div>
-          
-        </div>
-      </div>
-      <hr class="bookends-dots"/>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="large-12 medium-12 columns">
-      <div class="post">
-        <div class="post__title">
-          <h2><a href="/posts/render-block-in-erb">Рендеринг блока в erb</a></h1>
-        </div>
-
-        <div class="post__date">
-          30 Mar 2015
-        </div>
-
-        <div class="post__tags-title">
-          
-            <a href='/tags/#ruby'>#ruby</a>
-          
-            <a href='/tags/#erb'>#erb</a>
-          
-        </div>
-
-        <div class="post__content post__content_float">
-          
-            <p>Если вы создали методы которые возвращатю содержимое блока и вызываете их в erb (slim, haml, etc) у вас могут возникнуть проблемы. Например - репитинг контента или еще что хуже. 
-Пускай наши методы выглядят так:</p>
-
-<p>``` ruby
-def add_to_head(&amp;block)
-  @head_html ||= []
-  @head_html « block if block_given?
-end</p>
-
-<p>def display_custom_head
-  return unless @head_html
-  @head_html.map(&amp;:call).join
-end
-```</p>
-
-<p>Вы можете использовать метод <code>captire</code> который включен в <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-capture">rails</a> и <a href="https://github.com/sinatra/sinatra-contrib#common-extensions">sinatra-contrib</a> библиотеки. Но что делать, если у вас нет возможности использовать эти методы или они имеют слишком большой оверхед для конкретной задачи?
-Как раз такой случай возник у меня в pull request-е в sidekiq, где я написал простой вариант метода <code>capture</code> для erb файлов:</p>
-
-<p><code>ruby
-def capture(&amp;block)
-  block.call
-  eval('', block.binding)
-end
-</code></p>
-
-<p>Надеюсь это будет вам полезно.
-Happy hacking!</p>
-
-          
-        </div>
-      </div>
-      <hr class="bookends-dots"/>
-    </div>
-  </div>
-
-
-
-  <ul class="pagination" role="menubar" aria-label="Pagination">
-    
-      <li class="arrow unavailable" aria-disabled="true"><a href="">&laquo; Previous</a></li>
-    
-
-    
-      
-      <li class="current"><a href="">1</a></li>
-      
-    
-      
-        <li>
-          <a href="/page2">2</a>
-        </li>
-      
-    
-      
-        <li>
-          <a href="/page3">3</a>
-        </li>
-      
-    
-
-    
-      <li class="arrow">
-        <a href="/page2">Next &raquo;</a>
-      </li>
-    
-  </ul>
-
-
-
-      </div>
-    </div>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
-<script src="/assets/app-1108193558a27b4cc078f691fa499f86.js"></script>
-
-<script>
-  $(document).foundation();
-</script>
-
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-56114525-1', 'auto');
-  ga('send', 'pageview');
-</script>
-
-
-<script type="text/javascript">
-//<![CDATA[
-  (function() {
-    var shr = document.createElement('script');
-    shr.setAttribute('data-cfasync', 'false');
-    shr.src = '//dsms0mj1bbhn4.cloudfront.net/assets/pub/shareaholic.js';
-    shr.type = 'text/javascript'; shr.async = 'true';
-    shr.onload = shr.onreadystatechange = function() {
-      var rs = this.readyState;
-      if (rs && rs != 'complete' && rs != 'loaded') return;
-      var site_id = '9cc17325fe566a8d07d3ee25ce3fa991';
-      try { Shareaholic.init(site_id); } catch (e) {}
-    };
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(shr, s);
-  })();
-//]]>
-</script>
-
-  </body>
-</html>

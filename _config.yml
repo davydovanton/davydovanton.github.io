@@ -1,0 +1,21 @@
+# Permalinks
+#
+# Use of `relative_permalinks` ensures post links from the index work properly.
+permalink:           pretty
+relative_permalinks: true
+
+# Setup
+title:               Blog
+tagline:             'Anton Davydov'
+description:         "Simple blog where I'll write about ruby, my ideas and technologies which I love<br><a href=\"https://twitter.com/anton_davydov\" target=\"_blank\">@anton_davydov</a>"
+url:                 'http://davydovanton.github.io'
+paginate:            9
+
+# About/contact
+author:
+  name:              Anton Davydov
+  url:               https://github.com/davydovanton
+  email:             antondavydov.o@gmail.com
+
+# Custom vars
+version:             3.0.0
