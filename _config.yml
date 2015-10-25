@@ -5,10 +5,10 @@ permalink:           pretty
 relative_permalinks: true
 
 # Setup
-title:               Blog
-tagline:             'Anton Davydov'
+title:               Anton Davydov
+tagline:             Blog
 description:         "Simple blog where I'll write about ruby, my ideas and technologies which I love<br><a href=\"https://twitter.com/anton_davydov\" target=\"_blank\">@anton_davydov</a>"
-url:                 'http://davydovanton.github.io'
+url:                 http://davydovanton.github.io
 paginate:            9
 
 # About/contact

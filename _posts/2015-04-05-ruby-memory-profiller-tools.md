@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Memory profiler tools for ruby"
+description: "How to profile you ruby code"
 ---
 
 Memory profiler tools for ruby It so happened that I was need know how much ruby objects created
