@@ -4,7 +4,7 @@
  <title>Anton Davydov</title>
  <link href="http://davydovanton.github.io/atom.xml" rel="self"/>
  <link href="http://davydovanton.github.io/"/>
- <updated>2015-10-26T22:09:19+03:00</updated>
+ <updated>2015-10-26T23:07:35+03:00</updated>
  <id>http://davydovanton.github.io</id>
  <author>
    <name>Anton Davydov</name>
@@ -13,7 +13,7 @@
 
  
  <entry>
-   <title>Get requiest with custom locale in your tests</title>
+   <title>Get request with custom locale in your tests</title>
    <link href="http://davydovanton.github.io/2015/10/26/get-requiest-with-custom-locale-in-your-tests/"/>
    <updated>2015-10-26T00:00:00+03:00</updated>
    <id>http://davydovanton.github.io/2015/10/26/get-requiest-with-custom-locale-in-your-tests</id>

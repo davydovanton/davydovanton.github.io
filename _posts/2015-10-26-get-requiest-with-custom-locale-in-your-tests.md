@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Get requiest with custom locale in your tests"
+title: "Get request with custom locale in your tests"
 description: "Send specifiy locale in rspec or minitest get request"
 ---
 
