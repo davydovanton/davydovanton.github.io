@@ -4,13 +4,32 @@
  <title>Anton Davydov</title>
  <link href="http://davydovanton.github.io/atom.xml" rel="self"/>
  <link href="http://davydovanton.github.io/"/>
- <updated>2015-10-25T22:11:12+03:00</updated>
+ <updated>2015-10-26T22:09:19+03:00</updated>
  <id>http://davydovanton.github.io</id>
  <author>
    <name>Anton Davydov</name>
    <email>antondavydov.o@gmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>Get requiest with custom locale in your tests</title>
+   <link href="http://davydovanton.github.io/2015/10/26/get-requiest-with-custom-locale-in-your-tests/"/>
+   <updated>2015-10-26T00:00:00+03:00</updated>
+   <id>http://davydovanton.github.io/2015/10/26/get-requiest-with-custom-locale-in-your-tests</id>
+   <content type="html">&lt;p&gt;Sometimes in tests you have to set special locale for &lt;code&gt;get&lt;/code&gt; request.
+For example you want to &lt;a href=&quot;https://github.com/mperham/sidekiq/blob/master/test/test_web.rb#L33-L50&quot;&gt;test selecting locale language&lt;/a&gt;.
+For this you have to set locale in &lt;code&gt;&#39;HTTP_ACCEPT_LANGUAGE&#39;&lt;/code&gt; variable in params hash.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;your test description&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;rackenv&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;HTTP_ACCEPT_LANGUAGE&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;ru,en&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;/&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{},&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rackenv&lt;/span&gt;
+
+  &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+</content>
+ </entry>
  
  <entry>
    <title>Memory profiler tools for ruby</title>

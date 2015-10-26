@@ -104,6 +104,29 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/2015/10/26/get-requiest-with-custom-locale-in-your-tests/">
+        Get requiest with custom locale in your tests
+      </a>
+    </h1>
+
+    <span class="post-date">26 Oct 2015</span>
+
+    <p>Sometimes in tests you have to set special locale for <code>get</code> request.
+For example you want to <a href="https://github.com/mperham/sidekiq/blob/master/test/test_web.rb#L33-L50">test selecting locale language</a>.
+For this you have to set locale in <code>'HTTP_ACCEPT_LANGUAGE'</code> variable in params hash.</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">it</span> <span class="s1">&#39;your test description&#39;</span> <span class="k">do</span>
+  <span class="n">rackenv</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;HTTP_ACCEPT_LANGUAGE&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;ru,en&#39;</span><span class="p">}</span>
+  <span class="n">get</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="p">{},</span> <span class="n">rackenv</span>
+
+  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+<span class="k">end</span></code></pre></div>
+
+
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/2015/04/05/ruby-memory-profiller-tools/">
         Memory profiler tools for ruby
       </a>
