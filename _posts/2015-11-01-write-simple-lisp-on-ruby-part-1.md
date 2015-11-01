@@ -6,23 +6,23 @@ description: "В этой серии постов мы напишем прост
 
 **TL;DR:** [github repo](https://github.com/davydovanton/rlisp)
 
-Every developer has a moment in his life when he wants to write his own programming language.
-So in this article I want to show you how to do this for a simple lisp compiler.
+Every developer has a moment in his life where he wants to write his own programming language.
+In this article, I want to show you how to do this for a simple lisp compiler.
 
 ## Why scheme and lisp?
-Firstly, lisp is very simple for realization and for understanding.
-Lisp (_LISt Processor_) is a family of languages which based on the idea of S-expressions.
-S-Expression needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or an expression of the form `(x . y)` where `x` and `y` are s-expressions.
+Firstly, lisp is very simple for create and for understanding.
+Lisp (_LISt Processor_) is a family of languages which is based on the idea of S-expressions.
+S-Expression are needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or are the expression of the form `(x . y)` where `x` and `y` are s-expressions.
 This expression may be formed as lists (`(1 . ( 2 . 3))` this equals `(1 2 3)`) and trees (`((1 . (2 . 3)) . (4 . 5))`).
 
-Secondly, after creating interpreter you can better to understand language (author fully understood the environment idea).
-Also you can understand main idea of compilers and interpreters.
+Secondly, after creating interpreter you can better understand the language (the author fully understood the environment idea).
+Also you can understand the main idea of compilers and interpreters.
 
-So we begin our journey into the world of compilers and interpreters to write a simple scheme interpreter.
+Now let's begin our journey into the world of compilers and interpreters so that we can write a simple scheme interpreter.
 
 ## Main idea
-Our language will contain two parts: parser which translate string to AST and `eval` function.
-This function will take the AST with envariement value and will returns result of the code.
+Our language will contain two parts: a parser which translates the string to AST and `eval` function.
+This function will take the AST with envariement value and will return the result of the code.
 
 Schematically, it looks like this:
 {% highlight text %}
@@ -32,7 +32,7 @@ code(string) => parse function => AST => eval function => result
 ## First step. Parser.
 To begin, let's define what we want to get.
 For example, we have a string `'(+ 1 1 1)'`.
-What our parser should return? What kind of data structure? I think, that array will be correctly.
+What should our parser return? What kind of data structure should we receive? I think, that an array would be correct.
 
 Let write simple test code:
 {% highlight ruby %}
@@ -41,7 +41,7 @@ lisp = Lisp.new
 lisp.parse(program) == [:+, 1, 1, 1]
 {% endhighlight %}
 
-As you can see, this is simple code therefore I just display `parse` method code:
+As you can see, this is a simple code, so I just displayed `parse` method code:
 {% highlight ruby %}
 class Lisp
   def parse(program)
@@ -75,15 +75,16 @@ end
 As you know, in lisp you can write your code with nested operators, for example - `(+ (* 2 2) (- 5 3))`.
 And this code will return 6.
 
-If we use our parser for this code, we get is not quite what we need, so let's update our test code:
+When we use our parser for this code, the result is not quite what we need, so let's update our test code:
 {% highlight ruby %}
 program = '(+ (* (1 2) 3) 4)'
 lisp = Lisp.new
 lisp.parse(program) == [:+, [:*, [1, 2], 3], 4]
 {% endhighlight %}
 
-As you might guess, the most obvious way to fix our code - call `parse` method in recursion and all array elements from `'('` to `')'` we move to nested array.
-Code will be look loke this:
+As you might guess, the most obvious way to fix our code is to call `parse` method in recursion and all array elements from `'('` to `')'`.
+We will move to a nested array.
+The code will be look loke this:
 {% highlight ruby %}
 class Lisp
   def parse(program)
@@ -131,10 +132,10 @@ class Lisp
 end
 {% endhighlight %}
 
-We did it! Let's start make `eval` method.
+We did it! Let's start to make `eval` method.
 
 ## Eval method
-As I said earlier, our interpreter consist of two parts: parser and `eval` function.
+As I said earlier, our interpreter consists of two parts: a parser and `eval` function.
 
 The `eval` function will take two arguments: an expression, `exp`, that we want to evaluate, and an environment, `env`, in which to evaluate it. An environment is a mapping from variable names to their values.
 By default, eval will use a instance value that includes the names for a bunch of standard things.
@@ -148,7 +149,7 @@ env = {
 }
 {% endhighlight %}
 
-Next step - make `eval` function which will look for a match on the first element of the input array
+The next step is to make `eval` function which will look for a match on the first element of the input array
 {% highlight ruby %}
 class Lisp
   def initialize(ext = {})
@@ -167,8 +168,8 @@ class Lisp
 end
 {% endhighlight %}
 
-Now we have a problem: what will be happen when the first element of array will be not symbol (integer for example) and what will be happen when we have nested functiions?
-I think we can add check to element type like this:
+Now we have a problem: what will happen when the first element of the array will be not be a symbol (integer for example) and what will be happen when we have nested functions?
+I think we can add a check to the element type like this:
 {% highlight ruby %}
 class Lisp
   def initialize(ext = {})
@@ -196,8 +197,8 @@ end
 {% endhighlight %}
 
 Some (eg arithmetic), we can easily add to `env` variable, and some do not.
-Therefore we need to extend checking in `eval` function. We will add check on function name.
-For example, code bellow demonstrate `quote` and `if` functions:
+Therefore, we need to extend the checking in `eval` function. We will add a check for function name.
+For example, the code below will demonstrate `quote` and `if` functions:
 {% highlight ruby %}
 def eval(exp, env)
   # ...
@@ -211,7 +212,7 @@ def eval(exp, env)
 end
 {% endhighlight %}
 
-Next step - initialize `define` and `lambda` functions.
+The next step is to initialize `define` and `lambda` functions.
 In scheme `define` function syntax is as follows:
 {% highlight scheme %}
 (define name
@@ -229,13 +230,13 @@ def eval(exp, env)
 end
 {% endhighlight %}
 
-Last function, 'lambda' in scheme have this syntax:
+The last function, `lambda` in scheme will have this syntax:
 {% highlight scheme %}
 (lambda (arg1, arg2, ...)
   (block of code))
 {% endhighlight %}
 
-The first thing that comes to mind - to return a new `lambda` object with a new value inside `env` that will serve our code:
+The first thing that comes to mind is to return the new `lambda` object with a new value inside `env` that will serve our code:
 {% highlight ruby %}
 def eval(exp, env)
   # ...
@@ -246,12 +247,12 @@ def eval(exp, env)
 end
 {% endhighlight %}
 
-As you can see we did basic functionality of the our interpreter.
-Implementating of arithmetic methods, and implementing methods such as `true`,` false`, `list`, etc I leave on the conscience of the reader.
+As you can see, we made basic functionality of the our interpreter.
+I will leave learning how to do the implement the arithmetic methods and other methods such as `true`, `false`, `list`, etc up to the reader.
 
 ## REPL
-In main REPL have realy simple idea: repl takes single user inputs, evaluates them, and returns the result to the user.
-And all this is happening in an infinite loop:
+In main REPL have really simple idea repl takes single user inputs, evaluates them, and returns the result to the user.
+And all this is happens in an infinite loop:
 {% highlight ruby %}
 def repl(prompt = 'lisp >> ')
   while true
@@ -274,10 +275,10 @@ lisp >> (circle-area 11)
 {% endhighlight %}
 
 ## Conclusions
-At this moment we have a simple scheme interpreter.
-It is easy to expand, we wrote a simple repl, and considered the basic idea of the interpreter.
-In this article we does not consider such important aspects as macros, multithreading, code optimization, work with the system, and much more.
-This will be discussed in future articles.
+Right now, we have a simple scheme interpreter.
+It is easy to expand since we wrote a simple repl, and considered the basic idea of the interpreter.
+In this article, we did not consider such important concepts as macros, multithreading, code optimization, work with the system, and much more.
+These concepts will be discussed in future articles.
 
 ## Further reading
 http://norvig.com/lispy.html

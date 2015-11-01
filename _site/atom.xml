@@ -4,7 +4,7 @@
  <title>Anton Davydov</title>
  <link href="http://davydovanton.github.io/atom.xml" rel="self"/>
  <link href="http://davydovanton.github.io/"/>
- <updated>2015-11-01T23:17:56+03:00</updated>
+ <updated>2015-11-02T00:41:44+03:00</updated>
  <id>http://davydovanton.github.io</id>
  <author>
    <name>Anton Davydov</name>
@@ -19,23 +19,23 @@
    <id>http://davydovanton.github.io/2015/11/01/write-simple-lisp-on-ruby-part-1</id>
    <content type="html">&lt;p&gt;&lt;strong&gt;TL;DR:&lt;/strong&gt; &lt;a href=&quot;https://github.com/davydovanton/rlisp&quot;&gt;github repo&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;Every developer has a moment in his life when he wants to write his own programming language.
-So in this article I want to show you how to do this for a simple lisp compiler.&lt;/p&gt;
+&lt;p&gt;Every developer has a moment in his life where he wants to write his own programming language.
+In this article, I want to show you how to do this for a simple lisp compiler.&lt;/p&gt;
 
 &lt;h2 id=&quot;why-scheme-and-lisp&quot;&gt;Why scheme and lisp?&lt;/h2&gt;
-&lt;p&gt;Firstly, lisp is very simple for realization and for understanding.
-Lisp (&lt;em&gt;LISt Processor&lt;/em&gt;) is a family of languages which based on the idea of S-expressions.
-S-Expression needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or an expression of the form &lt;code&gt;(x . y)&lt;/code&gt; where &lt;code&gt;x&lt;/code&gt; and &lt;code&gt;y&lt;/code&gt; are s-expressions.
+&lt;p&gt;Firstly, lisp is very simple for create and for understanding.
+Lisp (&lt;em&gt;LISt Processor&lt;/em&gt;) is a family of languages which is based on the idea of S-expressions.
+S-Expression are needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or are the expression of the form &lt;code&gt;(x . y)&lt;/code&gt; where &lt;code&gt;x&lt;/code&gt; and &lt;code&gt;y&lt;/code&gt; are s-expressions.
 This expression may be formed as lists (&lt;code&gt;(1 . ( 2 . 3))&lt;/code&gt; this equals &lt;code&gt;(1 2 3)&lt;/code&gt;) and trees (&lt;code&gt;((1 . (2 . 3)) . (4 . 5))&lt;/code&gt;).&lt;/p&gt;
 
-&lt;p&gt;Secondly, after creating interpreter you can better to understand language (author fully understood the environment idea).
-Also you can understand main idea of compilers and interpreters.&lt;/p&gt;
+&lt;p&gt;Secondly, after creating interpreter you can better understand the language (the author fully understood the environment idea).
+Also you can understand the main idea of compilers and interpreters.&lt;/p&gt;
 
-&lt;p&gt;So we begin our journey into the world of compilers and interpreters to write a simple scheme interpreter.&lt;/p&gt;
+&lt;p&gt;Now let’s begin our journey into the world of compilers and interpreters so that we can write a simple scheme interpreter.&lt;/p&gt;
 
 &lt;h2 id=&quot;main-idea&quot;&gt;Main idea&lt;/h2&gt;
-&lt;p&gt;Our language will contain two parts: parser which translate string to AST and &lt;code&gt;eval&lt;/code&gt; function.
-This function will take the AST with envariement value and will returns result of the code.&lt;/p&gt;
+&lt;p&gt;Our language will contain two parts: a parser which translates the string to AST and &lt;code&gt;eval&lt;/code&gt; function.
+This function will take the AST with envariement value and will return the result of the code.&lt;/p&gt;
 
 &lt;p&gt;Schematically, it looks like this:&lt;/p&gt;
 
@@ -44,7 +44,7 @@ This function will take the AST with envariement value and will returns result o
 &lt;h2 id=&quot;first-step-parser&quot;&gt;First step. Parser.&lt;/h2&gt;
 &lt;p&gt;To begin, let’s define what we want to get.
 For example, we have a string &lt;code&gt;&#39;(+ 1 1 1)&#39;&lt;/code&gt;.
-What our parser should return? What kind of data structure? I think, that array will be correctly.&lt;/p&gt;
+What should our parser return? What kind of data structure should we receive? I think, that an array would be correct.&lt;/p&gt;
 
 &lt;p&gt;Let write simple test code:&lt;/p&gt;
 
@@ -52,7 +52,7 @@ What our parser should return? What kind of data structure? I think, that array 
 &lt;span class=&quot;n&quot;&gt;lisp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Lisp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;lisp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;program&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;As you can see, this is simple code therefore I just display &lt;code&gt;parse&lt;/code&gt; method code:&lt;/p&gt;
+&lt;p&gt;As you can see, this is a simple code, so I just displayed &lt;code&gt;parse&lt;/code&gt; method code:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Lisp&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;parse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;program&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
@@ -85,14 +85,15 @@ What our parser should return? What kind of data structure? I think, that array 
 &lt;p&gt;As you know, in lisp you can write your code with nested operators, for example - &lt;code&gt;(+ (* 2 2) (- 5 3))&lt;/code&gt;.
 And this code will return 6.&lt;/p&gt;
 
-&lt;p&gt;If we use our parser for this code, we get is not quite what we need, so let’s update our test code:&lt;/p&gt;
+&lt;p&gt;When we use our parser for this code, the result is not quite what we need, so let’s update our test code:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;program&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;(+ (* (1 2) 3) 4)&amp;#39;&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;lisp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Lisp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;lisp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;program&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;As you might guess, the most obvious way to fix our code - call &lt;code&gt;parse&lt;/code&gt; method in recursion and all array elements from &lt;code&gt;&#39;(&#39;&lt;/code&gt; to &lt;code&gt;&#39;)&#39;&lt;/code&gt; we move to nested array.
-Code will be look loke this:&lt;/p&gt;
+&lt;p&gt;As you might guess, the most obvious way to fix our code is to call &lt;code&gt;parse&lt;/code&gt; method in recursion and all array elements from &lt;code&gt;&#39;(&#39;&lt;/code&gt; to &lt;code&gt;&#39;)&#39;&lt;/code&gt;.
+We will move to a nested array.
+The code will be look loke this:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Lisp&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;parse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;program&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
@@ -139,10 +140,10 @@ Code will be look loke this:&lt;/p&gt;
   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;We did it! Let’s start make &lt;code&gt;eval&lt;/code&gt; method.&lt;/p&gt;
+&lt;p&gt;We did it! Let’s start to make &lt;code&gt;eval&lt;/code&gt; method.&lt;/p&gt;
 
 &lt;h2 id=&quot;eval-method&quot;&gt;Eval method&lt;/h2&gt;
-&lt;p&gt;As I said earlier, our interpreter consist of two parts: parser and &lt;code&gt;eval&lt;/code&gt; function.&lt;/p&gt;
+&lt;p&gt;As I said earlier, our interpreter consists of two parts: a parser and &lt;code&gt;eval&lt;/code&gt; function.&lt;/p&gt;
 
 &lt;p&gt;The &lt;code&gt;eval&lt;/code&gt; function will take two arguments: an expression, &lt;code&gt;exp&lt;/code&gt;, that we want to evaluate, and an environment, &lt;code&gt;env&lt;/code&gt;, in which to evaluate it. An environment is a mapping from variable names to their values.
 By default, eval will use a instance value that includes the names for a bunch of standard things.&lt;/p&gt;
@@ -155,7 +156,7 @@ By default, eval will use a instance value that includes the names for a bunch o
   &lt;span class=&quot;ss&quot;&gt;:cons&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cell&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cell&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Next step - make &lt;code&gt;eval&lt;/code&gt; function which will look for a match on the first element of the input array&lt;/p&gt;
+&lt;p&gt;The next step is to make &lt;code&gt;eval&lt;/code&gt; function which will look for a match on the first element of the input array&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Lisp&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ext&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{})&lt;/span&gt;
@@ -173,8 +174,8 @@ By default, eval will use a instance value that includes the names for a bunch o
   &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Now we have a problem: what will be happen when the first element of array will be not symbol (integer for example) and what will be happen when we have nested functiions?
-I think we can add check to element type like this:&lt;/p&gt;
+&lt;p&gt;Now we have a problem: what will happen when the first element of the array will be not be a symbol (integer for example) and what will be happen when we have nested functions?
+I think we can add a check to the element type like this:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Lisp&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ext&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{})&lt;/span&gt;
@@ -201,8 +202,8 @@ I think we can add check to element type like this:&lt;/p&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Some (eg arithmetic), we can easily add to &lt;code&gt;env&lt;/code&gt; variable, and some do not.
-Therefore we need to extend checking in &lt;code&gt;eval&lt;/code&gt; function. We will add check on function name.
-For example, code bellow demonstrate &lt;code&gt;quote&lt;/code&gt; and &lt;code&gt;if&lt;/code&gt; functions:&lt;/p&gt;
+Therefore, we need to extend the checking in &lt;code&gt;eval&lt;/code&gt; function. We will add a check for function name.
+For example, the code below will demonstrate &lt;code&gt;quote&lt;/code&gt; and &lt;code&gt;if&lt;/code&gt; functions:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
   &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
@@ -215,7 +216,7 @@ For example, code bellow demonstrate &lt;code&gt;quote&lt;/code&gt; and &lt;code
   &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Next step - initialize &lt;code&gt;define&lt;/code&gt; and &lt;code&gt;lambda&lt;/code&gt; functions.
+&lt;p&gt;The next step is to initialize &lt;code&gt;define&lt;/code&gt; and &lt;code&gt;lambda&lt;/code&gt; functions.
 In scheme &lt;code&gt;define&lt;/code&gt; function syntax is as follows:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-scheme&quot; data-lang=&quot;scheme&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;define &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;name&lt;/span&gt;
@@ -231,12 +232,12 @@ In scheme &lt;code&gt;define&lt;/code&gt; function syntax is as follows:&lt;/p&g
   &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Last function, ‘lambda’ in scheme have this syntax:&lt;/p&gt;
+&lt;p&gt;The last function, &lt;code&gt;lambda&lt;/code&gt; in scheme will have this syntax:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-scheme&quot; data-lang=&quot;scheme&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;lambda &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;arg1,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;arg2,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
   &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;block&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;of&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;code&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;The first thing that comes to mind - to return a new &lt;code&gt;lambda&lt;/code&gt; object with a new value inside &lt;code&gt;env&lt;/code&gt; that will serve our code:&lt;/p&gt;
+&lt;p&gt;The first thing that comes to mind is to return the new &lt;code&gt;lambda&lt;/code&gt; object with a new value inside &lt;code&gt;env&lt;/code&gt; that will serve our code:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
   &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
@@ -246,12 +247,12 @@ In scheme &lt;code&gt;define&lt;/code&gt; function syntax is as follows:&lt;/p&g
   &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;As you can see we did basic functionality of the our interpreter.
-Implementating of arithmetic methods, and implementing methods such as &lt;code&gt;true&lt;/code&gt;,&lt;code&gt; false&lt;/code&gt;, &lt;code&gt;list&lt;/code&gt;, etc I leave on the conscience of the reader.&lt;/p&gt;
+&lt;p&gt;As you can see, we made basic functionality of the our interpreter.
+I will leave learning how to do the implement the arithmetic methods and other methods such as &lt;code&gt;true&lt;/code&gt;, &lt;code&gt;false&lt;/code&gt;, &lt;code&gt;list&lt;/code&gt;, etc up to the reader.&lt;/p&gt;
 
 &lt;h2 id=&quot;repl&quot;&gt;REPL&lt;/h2&gt;
-&lt;p&gt;In main REPL have realy simple idea: repl takes single user inputs, evaluates them, and returns the result to the user.
-And all this is happening in an infinite loop:&lt;/p&gt;
+&lt;p&gt;In main REPL have really simple idea repl takes single user inputs, evaluates them, and returns the result to the user.
+And all this is happens in an infinite loop:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;repl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prompt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;lisp &amp;gt;&amp;gt; &amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
@@ -272,10 +273,10 @@ lisp &amp;gt;&amp;gt; (circle-area 11)
 379.94&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h2&gt;
-&lt;p&gt;At this moment we have a simple scheme interpreter.
-It is easy to expand, we wrote a simple repl, and considered the basic idea of the interpreter.
-In this article we does not consider such important aspects as macros, multithreading, code optimization, work with the system, and much more.
-This will be discussed in future articles.&lt;/p&gt;
+&lt;p&gt;Right now, we have a simple scheme interpreter.
+It is easy to expand since we wrote a simple repl, and considered the basic idea of the interpreter.
+In this article, we did not consider such important concepts as macros, multithreading, code optimization, work with the system, and much more.
+These concepts will be discussed in future articles.&lt;/p&gt;
 
 &lt;h2 id=&quot;further-reading&quot;&gt;Further reading&lt;/h2&gt;
 &lt;p&gt;http://norvig.com/lispy.html

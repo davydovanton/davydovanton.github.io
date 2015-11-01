@@ -107,23 +107,23 @@
   <span class="post-date">01 Nov 2015</span>
   <p><strong>TL;DR:</strong> <a href="https://github.com/davydovanton/rlisp">github repo</a></p>
 
-<p>Every developer has a moment in his life when he wants to write his own programming language.
-So in this article I want to show you how to do this for a simple lisp compiler.</p>
+<p>Every developer has a moment in his life where he wants to write his own programming language.
+In this article, I want to show you how to do this for a simple lisp compiler.</p>
 
 <h2 id="why-scheme-and-lisp">Why scheme and lisp?</h2>
-<p>Firstly, lisp is very simple for realization and for understanding.
-Lisp (<em>LISt Processor</em>) is a family of languages which based on the idea of S-expressions.
-S-Expression needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or an expression of the form <code>(x . y)</code> where <code>x</code> and <code>y</code> are s-expressions.
+<p>Firstly, lisp is very simple for create and for understanding.
+Lisp (<em>LISt Processor</em>) is a family of languages which is based on the idea of S-expressions.
+S-Expression are needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or are the expression of the form <code>(x . y)</code> where <code>x</code> and <code>y</code> are s-expressions.
 This expression may be formed as lists (<code>(1 . ( 2 . 3))</code> this equals <code>(1 2 3)</code>) and trees (<code>((1 . (2 . 3)) . (4 . 5))</code>).</p>
 
-<p>Secondly, after creating interpreter you can better to understand language (author fully understood the environment idea).
-Also you can understand main idea of compilers and interpreters.</p>
+<p>Secondly, after creating interpreter you can better understand the language (the author fully understood the environment idea).
+Also you can understand the main idea of compilers and interpreters.</p>
 
-<p>So we begin our journey into the world of compilers and interpreters to write a simple scheme interpreter.</p>
+<p>Now let’s begin our journey into the world of compilers and interpreters so that we can write a simple scheme interpreter.</p>
 
 <h2 id="main-idea">Main idea</h2>
-<p>Our language will contain two parts: parser which translate string to AST and <code>eval</code> function.
-This function will take the AST with envariement value and will returns result of the code.</p>
+<p>Our language will contain two parts: a parser which translates the string to AST and <code>eval</code> function.
+This function will take the AST with envariement value and will return the result of the code.</p>
 
 <p>Schematically, it looks like this:</p>
 
@@ -132,7 +132,7 @@ This function will take the AST with envariement value and will returns result o
 <h2 id="first-step-parser">First step. Parser.</h2>
 <p>To begin, let’s define what we want to get.
 For example, we have a string <code>'(+ 1 1 1)'</code>.
-What our parser should return? What kind of data structure? I think, that array will be correctly.</p>
+What should our parser return? What kind of data structure should we receive? I think, that an array would be correct.</p>
 
 <p>Let write simple test code:</p>
 
@@ -140,7 +140,7 @@ What our parser should return? What kind of data structure? I think, that array 
 <span class="n">lisp</span> <span class="o">=</span> <span class="no">Lisp</span><span class="o">.</span><span class="n">new</span>
 <span class="n">lisp</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span> <span class="o">==</span> <span class="o">[</span><span class="ss">:+</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">]</span></code></pre></div>
 
-<p>As you can see, this is simple code therefore I just display <code>parse</code> method code:</p>
+<p>As you can see, this is a simple code, so I just displayed <code>parse</code> method code:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
   <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
@@ -173,14 +173,15 @@ What our parser should return? What kind of data structure? I think, that array 
 <p>As you know, in lisp you can write your code with nested operators, for example - <code>(+ (* 2 2) (- 5 3))</code>.
 And this code will return 6.</p>
 
-<p>If we use our parser for this code, we get is not quite what we need, so let’s update our test code:</p>
+<p>When we use our parser for this code, the result is not quite what we need, so let’s update our test code:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">program</span> <span class="o">=</span> <span class="s1">&#39;(+ (* (1 2) 3) 4)&#39;</span>
 <span class="n">lisp</span> <span class="o">=</span> <span class="no">Lisp</span><span class="o">.</span><span class="n">new</span>
 <span class="n">lisp</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span> <span class="o">==</span> <span class="o">[</span><span class="ss">:+</span><span class="p">,</span> <span class="o">[</span><span class="ss">:*</span><span class="p">,</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">]</span><span class="p">,</span> <span class="mi">3</span><span class="o">]</span><span class="p">,</span> <span class="mi">4</span><span class="o">]</span></code></pre></div>
 
-<p>As you might guess, the most obvious way to fix our code - call <code>parse</code> method in recursion and all array elements from <code>'('</code> to <code>')'</code> we move to nested array.
-Code will be look loke this:</p>
+<p>As you might guess, the most obvious way to fix our code is to call <code>parse</code> method in recursion and all array elements from <code>'('</code> to <code>')'</code>.
+We will move to a nested array.
+The code will be look loke this:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
   <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
@@ -227,10 +228,10 @@ Code will be look loke this:</p>
   <span class="k">end</span>
 <span class="k">end</span></code></pre></div>
 
-<p>We did it! Let’s start make <code>eval</code> method.</p>
+<p>We did it! Let’s start to make <code>eval</code> method.</p>
 
 <h2 id="eval-method">Eval method</h2>
-<p>As I said earlier, our interpreter consist of two parts: parser and <code>eval</code> function.</p>
+<p>As I said earlier, our interpreter consists of two parts: a parser and <code>eval</code> function.</p>
 
 <p>The <code>eval</code> function will take two arguments: an expression, <code>exp</code>, that we want to evaluate, and an environment, <code>env</code>, in which to evaluate it. An environment is a mapping from variable names to their values.
 By default, eval will use a instance value that includes the names for a bunch of standard things.</p>
@@ -243,7 +244,7 @@ By default, eval will use a instance value that includes the names for a bunch o
   <span class="ss">:cons</span> <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">cell</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="o">[</span><span class="n">e</span><span class="o">]</span> <span class="o">+</span> <span class="n">cell</span> <span class="p">},</span>
 <span class="p">}</span></code></pre></div>
 
-<p>Next step - make <code>eval</code> function which will look for a match on the first element of the input array</p>
+<p>The next step is to make <code>eval</code> function which will look for a match on the first element of the input array</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
   <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">ext</span> <span class="o">=</span> <span class="p">{})</span>
@@ -261,8 +262,8 @@ By default, eval will use a instance value that includes the names for a bunch o
   <span class="c1"># ...</span>
 <span class="k">end</span></code></pre></div>
 
-<p>Now we have a problem: what will be happen when the first element of array will be not symbol (integer for example) and what will be happen when we have nested functiions?
-I think we can add check to element type like this:</p>
+<p>Now we have a problem: what will happen when the first element of the array will be not be a symbol (integer for example) and what will be happen when we have nested functions?
+I think we can add a check to the element type like this:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
   <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">ext</span> <span class="o">=</span> <span class="p">{})</span>
@@ -289,8 +290,8 @@ I think we can add check to element type like this:</p>
 <span class="k">end</span></code></pre></div>
 
 <p>Some (eg arithmetic), we can easily add to <code>env</code> variable, and some do not.
-Therefore we need to extend checking in <code>eval</code> function. We will add check on function name.
-For example, code bellow demonstrate <code>quote</code> and <code>if</code> functions:</p>
+Therefore, we need to extend the checking in <code>eval</code> function. We will add a check for function name.
+For example, the code below will demonstrate <code>quote</code> and <code>if</code> functions:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
   <span class="c1"># ...</span>
@@ -303,7 +304,7 @@ For example, code bellow demonstrate <code>quote</code> and <code>if</code> func
   <span class="c1"># ...</span>
 <span class="k">end</span></code></pre></div>
 
-<p>Next step - initialize <code>define</code> and <code>lambda</code> functions.
+<p>The next step is to initialize <code>define</code> and <code>lambda</code> functions.
 In scheme <code>define</code> function syntax is as follows:</p>
 
 <div class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">define </span><span class="nv">name</span>
@@ -319,12 +320,12 @@ In scheme <code>define</code> function syntax is as follows:</p>
   <span class="c1"># ...</span>
 <span class="k">end</span></code></pre></div>
 
-<p>Last function, ‘lambda’ in scheme have this syntax:</p>
+<p>The last function, <code>lambda</code> in scheme will have this syntax:</p>
 
 <div class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">arg1,</span> <span class="nv">arg2,</span> <span class="o">...</span><span class="p">)</span>
   <span class="p">(</span><span class="nf">block</span> <span class="nv">of</span> <span class="nv">code</span><span class="p">))</span></code></pre></div>
 
-<p>The first thing that comes to mind - to return a new <code>lambda</code> object with a new value inside <code>env</code> that will serve our code:</p>
+<p>The first thing that comes to mind is to return the new <code>lambda</code> object with a new value inside <code>env</code> that will serve our code:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
   <span class="c1"># ...</span>
@@ -334,12 +335,12 @@ In scheme <code>define</code> function syntax is as follows:</p>
   <span class="c1"># ...</span>
 <span class="k">end</span></code></pre></div>
 
-<p>As you can see we did basic functionality of the our interpreter.
-Implementating of arithmetic methods, and implementing methods such as <code>true</code>,<code> false</code>, <code>list</code>, etc I leave on the conscience of the reader.</p>
+<p>As you can see, we made basic functionality of the our interpreter.
+I will leave learning how to do the implement the arithmetic methods and other methods such as <code>true</code>, <code>false</code>, <code>list</code>, etc up to the reader.</p>
 
 <h2 id="repl">REPL</h2>
-<p>In main REPL have realy simple idea: repl takes single user inputs, evaluates them, and returns the result to the user.
-And all this is happening in an infinite loop:</p>
+<p>In main REPL have really simple idea repl takes single user inputs, evaluates them, and returns the result to the user.
+And all this is happens in an infinite loop:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">repl</span><span class="p">(</span><span class="n">prompt</span> <span class="o">=</span> <span class="s1">&#39;lisp &gt;&gt; &#39;</span><span class="p">)</span>
   <span class="k">while</span> <span class="kp">true</span>
@@ -360,10 +361,10 @@ lisp &gt;&gt; (circle-area 11)
 379.94</code></pre></div>
 
 <h2 id="conclusions">Conclusions</h2>
-<p>At this moment we have a simple scheme interpreter.
-It is easy to expand, we wrote a simple repl, and considered the basic idea of the interpreter.
-In this article we does not consider such important aspects as macros, multithreading, code optimization, work with the system, and much more.
-This will be discussed in future articles.</p>
+<p>Right now, we have a simple scheme interpreter.
+It is easy to expand since we wrote a simple repl, and considered the basic idea of the interpreter.
+In this article, we did not consider such important concepts as macros, multithreading, code optimization, work with the system, and much more.
+These concepts will be discussed in future articles.</p>
 
 <h2 id="further-reading">Further reading</h2>
 <p>http://norvig.com/lispy.html
