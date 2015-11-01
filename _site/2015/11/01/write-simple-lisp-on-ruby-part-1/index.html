@@ -107,63 +107,40 @@
   <span class="post-date">01 Nov 2015</span>
   <p><strong>TL;DR:</strong> <a href="https://github.com/davydovanton/rlisp">github repo</a></p>
 
-<p>В жизни каждого разработчика наступает момент, когда он хочет написать свой собственный язык программирования.
-Each developer have moment when he want to write own programming language.</p>
-
-<p>Поэтому в данной статье мы рассмотрим на примере простейшего лисп компилятора как это сделать.
-Therefore in this post I’ll show you how it’s done in a simple scheme interpreter.</p>
+<p>Every developer has a moment in his life when he wants to write his own programming language.
+So in this article I want to show you how to do this for a simple lisp compiler.</p>
 
 <h2 id="why-scheme-and-lisp">Why scheme and lisp?</h2>
-
-<p>Во первых, язык очень простой как для реализации, так и для понимания.
-In first, list really simple language for realization and for understanding.</p>
-
-<p>Лисп - семейство языков основной идеей которых являются S-выражения.
-Lisp(<em>LISt Processor</em>) is a language family which based on idea of S-expressions.</p>
-
-<p>S-выражение - это такая штука, которая нужна для представления данных и которая может состоять из атомов (числа, строки, булевы выражения), либо из точечных пар, которые имеют вид <code>(x . y)</code>.
-S-expressions are a notation for nested list data which can contain atoms (integers, symbols or boolean values) or expression of the form <code>(x . y)</code> where <code>x</code> and <code>y</code> are s-expressions.</p>
-
-<p>Основная идея точечных пар в том, что они могут формировать как списки (<code>(1 . ( 2 . 3))</code> что эквивалентно <code>(1 2 3)</code>), так
-и деревья (<code>((1 . (2 . 3)) . (4 . 5))</code>).
+<p>Firstly, lisp is very simple for realization and for understanding.
+Lisp (<em>LISt Processor</em>) is a family of languages which based on the idea of S-expressions.
+S-Expression needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or an expression of the form <code>(x . y)</code> where <code>x</code> and <code>y</code> are s-expressions.
 This expression may be formed as lists (<code>(1 . ( 2 . 3))</code> this equals <code>(1 2 3)</code>) and trees (<code>((1 . (2 . 3)) . (4 . 5))</code>).</p>
 
-<p>Во вторых, при самостоятельной реализации интерпретатора, можно лучше понять язык (автор доконца понял идею envariement), так и понять основную идею компиляторов.
-And in second, after creating interpreter you could better to understood language (author fully understood the envariement idea). Also you could  understand base idea of compillers and interpreters.</p>
+<p>Secondly, after creating interpreter you can better to understand language (author fully understood the environment idea).
+Also you can understand main idea of compilers and interpreters.</p>
 
-<p>Поэтому мы начнем наше путешествие в мир компиляторов и интерпретаторов с написания простейшего интерпретатора схемы.
-Therefore we start our way into the world of compilers and interpreters to write a simple scheme interpreter.</p>
+<p>So we begin our journey into the world of compilers and interpreters to write a simple scheme interpreter.</p>
 
-<h2 id="base-idea">Base idea</h2>
-
-<p>Наш язык будет состоять из двух частей, парсера, который превратит нашу строку текста (программа) в AST структуру.
-Our language will contain two parts: parser, which translate string to AST and <code>eval</code> function.
-Следующая часть нашего языка - eval функция, которая будет принимать наш AST и envariement переменную и возвращать результат выполнения кода.
-This fundtion will take AST with envariement and will return result of the code.</p>
+<h2 id="main-idea">Main idea</h2>
+<p>Our language will contain two parts: parser which translate string to AST and <code>eval</code> function.
+This function will take the AST with envariement value and will returns result of the code.</p>
 
 <p>Schematically, it looks like this:</p>
 
 <div class="highlight"><pre><code class="language-text" data-lang="text">code(string) =&gt; parse function =&gt; AST =&gt; eval function =&gt; result</code></pre></div>
 
 <h2 id="first-step-parser">First step. Parser.</h2>
-<p>Для начала, давайте определимся, чего мы хотим получить.
-To begin, let’s define what we want to get.</p>
+<p>To begin, let’s define what we want to get.
+For example, we have a string <code>'(+ 1 1 1)'</code>.
+What our parser should return? What kind of data structure? I think, that array will be correctly.</p>
 
-<p>У нас есть строка, например <code>(+ 1 1 1)</code>.
-For example, we have a string <code>'(+ 1 1 1)'</code>.</p>
-
-<p>Что наш парсер должен вернуть? Какую структуру данных? Думаю, что массив будет тем, что нужно.
-What our parser should return? What kind of data structure? I think, that array will be right.</p>
-
-<p>Давайте напишем наш первый “тест”:
-Let write simple test code:</p>
+<p>Let write simple test code:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">program</span> <span class="o">=</span> <span class="s1">&#39;(+ 1 1 1)&#39;</span>
 <span class="n">lisp</span> <span class="o">=</span> <span class="no">Lisp</span><span class="o">.</span><span class="n">new</span>
 <span class="n">lisp</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span> <span class="o">==</span> <span class="o">[</span><span class="ss">:+</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">]</span></code></pre></div>
 
-<p>Как видите, все достаточно просто, поэтому я сразу напишу код, который выполнит наш тест:
-As you can see, this is simle code therefore I just display <code>parse</code> method code:</p>
+<p>As you can see, this is simple code therefore I just display <code>parse</code> method code:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
   <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
@@ -193,23 +170,16 @@ As you can see, this is simle code therefore I just display <code>parse</code> m
   <span class="k">end</span>
 <span class="k">end</span></code></pre></div>
 
-<p>Как вы знаете, в лиспе мы можем написать наш код используя “вложенные” операторы, то есть вот так: <code>(+ (* 2 2) (- 5 3))</code>.
-As you know, in lisp you can write your codewith nested operators, for example - <code>(+ (* 2 2) (- 5 3))</code>.</p>
+<p>As you know, in lisp you can write your code with nested operators, for example - <code>(+ (* 2 2) (- 5 3))</code>.
+And this code will return 6.</p>
 
-<p>В результате выполнения этого кода мы получим число 6.
-This code returns 6.</p>
-
-<p>Если мы используем наш парсер для этого кода, мы получим не совсем то, что нам нужно, поэтому давайте обновим наш тест:
-If we use our parser for this code, we get is not quite what we need, so let’s update our check:</p>
+<p>If we use our parser for this code, we get is not quite what we need, so let’s update our test code:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">program</span> <span class="o">=</span> <span class="s1">&#39;(+ (* (1 2) 3) 4)&#39;</span>
 <span class="n">lisp</span> <span class="o">=</span> <span class="no">Lisp</span><span class="o">.</span><span class="n">new</span>
 <span class="n">lisp</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span> <span class="o">==</span> <span class="o">[</span><span class="ss">:+</span><span class="p">,</span> <span class="o">[</span><span class="ss">:*</span><span class="p">,</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">]</span><span class="p">,</span> <span class="mi">3</span><span class="o">]</span><span class="p">,</span> <span class="mi">4</span><span class="o">]</span></code></pre></div>
 
-<p>Как вы могли догадаться - самый очевидный способ исправить наш тест - обойти все элементы массива и если мы встречаем <code>'('</code>, то мы просто помещаем все элементы до <code>')'</code> в отдельный массив + делаем это рекурсивно.
-As you might guess, the most obvious way to fix our check - call <code>parse</code> method in recursion and all array elements from <code>'('</code> to <code>')'</code> we remove to nested array.</p>
-
-<p>В итоге наш код принимает следующий вид:
+<p>As you might guess, the most obvious way to fix our code - call <code>parse</code> method in recursion and all array elements from <code>'('</code> to <code>')'</code> we move to nested array.
 Code will be look loke this:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
@@ -257,17 +227,15 @@ Code will be look loke this:</p>
   <span class="k">end</span>
 <span class="k">end</span></code></pre></div>
 
-<p>Ура, мы написали наш парсер!
-We did it! Let’s start make <code>eval</code> method.</p>
+<p>We did it! Let’s start make <code>eval</code> method.</p>
 
 <h2 id="eval-method">Eval method</h2>
-<p>Как я говорил ранее, наша программа состоит из 2ух частей, парсера и <code>eval</code> функции, которая будет выполнять наш код.
-As I said earlier, our interpreter contain two parts: parser and <code>eval</code> function.</p>
+<p>As I said earlier, our interpreter consist of two parts: parser and <code>eval</code> function.</p>
 
 <p>The <code>eval</code> function will take two arguments: an expression, <code>exp</code>, that we want to evaluate, and an environment, <code>env</code>, in which to evaluate it. An environment is a mapping from variable names to their values.
 By default, eval will use a instance value that includes the names for a bunch of standard things.</p>
 
-<p>Let start to implevent base <code>@env</code> variable with <code>car</code>, <code>cdr</code> и <code>cons</code> functions:</p>
+<p>let’s implement <code>@env</code> variable with <code>car</code>, <code>cdr</code> and <code>cons</code> functions:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">env</span> <span class="o">=</span> <span class="p">{</span>
   <span class="ss">:car</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="p">},</span>
@@ -275,8 +243,7 @@ By default, eval will use a instance value that includes the names for a bunch o
   <span class="ss">:cons</span> <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">cell</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="o">[</span><span class="n">e</span><span class="o">]</span> <span class="o">+</span> <span class="n">cell</span> <span class="p">},</span>
 <span class="p">}</span></code></pre></div>
 
-<p>Следующее что нам нужно - написать функцию <code>eval</code>, которая будет искать совпадение по первому элементу входящего массива:
-Next step - make <code>eval</code> function which will look for a match on the first element of the input array</p>
+<p>Next step - make <code>eval</code> function which will look for a match on the first element of the input array</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
   <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">ext</span> <span class="o">=</span> <span class="p">{})</span>
@@ -294,11 +261,8 @@ Next step - make <code>eval</code> function which will look for a match on the f
   <span class="c1"># ...</span>
 <span class="k">end</span></code></pre></div>
 
-<p>Все достаточно просто, но возникает пробелма, что делать, когда первый элемент не символ (число например) и что делать, когда у нас вложенный код?
-Now we have a problem: what will we do when the first element of array will be not symbol (integer for example) and what will we do when we have nested functiions?</p>
-
-<p>Давайте обновим нашу функцию, добавив в нее проверку на тип:
-Of cource we can add check to element type:</p>
+<p>Now we have a problem: what will be happen when the first element of array will be not symbol (integer for example) and what will be happen when we have nested functiions?
+I think we can add check to element type like this:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
   <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">ext</span> <span class="o">=</span> <span class="p">{})</span>
@@ -324,14 +288,9 @@ Of cource we can add check to element type:</p>
   <span class="c1"># ...</span>
 <span class="k">end</span></code></pre></div>
 
-<p>Какие-то (например арифмитические) мы можем легко добавить в <code>env</code> переменную, а какие-то нет.
-Some (eg arithmetic), we can easily add to <code>env</code> variable, and some do not.</p>
-
-<p>Поэтому нам придется расширить проверку в <code>eval</code> функции, добавив в нее проверку на имя функции (первого элемента массива)
-Therefore we need to extend checking in <code>eval</code> function. We will add check on function name.</p>
-
-<p>Например, <code>quote</code> и <code>if</code> функции будут реализованны так:
-For example, code bellow will realize <code>quote</code> and <code>if</code> functions:</p>
+<p>Some (eg arithmetic), we can easily add to <code>env</code> variable, and some do not.
+Therefore we need to extend checking in <code>eval</code> function. We will add check on function name.
+For example, code bellow demonstrate <code>quote</code> and <code>if</code> functions:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
   <span class="c1"># ...</span>
@@ -344,17 +303,13 @@ For example, code bellow will realize <code>quote</code> and <code>if</code> fun
   <span class="c1"># ...</span>
 <span class="k">end</span></code></pre></div>
 
-<p>Немного сложнее для понимания будут функции <code>define</code> и <code>lambda</code>.
-Next step - initialize <code>define</code> and <code>lambda</code> functions.</p>
-
-<p>Синтаксис <code>define</code> функции выглядит следующим образом:
+<p>Next step - initialize <code>define</code> and <code>lambda</code> functions.
 In scheme <code>define</code> function syntax is as follows:</p>
 
 <div class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">define </span><span class="nv">name</span>
   <span class="p">(</span><span class="nf">expression</span><span class="p">))</span></code></pre></div>
 
-<p>наш код должн создавать новую ключ-значение пару в <code>env</code> хеше:
-And our code must create a new key-value pair in the <code>env</code> hash:</p>
+<p>And our code must create a new key-value pair in the <code>env</code> hash:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
   <span class="c1"># ...</span>
@@ -364,14 +319,12 @@ And our code must create a new key-value pair in the <code>env</code> hash:</p>
   <span class="c1"># ...</span>
 <span class="k">end</span></code></pre></div>
 
-<p>Осталась последняя функция, функция <code>lambda</code>, которая вызывается следующим образом:
-Last function, ‘lambda’ in scheme have this syntax:</p>
+<p>Last function, ‘lambda’ in scheme have this syntax:</p>
 
 <div class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">arg1,</span> <span class="nv">arg2,</span> <span class="o">...</span><span class="p">)</span>
   <span class="p">(</span><span class="nf">block</span> <span class="nv">of</span> <span class="nv">code</span><span class="p">))</span></code></pre></div>
 
-<p>Первое, что приходит в голову - возвращать новый объект <code>lambda</code> с новым значением <code>env</code> внутри, который будет выполнять наш код:
-The first thing that comes to mind - to return a new <code>lambda</code> object with a new value inside <code>env</code> that will serve our code:</p>
+<p>The first thing that comes to mind - to return a new <code>lambda</code> object with a new value inside <code>env</code> that will serve our code:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
   <span class="c1"># ...</span>
@@ -381,13 +334,12 @@ The first thing that comes to mind - to return a new <code>lambda</code> object 
   <span class="c1"># ...</span>
 <span class="k">end</span></code></pre></div>
 
-<p>Как видите, мы реализовали основной функционал, реализацию арифмитических методов, а так же реализацию таких методов как <code>true</code>, <code>false</code>, <code>list</code>, etc я оставляю на совести читателя.
-As you can see we realize base functional.
+<p>As you can see we did basic functionality of the our interpreter.
 Implementating of arithmetic methods, and implementing methods such as <code>true</code>,<code> false</code>, <code>list</code>, etc I leave on the conscience of the reader.</p>
 
 <h2 id="repl">REPL</h2>
-<p>Идея, как и реализация repl невероятно простая: вы, в бесконечном цикле, берете строку от пользователя, обрабатывайте ее, после чего печатаете результат.
-In base REPL have realy symple idea: repl takes single user inputs, evaluates them, and returns the result to the user.</p>
+<p>In main REPL have realy simple idea: repl takes single user inputs, evaluates them, and returns the result to the user.
+And all this is happening in an infinite loop:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">repl</span><span class="p">(</span><span class="n">prompt</span> <span class="o">=</span> <span class="s1">&#39;lisp &gt;&gt; &#39;</span><span class="p">)</span>
   <span class="k">while</span> <span class="kp">true</span>
@@ -398,8 +350,7 @@ In base REPL have realy symple idea: repl takes single user inputs, evaluates th
   <span class="k">end</span>
 <span class="k">end</span></code></pre></div>
 
-<p>В итоге вы должны получить что-то вроде такого:
-As a result, you should get something like this:</p>
+<p>As a result, you should get something like this:</p>
 
 <div class="highlight"><pre><code class="language-text" data-lang="text">lisp &gt;&gt; (define pi 3.14)
 3.14
@@ -409,19 +360,14 @@ lisp &gt;&gt; (circle-area 11)
 379.94</code></pre></div>
 
 <h2 id="conclusions">Conclusions</h2>
-<p>К концу статьи мы имеем на руках простейший интерпретатор scheme.
-At this moment we have a simple scheme interpreter.</p>
-
-<p>Его легко расширять, мы написали простейший repl, а так же рассмотрели основную идею работы интерпретатора.
-It is easy to expand, we wrote a simple repl, and considered the basic idea of the interpreter.</p>
-
-<p>В рамках данной статьи не рассматривались такие важдые аспекты как многопоточность, оптимизация кода, работа с системой и многое другое.
-In this article we does not consider such important aspects as macros, multithreading, code optimization, work with the system, and much more.</p>
-
-<p>Об этом мы поговорим в следующих статьях.
+<p>At this moment we have a simple scheme interpreter.
+It is easy to expand, we wrote a simple repl, and considered the basic idea of the interpreter.
+In this article we does not consider such important aspects as macros, multithreading, code optimization, work with the system, and much more.
 This will be discussed in future articles.</p>
 
-<p>http://norvig.com/lispy.html</p>
+<h2 id="further-reading">Further reading</h2>
+<p>http://norvig.com/lispy.html
+http://www.wikiwand.com/en/S-expression</p>
 
 </div>
 

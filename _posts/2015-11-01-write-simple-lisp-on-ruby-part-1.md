@@ -6,39 +6,23 @@ description: "В этой серии постов мы напишем прост
 
 **TL;DR:** [github repo](https://github.com/davydovanton/rlisp)
 
-В жизни каждого разработчика наступает момент, когда он хочет написать свой собственный язык программирования.
-Each developer have moment when he want to write own programming language.
-
-Поэтому в данной статье мы рассмотрим на примере простейшего лисп компилятора как это сделать.
-Therefore in this post I'll show you how it's done in a simple scheme interpreter.
+Every developer has a moment in his life when he wants to write his own programming language.
+So in this article I want to show you how to do this for a simple lisp compiler.
 
 ## Why scheme and lisp?
-
-Во первых, язык очень простой как для реализации, так и для понимания.
-In first, list really simple language for realization and for understanding.
-
-Лисп - семейство языков основной идеей которых являются S-выражения.
-Lisp(_LISt Processor_) is a language family which based on idea of S-expressions.
-
-S-выражение - это такая штука, которая нужна для представления данных и которая может состоять из атомов (числа, строки, булевы выражения), либо из точечных пар, которые имеют вид `(x . y)`.
-S-expressions are a notation for nested list data which can contain atoms (integers, symbols or boolean values) or expression of the form `(x . y)` where `x` and `y` are s-expressions.
-
-Основная идея точечных пар в том, что они могут формировать как списки (`(1 . ( 2 . 3))` что эквивалентно `(1 2 3)`), так
-и деревья (`((1 . (2 . 3)) . (4 . 5))`).
+Firstly, lisp is very simple for realization and for understanding.
+Lisp (_LISt Processor_) is a family of languages which based on the idea of S-expressions.
+S-Expression needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or an expression of the form `(x . y)` where `x` and `y` are s-expressions.
 This expression may be formed as lists (`(1 . ( 2 . 3))` this equals `(1 2 3)`) and trees (`((1 . (2 . 3)) . (4 . 5))`).
 
-Во вторых, при самостоятельной реализации интерпретатора, можно лучше понять язык (автор доконца понял идею envariement), так и понять основную идею компиляторов.
-And in second, after creating interpreter you could better to understood language (author fully understood the envariement idea). Also you could  understand base idea of compillers and interpreters.
+Secondly, after creating interpreter you can better to understand language (author fully understood the environment idea).
+Also you can understand main idea of compilers and interpreters.
 
-Поэтому мы начнем наше путешествие в мир компиляторов и интерпретаторов с написания простейшего интерпретатора схемы.
-Therefore we start our way into the world of compilers and interpreters to write a simple scheme interpreter.
+So we begin our journey into the world of compilers and interpreters to write a simple scheme interpreter.
 
-## Base idea
-
-Наш язык будет состоять из двух частей, парсера, который превратит нашу строку текста (программа) в AST структуру.
-Our language will contain two parts: parser, which translate string to AST and `eval` function.
-Следующая часть нашего языка - eval функция, которая будет принимать наш AST и envariement переменную и возвращать результат выполнения кода.
-This fundtion will take AST with envariement and will return result of the code.
+## Main idea
+Our language will contain two parts: parser which translate string to AST and `eval` function.
+This function will take the AST with envariement value and will returns result of the code.
 
 Schematically, it looks like this:
 {% highlight text %}
@@ -46,26 +30,18 @@ code(string) => parse function => AST => eval function => result
 {% endhighlight %}
 
 ## First step. Parser.
-Для начала, давайте определимся, чего мы хотим получить.
 To begin, let's define what we want to get.
-
-У нас есть строка, например `(+ 1 1 1)`.
 For example, we have a string `'(+ 1 1 1)'`.
+What our parser should return? What kind of data structure? I think, that array will be correctly.
 
-Что наш парсер должен вернуть? Какую структуру данных? Думаю, что массив будет тем, что нужно.
-What our parser should return? What kind of data structure? I think, that array will be right.
-
-Давайте напишем наш первый "тест":
 Let write simple test code:
-
 {% highlight ruby %}
 program = '(+ 1 1 1)'
 lisp = Lisp.new
 lisp.parse(program) == [:+, 1, 1, 1]
 {% endhighlight %}
 
-Как видите, все достаточно просто, поэтому я сразу напишу код, который выполнит наш тест:
-As you can see, this is simle code therefore I just display `parse` method code:
+As you can see, this is simple code therefore I just display `parse` method code:
 {% highlight ruby %}
 class Lisp
   def parse(program)
@@ -96,26 +72,18 @@ class Lisp
 end
 {% endhighlight %}
 
-Как вы знаете, в лиспе мы можем написать наш код используя "вложенные" операторы, то есть вот так: `(+ (* 2 2) (- 5 3))`.
-As you know, in lisp you can write your codewith nested operators, for example - `(+ (* 2 2) (- 5 3))`.
+As you know, in lisp you can write your code with nested operators, for example - `(+ (* 2 2) (- 5 3))`.
+And this code will return 6.
 
-В результате выполнения этого кода мы получим число 6.
-This code returns 6.
-
-Если мы используем наш парсер для этого кода, мы получим не совсем то, что нам нужно, поэтому давайте обновим наш тест:
-If we use our parser for this code, we get is not quite what we need, so let's update our check:
+If we use our parser for this code, we get is not quite what we need, so let's update our test code:
 {% highlight ruby %}
 program = '(+ (* (1 2) 3) 4)'
 lisp = Lisp.new
 lisp.parse(program) == [:+, [:*, [1, 2], 3], 4]
 {% endhighlight %}
 
-Как вы могли догадаться - самый очевидный способ исправить наш тест - обойти все элементы массива и если мы встречаем `'('`, то мы просто помещаем все элементы до `')'` в отдельный массив + делаем это рекурсивно.
-As you might guess, the most obvious way to fix our check - call `parse` method in recursion and all array elements from `'('` to `')'` we remove to nested array.
-
-В итоге наш код принимает следующий вид:
+As you might guess, the most obvious way to fix our code - call `parse` method in recursion and all array elements from `'('` to `')'` we move to nested array.
 Code will be look loke this:
-
 {% highlight ruby %}
 class Lisp
   def parse(program)
@@ -163,17 +131,15 @@ class Lisp
 end
 {% endhighlight %}
 
-Ура, мы написали наш парсер!
 We did it! Let's start make `eval` method.
 
 ## Eval method
-Как я говорил ранее, наша программа состоит из 2ух частей, парсера и `eval` функции, которая будет выполнять наш код.
-As I said earlier, our interpreter contain two parts: parser and `eval` function.
+As I said earlier, our interpreter consist of two parts: parser and `eval` function.
 
 The `eval` function will take two arguments: an expression, `exp`, that we want to evaluate, and an environment, `env`, in which to evaluate it. An environment is a mapping from variable names to their values.
 By default, eval will use a instance value that includes the names for a bunch of standard things.
 
-Let start to implevent base `@env` variable with `car`, `cdr` и `cons` functions:
+let's implement `@env` variable with `car`, `cdr` and `cons` functions:
 {% highlight ruby %}
 env = {
   :car  => lambda { |*list| list[0] },
@@ -182,7 +148,6 @@ env = {
 }
 {% endhighlight %}
 
-Следующее что нам нужно - написать функцию `eval`, которая будет искать совпадение по первому элементу входящего массива:
 Next step - make `eval` function which will look for a match on the first element of the input array
 {% highlight ruby %}
 class Lisp
@@ -202,11 +167,8 @@ class Lisp
 end
 {% endhighlight %}
 
-Все достаточно просто, но возникает пробелма, что делать, когда первый элемент не символ (число например) и что делать, когда у нас вложенный код?
-Now we have a problem: what will we do when the first element of array will be not symbol (integer for example) and what will we do when we have nested functiions?
-
-Давайте обновим нашу функцию, добавив в нее проверку на тип:
-Of cource we can add check to element type:
+Now we have a problem: what will be happen when the first element of array will be not symbol (integer for example) and what will be happen when we have nested functiions?
+I think we can add check to element type like this:
 {% highlight ruby %}
 class Lisp
   def initialize(ext = {})
@@ -233,15 +195,9 @@ class Lisp
 end
 {% endhighlight %}
 
-Какие-то (например арифмитические) мы можем легко добавить в `env` переменную, а какие-то нет.
 Some (eg arithmetic), we can easily add to `env` variable, and some do not.
-
-Поэтому нам придется расширить проверку в `eval` функции, добавив в нее проверку на имя функции (первого элемента массива)
 Therefore we need to extend checking in `eval` function. We will add check on function name.
-
-Например, `quote` и `if` функции будут реализованны так:
-For example, code bellow will realize `quote` and `if` functions:
-
+For example, code bellow demonstrate `quote` and `if` functions:
 {% highlight ruby %}
 def eval(exp, env)
   # ...
@@ -255,17 +211,13 @@ def eval(exp, env)
 end
 {% endhighlight %}
 
-Немного сложнее для понимания будут функции `define` и `lambda`.
 Next step - initialize `define` and `lambda` functions.
-
-Синтаксис `define` функции выглядит следующим образом:
 In scheme `define` function syntax is as follows:
 {% highlight scheme %}
 (define name
   (expression))
 {% endhighlight %}
 
-наш код должн создавать новую ключ-значение пару в `env` хеше:
 And our code must create a new key-value pair in the `env` hash:
 {% highlight ruby %}
 def eval(exp, env)
@@ -277,14 +229,12 @@ def eval(exp, env)
 end
 {% endhighlight %}
 
-Осталась последняя функция, функция `lambda`, которая вызывается следующим образом:
 Last function, 'lambda' in scheme have this syntax:
 {% highlight scheme %}
 (lambda (arg1, arg2, ...)
   (block of code))
 {% endhighlight %}
 
-Первое, что приходит в голову - возвращать новый объект `lambda` с новым значением `env` внутри, который будет выполнять наш код:
 The first thing that comes to mind - to return a new `lambda` object with a new value inside `env` that will serve our code:
 {% highlight ruby %}
 def eval(exp, env)
@@ -296,14 +246,12 @@ def eval(exp, env)
 end
 {% endhighlight %}
 
-Как видите, мы реализовали основной функционал, реализацию арифмитических методов, а так же реализацию таких методов как `true`, `false`, `list`, etc я оставляю на совести читателя.
-As you can see we realize base functional.
+As you can see we did basic functionality of the our interpreter.
 Implementating of arithmetic methods, and implementing methods such as `true`,` false`, `list`, etc I leave on the conscience of the reader.
 
 ## REPL
-Идея, как и реализация repl невероятно простая: вы, в бесконечном цикле, берете строку от пользователя, обрабатывайте ее, после чего печатаете результат.
-In base REPL have realy symple idea: repl takes single user inputs, evaluates them, and returns the result to the user.
-
+In main REPL have realy simple idea: repl takes single user inputs, evaluates them, and returns the result to the user.
+And all this is happening in an infinite loop:
 {% highlight ruby %}
 def repl(prompt = 'lisp >> ')
   while true
@@ -315,7 +263,6 @@ def repl(prompt = 'lisp >> ')
 end
 {% endhighlight %}
 
-В итоге вы должны получить что-то вроде такого:
 As a result, you should get something like this:
 {% highlight text %}
 lisp >> (define pi 3.14)
@@ -327,16 +274,11 @@ lisp >> (circle-area 11)
 {% endhighlight %}
 
 ## Conclusions
-К концу статьи мы имеем на руках простейший интерпретатор scheme.
 At this moment we have a simple scheme interpreter.
-
-Его легко расширять, мы написали простейший repl, а так же рассмотрели основную идею работы интерпретатора.
 It is easy to expand, we wrote a simple repl, and considered the basic idea of the interpreter.
-
-В рамках данной статьи не рассматривались такие важдые аспекты как многопоточность, оптимизация кода, работа с системой и многое другое.
 In this article we does not consider such important aspects as macros, multithreading, code optimization, work with the system, and much more.
-
-Об этом мы поговорим в следующих статьях.
 This will be discussed in future articles.
 
+## Further reading
 http://norvig.com/lispy.html
+http://www.wikiwand.com/en/S-expression

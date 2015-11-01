@@ -4,7 +4,7 @@
  <title>Anton Davydov</title>
  <link href="http://davydovanton.github.io/atom.xml" rel="self"/>
  <link href="http://davydovanton.github.io/"/>
- <updated>2015-11-01T21:56:27+03:00</updated>
+ <updated>2015-11-01T23:17:56+03:00</updated>
  <id>http://davydovanton.github.io</id>
  <author>
    <name>Anton Davydov</name>
@@ -19,63 +19,40 @@
    <id>http://davydovanton.github.io/2015/11/01/write-simple-lisp-on-ruby-part-1</id>
    <content type="html">&lt;p&gt;&lt;strong&gt;TL;DR:&lt;/strong&gt; &lt;a href=&quot;https://github.com/davydovanton/rlisp&quot;&gt;github repo&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;В жизни каждого разработчика наступает момент, когда он хочет написать свой собственный язык программирования.
-Each developer have moment when he want to write own programming language.&lt;/p&gt;
-
-&lt;p&gt;Поэтому в данной статье мы рассмотрим на примере простейшего лисп компилятора как это сделать.
-Therefore in this post I’ll show you how it’s done in a simple scheme interpreter.&lt;/p&gt;
+&lt;p&gt;Every developer has a moment in his life when he wants to write his own programming language.
+So in this article I want to show you how to do this for a simple lisp compiler.&lt;/p&gt;
 
 &lt;h2 id=&quot;why-scheme-and-lisp&quot;&gt;Why scheme and lisp?&lt;/h2&gt;
-
-&lt;p&gt;Во первых, язык очень простой как для реализации, так и для понимания.
-In first, list really simple language for realization and for understanding.&lt;/p&gt;
-
-&lt;p&gt;Лисп - семейство языков основной идеей которых являются S-выражения.
-Lisp(&lt;em&gt;LISt Processor&lt;/em&gt;) is a language family which based on idea of S-expressions.&lt;/p&gt;
-
-&lt;p&gt;S-выражение - это такая штука, которая нужна для представления данных и которая может состоять из атомов (числа, строки, булевы выражения), либо из точечных пар, которые имеют вид &lt;code&gt;(x . y)&lt;/code&gt;.
-S-expressions are a notation for nested list data which can contain atoms (integers, symbols or boolean values) or expression of the form &lt;code&gt;(x . y)&lt;/code&gt; where &lt;code&gt;x&lt;/code&gt; and &lt;code&gt;y&lt;/code&gt; are s-expressions.&lt;/p&gt;
-
-&lt;p&gt;Основная идея точечных пар в том, что они могут формировать как списки (&lt;code&gt;(1 . ( 2 . 3))&lt;/code&gt; что эквивалентно &lt;code&gt;(1 2 3)&lt;/code&gt;), так
-и деревья (&lt;code&gt;((1 . (2 . 3)) . (4 . 5))&lt;/code&gt;).
+&lt;p&gt;Firstly, lisp is very simple for realization and for understanding.
+Lisp (&lt;em&gt;LISt Processor&lt;/em&gt;) is a family of languages which based on the idea of S-expressions.
+S-Expression needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or an expression of the form &lt;code&gt;(x . y)&lt;/code&gt; where &lt;code&gt;x&lt;/code&gt; and &lt;code&gt;y&lt;/code&gt; are s-expressions.
 This expression may be formed as lists (&lt;code&gt;(1 . ( 2 . 3))&lt;/code&gt; this equals &lt;code&gt;(1 2 3)&lt;/code&gt;) and trees (&lt;code&gt;((1 . (2 . 3)) . (4 . 5))&lt;/code&gt;).&lt;/p&gt;
 
-&lt;p&gt;Во вторых, при самостоятельной реализации интерпретатора, можно лучше понять язык (автор доконца понял идею envariement), так и понять основную идею компиляторов.
-And in second, after creating interpreter you could better to understood language (author fully understood the envariement idea). Also you could  understand base idea of compillers and interpreters.&lt;/p&gt;
+&lt;p&gt;Secondly, after creating interpreter you can better to understand language (author fully understood the environment idea).
+Also you can understand main idea of compilers and interpreters.&lt;/p&gt;
 
-&lt;p&gt;Поэтому мы начнем наше путешествие в мир компиляторов и интерпретаторов с написания простейшего интерпретатора схемы.
-Therefore we start our way into the world of compilers and interpreters to write a simple scheme interpreter.&lt;/p&gt;
+&lt;p&gt;So we begin our journey into the world of compilers and interpreters to write a simple scheme interpreter.&lt;/p&gt;
 
-&lt;h2 id=&quot;base-idea&quot;&gt;Base idea&lt;/h2&gt;
-
-&lt;p&gt;Наш язык будет состоять из двух частей, парсера, который превратит нашу строку текста (программа) в AST структуру.
-Our language will contain two parts: parser, which translate string to AST and &lt;code&gt;eval&lt;/code&gt; function.
-Следующая часть нашего языка - eval функция, которая будет принимать наш AST и envariement переменную и возвращать результат выполнения кода.
-This fundtion will take AST with envariement and will return result of the code.&lt;/p&gt;
+&lt;h2 id=&quot;main-idea&quot;&gt;Main idea&lt;/h2&gt;
+&lt;p&gt;Our language will contain two parts: parser which translate string to AST and &lt;code&gt;eval&lt;/code&gt; function.
+This function will take the AST with envariement value and will returns result of the code.&lt;/p&gt;
 
 &lt;p&gt;Schematically, it looks like this:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;code(string) =&amp;gt; parse function =&amp;gt; AST =&amp;gt; eval function =&amp;gt; result&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;first-step-parser&quot;&gt;First step. Parser.&lt;/h2&gt;
-&lt;p&gt;Для начала, давайте определимся, чего мы хотим получить.
-To begin, let’s define what we want to get.&lt;/p&gt;
+&lt;p&gt;To begin, let’s define what we want to get.
+For example, we have a string &lt;code&gt;&#39;(+ 1 1 1)&#39;&lt;/code&gt;.
+What our parser should return? What kind of data structure? I think, that array will be correctly.&lt;/p&gt;
 
-&lt;p&gt;У нас есть строка, например &lt;code&gt;(+ 1 1 1)&lt;/code&gt;.
-For example, we have a string &lt;code&gt;&#39;(+ 1 1 1)&#39;&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Что наш парсер должен вернуть? Какую структуру данных? Думаю, что массив будет тем, что нужно.
-What our parser should return? What kind of data structure? I think, that array will be right.&lt;/p&gt;
-
-&lt;p&gt;Давайте напишем наш первый “тест”:
-Let write simple test code:&lt;/p&gt;
+&lt;p&gt;Let write simple test code:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;program&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;(+ 1 1 1)&amp;#39;&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;lisp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Lisp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;lisp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;program&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Как видите, все достаточно просто, поэтому я сразу напишу код, который выполнит наш тест:
-As you can see, this is simle code therefore I just display &lt;code&gt;parse&lt;/code&gt; method code:&lt;/p&gt;
+&lt;p&gt;As you can see, this is simple code therefore I just display &lt;code&gt;parse&lt;/code&gt; method code:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Lisp&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;parse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;program&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
@@ -105,23 +82,16 @@ As you can see, this is simle code therefore I just display &lt;code&gt;parse&lt
   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Как вы знаете, в лиспе мы можем написать наш код используя “вложенные” операторы, то есть вот так: &lt;code&gt;(+ (* 2 2) (- 5 3))&lt;/code&gt;.
-As you know, in lisp you can write your codewith nested operators, for example - &lt;code&gt;(+ (* 2 2) (- 5 3))&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;As you know, in lisp you can write your code with nested operators, for example - &lt;code&gt;(+ (* 2 2) (- 5 3))&lt;/code&gt;.
+And this code will return 6.&lt;/p&gt;
 
-&lt;p&gt;В результате выполнения этого кода мы получим число 6.
-This code returns 6.&lt;/p&gt;
-
-&lt;p&gt;Если мы используем наш парсер для этого кода, мы получим не совсем то, что нам нужно, поэтому давайте обновим наш тест:
-If we use our parser for this code, we get is not quite what we need, so let’s update our check:&lt;/p&gt;
+&lt;p&gt;If we use our parser for this code, we get is not quite what we need, so let’s update our test code:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;program&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;(+ (* (1 2) 3) 4)&amp;#39;&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;lisp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Lisp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;lisp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;program&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Как вы могли догадаться - самый очевидный способ исправить наш тест - обойти все элементы массива и если мы встречаем &lt;code&gt;&#39;(&#39;&lt;/code&gt;, то мы просто помещаем все элементы до &lt;code&gt;&#39;)&#39;&lt;/code&gt; в отдельный массив + делаем это рекурсивно.
-As you might guess, the most obvious way to fix our check - call &lt;code&gt;parse&lt;/code&gt; method in recursion and all array elements from &lt;code&gt;&#39;(&#39;&lt;/code&gt; to &lt;code&gt;&#39;)&#39;&lt;/code&gt; we remove to nested array.&lt;/p&gt;
-
-&lt;p&gt;В итоге наш код принимает следующий вид:
+&lt;p&gt;As you might guess, the most obvious way to fix our code - call &lt;code&gt;parse&lt;/code&gt; method in recursion and all array elements from &lt;code&gt;&#39;(&#39;&lt;/code&gt; to &lt;code&gt;&#39;)&#39;&lt;/code&gt; we move to nested array.
 Code will be look loke this:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Lisp&lt;/span&gt;
@@ -169,17 +139,15 @@ Code will be look loke this:&lt;/p&gt;
   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Ура, мы написали наш парсер!
-We did it! Let’s start make &lt;code&gt;eval&lt;/code&gt; method.&lt;/p&gt;
+&lt;p&gt;We did it! Let’s start make &lt;code&gt;eval&lt;/code&gt; method.&lt;/p&gt;
 
 &lt;h2 id=&quot;eval-method&quot;&gt;Eval method&lt;/h2&gt;
-&lt;p&gt;Как я говорил ранее, наша программа состоит из 2ух частей, парсера и &lt;code&gt;eval&lt;/code&gt; функции, которая будет выполнять наш код.
-As I said earlier, our interpreter contain two parts: parser and &lt;code&gt;eval&lt;/code&gt; function.&lt;/p&gt;
+&lt;p&gt;As I said earlier, our interpreter consist of two parts: parser and &lt;code&gt;eval&lt;/code&gt; function.&lt;/p&gt;
 
 &lt;p&gt;The &lt;code&gt;eval&lt;/code&gt; function will take two arguments: an expression, &lt;code&gt;exp&lt;/code&gt;, that we want to evaluate, and an environment, &lt;code&gt;env&lt;/code&gt;, in which to evaluate it. An environment is a mapping from variable names to their values.
 By default, eval will use a instance value that includes the names for a bunch of standard things.&lt;/p&gt;
 
-&lt;p&gt;Let start to implevent base &lt;code&gt;@env&lt;/code&gt; variable with &lt;code&gt;car&lt;/code&gt;, &lt;code&gt;cdr&lt;/code&gt; и &lt;code&gt;cons&lt;/code&gt; functions:&lt;/p&gt;
+&lt;p&gt;let’s implement &lt;code&gt;@env&lt;/code&gt; variable with &lt;code&gt;car&lt;/code&gt;, &lt;code&gt;cdr&lt;/code&gt; and &lt;code&gt;cons&lt;/code&gt; functions:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
   &lt;span class=&quot;ss&quot;&gt;:car&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
@@ -187,8 +155,7 @@ By default, eval will use a instance value that includes the names for a bunch o
   &lt;span class=&quot;ss&quot;&gt;:cons&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cell&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cell&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Следующее что нам нужно - написать функцию &lt;code&gt;eval&lt;/code&gt;, которая будет искать совпадение по первому элементу входящего массива:
-Next step - make &lt;code&gt;eval&lt;/code&gt; function which will look for a match on the first element of the input array&lt;/p&gt;
+&lt;p&gt;Next step - make &lt;code&gt;eval&lt;/code&gt; function which will look for a match on the first element of the input array&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Lisp&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ext&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{})&lt;/span&gt;
@@ -206,11 +173,8 @@ Next step - make &lt;code&gt;eval&lt;/code&gt; function which will look for a ma
   &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Все достаточно просто, но возникает пробелма, что делать, когда первый элемент не символ (число например) и что делать, когда у нас вложенный код?
-Now we have a problem: what will we do when the first element of array will be not symbol (integer for example) and what will we do when we have nested functiions?&lt;/p&gt;
-
-&lt;p&gt;Давайте обновим нашу функцию, добавив в нее проверку на тип:
-Of cource we can add check to element type:&lt;/p&gt;
+&lt;p&gt;Now we have a problem: what will be happen when the first element of array will be not symbol (integer for example) and what will be happen when we have nested functiions?
+I think we can add check to element type like this:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Lisp&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ext&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{})&lt;/span&gt;
@@ -236,14 +200,9 @@ Of cource we can add check to element type:&lt;/p&gt;
   &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Какие-то (например арифмитические) мы можем легко добавить в &lt;code&gt;env&lt;/code&gt; переменную, а какие-то нет.
-Some (eg arithmetic), we can easily add to &lt;code&gt;env&lt;/code&gt; variable, and some do not.&lt;/p&gt;
-
-&lt;p&gt;Поэтому нам придется расширить проверку в &lt;code&gt;eval&lt;/code&gt; функции, добавив в нее проверку на имя функции (первого элемента массива)
-Therefore we need to extend checking in &lt;code&gt;eval&lt;/code&gt; function. We will add check on function name.&lt;/p&gt;
-
-&lt;p&gt;Например, &lt;code&gt;quote&lt;/code&gt; и &lt;code&gt;if&lt;/code&gt; функции будут реализованны так:
-For example, code bellow will realize &lt;code&gt;quote&lt;/code&gt; and &lt;code&gt;if&lt;/code&gt; functions:&lt;/p&gt;
+&lt;p&gt;Some (eg arithmetic), we can easily add to &lt;code&gt;env&lt;/code&gt; variable, and some do not.
+Therefore we need to extend checking in &lt;code&gt;eval&lt;/code&gt; function. We will add check on function name.
+For example, code bellow demonstrate &lt;code&gt;quote&lt;/code&gt; and &lt;code&gt;if&lt;/code&gt; functions:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
   &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
@@ -256,17 +215,13 @@ For example, code bellow will realize &lt;code&gt;quote&lt;/code&gt; and &lt;cod
   &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Немного сложнее для понимания будут функции &lt;code&gt;define&lt;/code&gt; и &lt;code&gt;lambda&lt;/code&gt;.
-Next step - initialize &lt;code&gt;define&lt;/code&gt; and &lt;code&gt;lambda&lt;/code&gt; functions.&lt;/p&gt;
-
-&lt;p&gt;Синтаксис &lt;code&gt;define&lt;/code&gt; функции выглядит следующим образом:
+&lt;p&gt;Next step - initialize &lt;code&gt;define&lt;/code&gt; and &lt;code&gt;lambda&lt;/code&gt; functions.
 In scheme &lt;code&gt;define&lt;/code&gt; function syntax is as follows:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-scheme&quot; data-lang=&quot;scheme&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;define &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;name&lt;/span&gt;
   &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;expression&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;наш код должн создавать новую ключ-значение пару в &lt;code&gt;env&lt;/code&gt; хеше:
-And our code must create a new key-value pair in the &lt;code&gt;env&lt;/code&gt; hash:&lt;/p&gt;
+&lt;p&gt;And our code must create a new key-value pair in the &lt;code&gt;env&lt;/code&gt; hash:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
   &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
@@ -276,14 +231,12 @@ And our code must create a new key-value pair in the &lt;code&gt;env&lt;/code&gt
   &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Осталась последняя функция, функция &lt;code&gt;lambda&lt;/code&gt;, которая вызывается следующим образом:
-Last function, ‘lambda’ in scheme have this syntax:&lt;/p&gt;
+&lt;p&gt;Last function, ‘lambda’ in scheme have this syntax:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-scheme&quot; data-lang=&quot;scheme&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;lambda &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;arg1,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;arg2,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
   &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;block&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;of&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;code&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Первое, что приходит в голову - возвращать новый объект &lt;code&gt;lambda&lt;/code&gt; с новым значением &lt;code&gt;env&lt;/code&gt; внутри, который будет выполнять наш код:
-The first thing that comes to mind - to return a new &lt;code&gt;lambda&lt;/code&gt; object with a new value inside &lt;code&gt;env&lt;/code&gt; that will serve our code:&lt;/p&gt;
+&lt;p&gt;The first thing that comes to mind - to return a new &lt;code&gt;lambda&lt;/code&gt; object with a new value inside &lt;code&gt;env&lt;/code&gt; that will serve our code:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
   &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
@@ -293,13 +246,12 @@ The first thing that comes to mind - to return a new &lt;code&gt;lambda&lt;/code
   &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Как видите, мы реализовали основной функционал, реализацию арифмитических методов, а так же реализацию таких методов как &lt;code&gt;true&lt;/code&gt;, &lt;code&gt;false&lt;/code&gt;, &lt;code&gt;list&lt;/code&gt;, etc я оставляю на совести читателя.
-As you can see we realize base functional.
+&lt;p&gt;As you can see we did basic functionality of the our interpreter.
 Implementating of arithmetic methods, and implementing methods such as &lt;code&gt;true&lt;/code&gt;,&lt;code&gt; false&lt;/code&gt;, &lt;code&gt;list&lt;/code&gt;, etc I leave on the conscience of the reader.&lt;/p&gt;
 
 &lt;h2 id=&quot;repl&quot;&gt;REPL&lt;/h2&gt;
-&lt;p&gt;Идея, как и реализация repl невероятно простая: вы, в бесконечном цикле, берете строку от пользователя, обрабатывайте ее, после чего печатаете результат.
-In base REPL have realy symple idea: repl takes single user inputs, evaluates them, and returns the result to the user.&lt;/p&gt;
+&lt;p&gt;In main REPL have realy simple idea: repl takes single user inputs, evaluates them, and returns the result to the user.
+And all this is happening in an infinite loop:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;repl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prompt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;lisp &amp;gt;&amp;gt; &amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
@@ -310,8 +262,7 @@ In base REPL have realy symple idea: repl takes single user inputs, evaluates th
   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;В итоге вы должны получить что-то вроде такого:
-As a result, you should get something like this:&lt;/p&gt;
+&lt;p&gt;As a result, you should get something like this:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;lisp &amp;gt;&amp;gt; (define pi 3.14)
 3.14
@@ -321,19 +272,14 @@ lisp &amp;gt;&amp;gt; (circle-area 11)
 379.94&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h2&gt;
-&lt;p&gt;К концу статьи мы имеем на руках простейший интерпретатор scheme.
-At this moment we have a simple scheme interpreter.&lt;/p&gt;
-
-&lt;p&gt;Его легко расширять, мы написали простейший repl, а так же рассмотрели основную идею работы интерпретатора.
-It is easy to expand, we wrote a simple repl, and considered the basic idea of the interpreter.&lt;/p&gt;
-
-&lt;p&gt;В рамках данной статьи не рассматривались такие важдые аспекты как многопоточность, оптимизация кода, работа с системой и многое другое.
-In this article we does not consider such important aspects as macros, multithreading, code optimization, work with the system, and much more.&lt;/p&gt;
-
-&lt;p&gt;Об этом мы поговорим в следующих статьях.
+&lt;p&gt;At this moment we have a simple scheme interpreter.
+It is easy to expand, we wrote a simple repl, and considered the basic idea of the interpreter.
+In this article we does not consider such important aspects as macros, multithreading, code optimization, work with the system, and much more.
 This will be discussed in future articles.&lt;/p&gt;
 
-&lt;p&gt;http://norvig.com/lispy.html&lt;/p&gt;
+&lt;h2 id=&quot;further-reading&quot;&gt;Further reading&lt;/h2&gt;
+&lt;p&gt;http://norvig.com/lispy.html
+http://www.wikiwand.com/en/S-expression&lt;/p&gt;
 </content>
  </entry>
  
