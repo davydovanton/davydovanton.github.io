@@ -3,6 +3,21 @@
   
     
     <url>
+      <loc>http://davydovanton.github.io/2015/11/01/write-simple-lisp-on-ruby-part-1/</loc>
+      
+        <lastmod>2015-11-01T00:00:00+03:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
       <loc>http://davydovanton.github.io/2015/10/26/get-requiest-with-custom-locale-in-your-tests/</loc>
       
         <lastmod>2015-10-26T00:00:00+03:00</lastmod>
@@ -115,7 +130,7 @@
     <url>
       <loc>http://davydovanton.github.io404.html</loc>
       
-        <lastmod>2015-10-26T23:07:35+03:00</lastmod>
+        <lastmod>2015-11-01T20:52:06+03:00</lastmod>
       
       
         <changefreq>monthly</changefreq>
@@ -143,7 +158,7 @@
     <url>
       <loc>http://davydovanton.github.io</loc>
       
-        <lastmod>2015-10-26T23:07:35+03:00</lastmod>
+        <lastmod>2015-11-01T20:52:06+03:00</lastmod>
       
       
         <changefreq>monthly</changefreq>

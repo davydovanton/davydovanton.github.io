@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Write simple scheme interpreter on ruby &middot; Anton Davydov
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/base.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- SEO -->
+  
+    <meta name="description" content="В этой серии постов мы напишем простой интерпретатор схемы с простыми командами и реплом" />
+  
+
+  <link rel="author" href="https://plus.google.com/u/0/104253015484296728880"/>
+</head>
+
+
+  <body>
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>Simple blog where I'll write about ruby, my ideas and technologies which I love<br><a href="https://twitter.com/anton_davydov" target="_blank">@anton_davydov</a></p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+    
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/davydovanton">GitHub</a>
+    <a class="sidebar-nav-item" href="https://twitter.com/anton_davydov">Twitter</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2015. All rights reserved.
+    </p>
+  </div>
+</div>
+
+    <div class="yandex_metrica">
+<!-- Yandex.Metrika counter --><script type="text/javascript">var yaParams = {/*Здесь параметры визита*/};</script><script type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter23652886 = new Ya.Metrika({id:23652886, webvisor:true, clickmap:true, trackLinks:true, accurateTrackBounce:true, trackHash:true,params:window.yaParams||{ }}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="//mc.yandex.ru/watch/23652886" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Anton Davydov</a>
+            <small>Blog</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Write simple scheme interpreter on ruby</h1>
+  <span class="post-date">01 Nov 2015</span>
+  <p><strong>TL;DR:</strong> <a href="https://github.com/davydovanton/rlisp">github repo</a></p>
+
+<p>В жизни каждого разработчика наступает момент, когда он хочет написать свой собственный язык программирования.
+Поэтому в данной статье мы рассмотрим на примере простейшего лисп компилятора как это сделать.</p>
+
+<h2 id="section">Почему лисп?</h2>
+
+<p>Во первых, язык очень простой как для реализации, так и для понимания.</p>
+
+<p>Лисп - семейство языков основной идеей которых являются S-выражения. 
+S-выражение - это такая штука, которая нужна для представления данных и которая может состоять из атомов
+(числа, строки, булевы выражения), либо из точечных пар, которые имеют вид <code>(x . y)</code>.
+Основная идея точечных пар в том, что они могут формировать как списки (<code>(1 . ( 2 . 3))</code> что эквивалентно <code>(1 2 3)</code>), так
+и деревья (<code>((1 . (2 . 3)) . (4 . 5))</code>).</p>
+
+<p>Во вторых, при самостоятельной реализации интерпретатора, можно лучше понять язык (автор доконца понял идею envariement),
+так и понять основную идею компиляторов.</p>
+
+<p>Поэтому мы начнем наше путешествие в мир компиляторов и интерпретаторов с написания простейшего интерпретатора схемы.</p>
+
+<h2 id="section-1">Основная идея.</h2>
+
+<p>Наш язык будет состоять из двух частей, парсера, который превратит нашу строку текста (программа) в AST структуру.
+Следующая часть нашего языка - eval функция, которая будет принимать наш AST и envariement переменную и возвращать результат выполнения кода.
+Начнем с парсера.</p>
+
+<h2 id="section-2">Шаг первый. Пишем парсер.</h2>
+
+<p>Для начала, давайте определимся, чего мы хотим получить. У нас есть строка, например <code>(+ 1 1 1)</code>.
+Что наш парсер должен вернуть? Какую структуру данных? Думаю, что массив будет тем, что нужно. Так как я приверженец TDD/BDD 
+то давайте напишем наш первый “тест” (далее мои тесты будут построенны исключительно на операции сравнения):</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">program</span> <span class="o">=</span> <span class="s1">&#39;(+ 1 1 1)&#39;</span>
+<span class="n">lisp</span> <span class="o">=</span> <span class="no">Lisp</span><span class="o">.</span><span class="n">new</span>
+<span class="n">lisp</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span> <span class="o">==</span> <span class="o">[</span><span class="ss">:+</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">]</span></code></pre></div>
+
+<p>Как видите, все достаточно просто, поэтому я сразу напишу код, который выполнит наш тест:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
+  <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
+    <span class="n">tokenize</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="n">chars</span><span class="p">)</span>
+    <span class="n">chars</span>
+      <span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/\s\s+/</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">,</span> <span class="s1">&#39; ( &#39;</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="s1">&#39; ) &#39;</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">map</span><span class="p">{</span> <span class="o">|</span><span class="n">token</span><span class="o">|</span> <span class="n">atom</span><span class="p">(</span><span class="n">token</span><span class="p">)</span> <span class="p">}</span>
+      <span class="o">.</span><span class="n">compact</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">atom</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">token</span><span class="o">[</span><span class="sr">/\.\d+/</span><span class="o">]</span>
+      <span class="n">token</span><span class="o">.</span><span class="n">to_f</span>
+    <span class="k">elsif</span> <span class="n">token</span> <span class="o">==</span> <span class="s1">&#39;(&#39;</span> <span class="o">||</span> <span class="n">token</span> <span class="o">==</span> <span class="s1">&#39;)&#39;</span>
+      <span class="kp">nil</span>
+    <span class="k">elsif</span> <span class="n">token</span><span class="o">[</span><span class="sr">/\d+/</span><span class="o">]</span>
+      <span class="n">token</span><span class="o">.</span><span class="n">to_i</span>
+    <span class="k">else</span>
+      <span class="n">token</span><span class="o">.</span><span class="n">to_sym</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Как вы знаете, в лиспе мы можем написать наш код используя “вложенные” операторы, то есть вот так: <code>(+ (* 2 2) (- 5 3))</code>.</p>
+
+<p>В результате выполнения этого кода мы получим число 6. Если мы используем наш парсер для этого кода,
+мы получим не совсем то, что нам нужно, поэтому давайте обновим наш тест:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">program</span> <span class="o">=</span> <span class="s1">&#39;(+ (* (1 2) 3) 4)&#39;</span>
+<span class="n">lisp</span> <span class="o">=</span> <span class="no">Lisp</span><span class="o">.</span><span class="n">new</span>
+<span class="n">lisp</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span> <span class="o">==</span> <span class="o">[</span><span class="ss">:+</span><span class="p">,</span> <span class="o">[</span><span class="ss">:*</span><span class="p">,</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">]</span><span class="p">,</span> <span class="mi">3</span><span class="o">]</span><span class="p">,</span> <span class="mi">4</span><span class="o">]</span></code></pre></div>
+
+<p>Как вы могли догадаться - самый очевидный способ исправить наш тест - обойти все элементы массива и если мы встречаем <code>'('</code>,
+то мы просто помещаем все элементы до <code>')'</code> в отдельный массив + делаем это рекурсивно. В итоге наш код принимает следующий вид:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
+  <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
+    <span class="n">read_from_tokens</span><span class="p">(</span><span class="n">tokenize</span><span class="p">(</span><span class="n">program</span><span class="p">))</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="n">chars</span><span class="p">)</span>
+    <span class="n">chars</span>
+      <span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/\s\s+/</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">,</span> <span class="s1">&#39; ( &#39;</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="s1">&#39; ) &#39;</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">read_from_tokens</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+    <span class="k">return</span> <span class="k">if</span> <span class="n">tokens</span><span class="o">.</span><span class="n">empty?</span>
+
+    <span class="n">token</span> <span class="o">=</span> <span class="n">tokens</span><span class="o">.</span><span class="n">shift</span>
+
+    <span class="k">if</span> <span class="s1">&#39;(&#39;</span> <span class="o">==</span> <span class="n">token</span>
+      <span class="n">list</span> <span class="o">=</span> <span class="o">[]</span>
+
+      <span class="k">while</span> <span class="n">tokens</span><span class="o">.</span><span class="n">first</span> <span class="o">!=</span> <span class="s1">&#39;)&#39;</span>
+        <span class="n">list</span> <span class="o">&lt;&lt;</span> <span class="n">read_from_tokens</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+      <span class="k">end</span>
+      <span class="n">tokens</span><span class="o">.</span><span class="n">shift</span>
+
+      <span class="n">list</span>
+    <span class="k">elsif</span> <span class="s1">&#39;)&#39;</span> <span class="o">==</span> <span class="n">token</span>
+      <span class="k">raise</span> <span class="s1">&#39;unexpected )&#39;</span>
+    <span class="k">else</span>
+      <span class="n">atom</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">atom</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">token</span><span class="o">[</span><span class="sr">/\.\d+/</span><span class="o">]</span>
+      <span class="n">token</span><span class="o">.</span><span class="n">to_f</span>
+    <span class="k">elsif</span> <span class="n">token</span><span class="o">[</span><span class="sr">/\d+/</span><span class="o">]</span>
+      <span class="n">token</span><span class="o">.</span><span class="n">to_i</span>
+    <span class="k">else</span>
+      <span class="n">token</span><span class="o">.</span><span class="n">to_sym</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Ура, мы написали наш парсер!
+Теперь перейдем к самому интересному.</p>
+
+<h2 id="eval--">Eval наше все</h2>
+<p>Как я говорил ранее, наша программа состоит из 2ух частей, парсера и <code>eval</code> функции, которая будет выполнять наш код.
+Основная идея, которая лежит в <code>eval</code> функции - это то, что она состоит из непосредственно функции <code>eval</code>,
+которая по первому элементу массива определяет, что за функция передана к нам и переменной <code>env</code> которая 
+является обычным хешем. В <code>env</code> ключ будет являться именем нашей переменной, а значением будет лямбда, которая
+будет выполняться для всех элементов после объявления функции.</p>
+
+<p>Звучит сложно, но давайте реализуем оснавные функции <code>car</code>, <code>cdr</code> и <code>cons</code>:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">env</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="ss">:car</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="p">},</span>
+  <span class="ss">:cdr</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="o">.</span><span class="n">drop</span> <span class="mi">1</span> <span class="p">},</span>
+  <span class="ss">:cons</span> <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">cell</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="o">[</span><span class="n">e</span><span class="o">]</span> <span class="o">+</span> <span class="n">cell</span> <span class="p">},</span>
+<span class="p">}</span></code></pre></div>
+
+<p>Следующее что нам нужно - написать функцию <code>eval</code>, которая будет искать совпадение по первому элементу входящего массива:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">ext</span> <span class="o">=</span> <span class="p">{})</span>
+    <span class="vi">@env</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="ss">:car</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="p">},</span>
+      <span class="ss">:cdr</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="o">.</span><span class="n">drop</span> <span class="mi">1</span> <span class="p">},</span>
+      <span class="ss">:cons</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">cell</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="o">[</span><span class="n">e</span><span class="o">]</span> <span class="o">+</span> <span class="n">cell</span> <span class="p">},</span>
+    <span class="p">}</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span> <span class="o">=</span> <span class="vi">@env</span><span class="p">)</span>
+    <span class="n">env</span><span class="o">[</span><span class="n">exp</span><span class="o">.</span><span class="n">first</span><span class="o">].</span><span class="p">(</span><span class="n">exp</span><span class="o">[</span><span class="mi">1</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="c1"># ...</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Все достаточно просто, но возникает пробелма, что делать, когда первый элемент не символ (число например) и что делать, когда у нас вложенный код?</p>
+
+<p>Давайте обновим нашу функцию, добавив в нее проверку на тип:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">ext</span> <span class="o">=</span> <span class="p">{})</span>
+    <span class="vi">@env</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="ss">:car</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="p">},</span>
+      <span class="ss">:cdr</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="o">.</span><span class="n">drop</span> <span class="mi">1</span> <span class="p">},</span>
+      <span class="ss">:cons</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">cell</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="o">[</span><span class="n">e</span><span class="o">]</span> <span class="o">+</span> <span class="n">cell</span> <span class="p">},</span>
+    <span class="p">}</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span> <span class="o">=</span> <span class="vi">@env</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">exp</span><span class="o">.</span><span class="n">is_a?</span> <span class="no">Numeric</span>
+      <span class="n">exp</span>
+    <span class="k">elsif</span> <span class="n">exp</span><span class="o">.</span><span class="n">is_a?</span> <span class="no">Symbol</span>
+      <span class="n">env</span><span class="o">[</span><span class="n">exp</span><span class="o">]</span>
+    <span class="k">else</span>
+      <span class="n">code</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">exp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+      <span class="n">args</span> <span class="o">=</span> <span class="n">exp</span><span class="o">[</span><span class="mi">1</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">1</span><span class="o">].</span><span class="n">map</span><span class="p">{</span> <span class="o">|</span><span class="n">arg</span><span class="o">|</span> <span class="nb">eval</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="p">}</span>
+      <span class="n">code</span><span class="o">.</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="c1"># ...</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Как вы могли догадаться - кроме функций <code>car</code>, <code>cdr</code> и <code>cons</code> у нас должны быть другие функции.
+Какие-то (например арифмитические) мы можем легко добавить в <code>env</code> переменную, а какие-то нет.
+Поэтому нам придется расширить проверку в <code>eval</code> функции, добавив в нее проверку на имя функции (первого элемента массива)</p>
+
+<p>Например, <code>quote</code> и <code>if</code> функции будут реализованны так:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+  <span class="c1"># ...</span>
+  <span class="k">elsif</span> <span class="n">exp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">==</span> <span class="ss">:quote</span>
+    <span class="n">exp</span><span class="o">[</span><span class="mi">1</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span>
+  <span class="k">elsif</span> <span class="n">exp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">==</span> <span class="ss">:if</span>
+    <span class="n">_</span><span class="p">,</span> <span class="nb">test</span><span class="p">,</span> <span class="n">conseq</span><span class="p">,</span> <span class="n">alt</span> <span class="o">=</span> <span class="n">exp</span>
+    <span class="n">exp</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="nb">test</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="p">?</span> <span class="n">conseq</span> <span class="p">:</span> <span class="n">alt</span>
+    <span class="nb">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+  <span class="c1"># ...</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Немного сложнее для понимания будут функции <code>define</code> и <code>lambda</code>.</p>
+
+<p>Синтаксис <code>define</code> функции выглядит следующим образом:</p>
+
+<div class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">define </span><span class="nv">name</span>
+  <span class="p">(</span><span class="nf">expression</span><span class="p">))</span></code></pre></div>
+
+<p>И как вы заметили, наш код должн создавать новую ключ-значение пару в <code>env</code> хеше:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+  <span class="c1"># ...</span>
+  <span class="k">elsif</span> <span class="n">exp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">==</span> <span class="ss">:define</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">e</span> <span class="o">=</span> <span class="n">exp</span>
+    <span class="n">env</span><span class="o">[</span><span class="n">var</span><span class="o">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+  <span class="c1"># ...</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Осталась последняя функция, функция <code>lambda</code>, которая вызывается следующим образом:</p>
+
+<div class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">arg1,</span> <span class="nv">arg2,</span> <span class="o">...</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">block</span> <span class="nv">of</span> <span class="nv">code</span><span class="p">))</span></code></pre></div>
+
+<p>Первое, что приходит в голову - возвращать новый объект <code>lambda</code> с новым значением <code>env</code> внутри, который будет выполнять наш код:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+  <span class="c1"># ...</span>
+  <span class="k">elsif</span> <span class="n">exp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">==</span> <span class="ss">:lambda</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">e</span> <span class="o">=</span> <span class="n">exp</span>
+    <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">args</span><span class="o">|</span> <span class="nb">self</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="no">Hash</span><span class="o">[</span><span class="n">params</span><span class="o">.</span><span class="n">zip</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="o">]</span><span class="p">))</span> <span class="p">}</span>
+  <span class="c1"># ...</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Как видите, мы реализовали основной функционал, реализацию арифмитических методов, а так же реализацию таких методов как <code>true</code>, <code>false</code>, <code>list</code>, etc я оставляю на совести читателя.</p>
+
+<h2 id="repl">REPL</h2>
+<p>Идея, как и реализация repl невероятно простая: вы, в бесконечном цикле, берете строку от пользователя, обрабатывайте ее, после чего печатаете результат.
+Поэтому</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">repl</span><span class="p">(</span><span class="n">prompt</span> <span class="o">=</span> <span class="s1">&#39;lisp &gt;&gt; &#39;</span><span class="p">)</span>
+  <span class="k">while</span> <span class="kp">true</span>
+    <span class="nb">print</span> <span class="n">prompt</span>
+    <span class="n">program</span> <span class="o">=</span> <span class="nb">gets</span>
+
+    <span class="nb">p</span> <span class="nb">eval</span><span class="p">(</span><span class="n">parse</span><span class="p">(</span><span class="n">program</span><span class="p">))</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
+
+<p>В итоге вы должны получить что-то вроде такого:</p>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text">lisp &gt;&gt; (define pi 3.14)
+3.14
+lisp &gt;&gt; (define circle-area (lambda (r) (* pi (* r r))))
+#&lt;Proc:0x007fa6140c6cc0@lib/rlisp.rb:86 (lambda)&gt;
+lisp &gt;&gt; (circle-area 11)
+379.94</code></pre></div>
+
+<h2 id="section-3">Выводы</h2>
+<p>К концу статьи мы имеем на руках простейший интерпретатор scheme. Его легко расширять, мы написали простейший repl, а так же рассмотрели основную идею работы интерпретатора.</p>
+
+<p>В рамках данной статьи не рассматривались такие важдые аспекты как многопоточность, оптимизация кода, работа с системой и многое другое.
+Об этом мы поговорим в следующих статьях.</p>
+
+<p>http://www.wikiwand.com/ru/S-выражение</p>
+
+</div>
+
+<div class="share_buttons">
+  <div class='shareaholic-canvas' data-app='share_buttons' data-app-id='11548095'></div>
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2015/10/26/get-requiest-with-custom-locale-in-your-tests/">
+            Get request with custom locale in your tests
+            <small>26 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2015/04/05/ruby-memory-profiller-tools/">
+            Memory profiler tools for ruby
+            <small>05 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2015/03/29/specific-color-hash/">
+            Convert string to color hash
+            <small>29 Mar 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'fikysmyblog'; // required: replace example with your forum shortname
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<script type="text/javascript">
+//<![CDATA[
+  (function() {
+    var shr = document.createElement('script');
+    shr.setAttribute('data-cfasync', 'false');
+    shr.src = '//dsms0mj1bbhn4.cloudfront.net/assets/pub/shareaholic.js';
+    shr.type = 'text/javascript'; shr.async = 'true';
+    shr.onload = shr.onreadystatechange = function() {
+      var rs = this.readyState;
+      if (rs && rs != 'complete' && rs != 'loaded') return;
+      var site_id = '9cc17325fe566a8d07d3ee25ce3fa991';
+      try { Shareaholic.init(site_id); } catch (e) {}
+    };
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(shr, s);
+  })();
+//]]>
+</script>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>
