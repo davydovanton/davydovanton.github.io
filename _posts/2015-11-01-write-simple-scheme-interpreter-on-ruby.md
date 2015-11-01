@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Write simple scheme interpreter on ruby"
-description: "В этой серии постов мы напишем простой интерпретатор схемы с простыми командами и реплом"
+description: "In this post we'll write simple scheme interpreter with repl and base functionality on ruby language"
 ---
 
 **TL;DR:** [github repo](https://github.com/davydovanton/rlisp)
@@ -11,8 +11,8 @@ In this article, I want to show you how to do this for a simple lisp compiler.
 
 ## Why scheme and lisp?
 Firstly, lisp is very simple for create and for understanding.
-Lisp (_LISt Processor_) is a family of languages which is based on the idea of S-expressions.
-S-Expression are needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or are the expression of the form `(x . y)` where `x` and `y` are s-expressions.
+Lisp (_LISt Processor_) is a family of languages which is based on the idea of [S-expressions](http://www.wikiwand.com/en/S-expression).
+[S-Expression](http://www.wikiwand.com/en/S-expression) are needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or are the expression of the form `(x . y)` where `x` and `y` are [s-expressions](http://www.wikiwand.com/en/S-expression).
 This expression may be formed as lists (`(1 . ( 2 . 3))` this equals `(1 2 3)`) and trees (`((1 . (2 . 3)) . (4 . 5))`).
 
 Secondly, after creating interpreter you can better understand the language (the author fully understood the environment idea).
@@ -21,8 +21,8 @@ Also you can understand the main idea of compilers and interpreters.
 Now let's begin our journey into the world of compilers and interpreters so that we can write a simple scheme interpreter.
 
 ## Main idea
-Our language will contain two parts: a parser which translates the string to AST and `eval` function.
-This function will take the AST with envariement value and will return the result of the code.
+Our language will contain two parts: a parser which translates the string to [AST](http://www.wikiwand.com/en/Abstract_syntax_tree) and `eval` function.
+This function will take the [AST](http://www.wikiwand.com/en/Abstract_syntax_tree) with envariement value and will return the result of the code.
 
 Schematically, it looks like this:
 {% highlight text %}
@@ -281,5 +281,7 @@ In this article, we did not consider such important concepts as macros, multithr
 These concepts will be discussed in future articles.
 
 ## Further reading
-http://norvig.com/lispy.html
-http://www.wikiwand.com/en/S-expression
+- Lisp interpreter written on python ([http://norvig.com/lispy.html](http://norvig.com/lispy.html))
+- Lisp interpreter written on C lang ([http://www.buildyourownlisp.com](http://www.buildyourownlisp.com))
+- [http://www.wikiwand.com/en/Scheme_(programming_language)](http://www.wikiwand.com/en/Scheme_(programming_language))
+- [http://www.wikiwand.com/en/S-expression](http://www.wikiwand.com/en/S-expression)

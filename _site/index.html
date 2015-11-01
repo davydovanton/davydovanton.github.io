@@ -104,7 +104,7 @@
   
   <div class="post">
     <h1 class="post-title">
-      <a href="/2015/11/01/write-simple-lisp-on-ruby-part-1/">
+      <a href="/2015/11/01/write-simple-scheme-interpreter-on-ruby/">
         Write simple scheme interpreter on ruby
       </a>
     </h1>
@@ -118,8 +118,8 @@ In this article, I want to show you how to do this for a simple lisp compiler.</
 
 <h2 id="why-scheme-and-lisp">Why scheme and lisp?</h2>
 <p>Firstly, lisp is very simple for create and for understanding.
-Lisp (<em>LISt Processor</em>) is a family of languages which is based on the idea of S-expressions.
-S-Expression are needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or are the expression of the form <code>(x . y)</code> where <code>x</code> and <code>y</code> are s-expressions.
+Lisp (<em>LISt Processor</em>) is a family of languages which is based on the idea of <a href="http://www.wikiwand.com/en/S-expression">S-expressions</a>.
+<a href="http://www.wikiwand.com/en/S-expression">S-Expression</a> are needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or are the expression of the form <code>(x . y)</code> where <code>x</code> and <code>y</code> are <a href="http://www.wikiwand.com/en/S-expression">s-expressions</a>.
 This expression may be formed as lists (<code>(1 . ( 2 . 3))</code> this equals <code>(1 2 3)</code>) and trees (<code>((1 . (2 . 3)) . (4 . 5))</code>).</p>
 
 <p>Secondly, after creating interpreter you can better understand the language (the author fully understood the environment idea).
@@ -128,8 +128,8 @@ Also you can understand the main idea of compilers and interpreters.</p>
 <p>Now let’s begin our journey into the world of compilers and interpreters so that we can write a simple scheme interpreter.</p>
 
 <h2 id="main-idea">Main idea</h2>
-<p>Our language will contain two parts: a parser which translates the string to AST and <code>eval</code> function.
-This function will take the AST with envariement value and will return the result of the code.</p>
+<p>Our language will contain two parts: a parser which translates the string to <a href="http://www.wikiwand.com/en/Abstract_syntax_tree">AST</a> and <code>eval</code> function.
+This function will take the <a href="http://www.wikiwand.com/en/Abstract_syntax_tree">AST</a> with envariement value and will return the result of the code.</p>
 
 <p>Schematically, it looks like this:</p>
 
@@ -373,8 +373,12 @@ In this article, we did not consider such important concepts as macros, multithr
 These concepts will be discussed in future articles.</p>
 
 <h2 id="further-reading">Further reading</h2>
-<p>http://norvig.com/lispy.html
-http://www.wikiwand.com/en/S-expression</p>
+<ul>
+  <li>Lisp interpreter written on python (<a href="http://norvig.com/lispy.html">http://norvig.com/lispy.html</a>)</li>
+  <li>Lisp interpreter written on C lang (<a href="http://www.buildyourownlisp.com">http://www.buildyourownlisp.com</a>)</li>
+  <li><a href="http://www.wikiwand.com/en/Scheme_(programming_language)">http://www.wikiwand.com/en/Scheme_(programming_language)</a></li>
+  <li><a href="http://www.wikiwand.com/en/S-expression">http://www.wikiwand.com/en/S-expression</a></li>
+</ul>
 
   </div>
   

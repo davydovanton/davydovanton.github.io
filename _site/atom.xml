@@ -4,7 +4,7 @@
  <title>Anton Davydov</title>
  <link href="http://davydovanton.github.io/atom.xml" rel="self"/>
  <link href="http://davydovanton.github.io/"/>
- <updated>2015-11-02T00:41:44+03:00</updated>
+ <updated>2015-11-02T00:52:38+03:00</updated>
  <id>http://davydovanton.github.io</id>
  <author>
    <name>Anton Davydov</name>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>Write simple scheme interpreter on ruby</title>
-   <link href="http://davydovanton.github.io/2015/11/01/write-simple-lisp-on-ruby-part-1/"/>
+   <link href="http://davydovanton.github.io/2015/11/01/write-simple-scheme-interpreter-on-ruby/"/>
    <updated>2015-11-01T00:00:00+03:00</updated>
-   <id>http://davydovanton.github.io/2015/11/01/write-simple-lisp-on-ruby-part-1</id>
+   <id>http://davydovanton.github.io/2015/11/01/write-simple-scheme-interpreter-on-ruby</id>
    <content type="html">&lt;p&gt;&lt;strong&gt;TL;DR:&lt;/strong&gt; &lt;a href=&quot;https://github.com/davydovanton/rlisp&quot;&gt;github repo&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Every developer has a moment in his life where he wants to write his own programming language.
@@ -24,8 +24,8 @@ In this article, I want to show you how to do this for a simple lisp compiler.&l
 
 &lt;h2 id=&quot;why-scheme-and-lisp&quot;&gt;Why scheme and lisp?&lt;/h2&gt;
 &lt;p&gt;Firstly, lisp is very simple for create and for understanding.
-Lisp (&lt;em&gt;LISt Processor&lt;/em&gt;) is a family of languages which is based on the idea of S-expressions.
-S-Expression are needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or are the expression of the form &lt;code&gt;(x . y)&lt;/code&gt; where &lt;code&gt;x&lt;/code&gt; and &lt;code&gt;y&lt;/code&gt; are s-expressions.
+Lisp (&lt;em&gt;LISt Processor&lt;/em&gt;) is a family of languages which is based on the idea of &lt;a href=&quot;http://www.wikiwand.com/en/S-expression&quot;&gt;S-expressions&lt;/a&gt;.
+&lt;a href=&quot;http://www.wikiwand.com/en/S-expression&quot;&gt;S-Expression&lt;/a&gt; are needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or are the expression of the form &lt;code&gt;(x . y)&lt;/code&gt; where &lt;code&gt;x&lt;/code&gt; and &lt;code&gt;y&lt;/code&gt; are &lt;a href=&quot;http://www.wikiwand.com/en/S-expression&quot;&gt;s-expressions&lt;/a&gt;.
 This expression may be formed as lists (&lt;code&gt;(1 . ( 2 . 3))&lt;/code&gt; this equals &lt;code&gt;(1 2 3)&lt;/code&gt;) and trees (&lt;code&gt;((1 . (2 . 3)) . (4 . 5))&lt;/code&gt;).&lt;/p&gt;
 
 &lt;p&gt;Secondly, after creating interpreter you can better understand the language (the author fully understood the environment idea).
@@ -34,8 +34,8 @@ Also you can understand the main idea of compilers and interpreters.&lt;/p&gt;
 &lt;p&gt;Now let’s begin our journey into the world of compilers and interpreters so that we can write a simple scheme interpreter.&lt;/p&gt;
 
 &lt;h2 id=&quot;main-idea&quot;&gt;Main idea&lt;/h2&gt;
-&lt;p&gt;Our language will contain two parts: a parser which translates the string to AST and &lt;code&gt;eval&lt;/code&gt; function.
-This function will take the AST with envariement value and will return the result of the code.&lt;/p&gt;
+&lt;p&gt;Our language will contain two parts: a parser which translates the string to &lt;a href=&quot;http://www.wikiwand.com/en/Abstract_syntax_tree&quot;&gt;AST&lt;/a&gt; and &lt;code&gt;eval&lt;/code&gt; function.
+This function will take the &lt;a href=&quot;http://www.wikiwand.com/en/Abstract_syntax_tree&quot;&gt;AST&lt;/a&gt; with envariement value and will return the result of the code.&lt;/p&gt;
 
 &lt;p&gt;Schematically, it looks like this:&lt;/p&gt;
 
@@ -279,8 +279,12 @@ In this article, we did not consider such important concepts as macros, multithr
 These concepts will be discussed in future articles.&lt;/p&gt;
 
 &lt;h2 id=&quot;further-reading&quot;&gt;Further reading&lt;/h2&gt;
-&lt;p&gt;http://norvig.com/lispy.html
-http://www.wikiwand.com/en/S-expression&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Lisp interpreter written on python (&lt;a href=&quot;http://norvig.com/lispy.html&quot;&gt;http://norvig.com/lispy.html&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;Lisp interpreter written on C lang (&lt;a href=&quot;http://www.buildyourownlisp.com&quot;&gt;http://www.buildyourownlisp.com&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.wikiwand.com/en/Scheme_(programming_language)&quot;&gt;http://www.wikiwand.com/en/Scheme_(programming_language)&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.wikiwand.com/en/S-expression&quot;&gt;http://www.wikiwand.com/en/S-expression&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 </content>
  </entry>
  
