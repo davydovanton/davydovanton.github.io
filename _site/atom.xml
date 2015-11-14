@@ -4,13 +4,50 @@
  <title>Anton Davydov</title>
  <link href="http://davydovanton.github.io/atom.xml" rel="self"/>
  <link href="http://davydovanton.github.io/"/>
- <updated>2015-11-14T23:10:14+03:00</updated>
+ <updated>2015-11-15T00:02:57+03:00</updated>
  <id>http://davydovanton.github.io</id>
  <author>
    <name>Anton Davydov</name>
    <email>antondavydov.o@gmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>Ignore file lines in git</title>
+   <link href="http://davydovanton.github.io/2015/11/14/ignore-file-lines-in-git/"/>
+   <updated>2015-11-14T00:00:00+03:00</updated>
+   <id>http://davydovanton.github.io/2015/11/14/ignore-file-lines-in-git</id>
+   <content type="html">&lt;p&gt;For example, you have this code and you want to ignore in git lines which contain &lt;code&gt;username&lt;/code&gt; and &lt;code&gt;password&lt;/code&gt; values:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ssh_connect&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;username&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;root&amp;quot;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# ignore this line&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;password&amp;quot;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# ignore this line too&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;ip&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;192.168.1.1&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To ignore some special lines in git you need to:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Create a &lt;code&gt;.gitattributes&lt;/code&gt; in your repository (remember that &lt;code&gt;.gitattributes&lt;/code&gt; will be commited into the repository, if you don’t want that, add it to &lt;code&gt;.git/info/attributes&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;Add &lt;code&gt;*.rb filter=ignoreline&lt;/code&gt; (run filter named ignoreline on all &lt;code&gt;*.rb&lt;/code&gt; files)&lt;/li&gt;
+  &lt;li&gt;Now, we need to define ignoreline filter in &lt;code&gt;.gitconfig&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;git config --global filter.ignoreline.clean &quot;sed &#39;/#ignoreline$/&#39;d&quot;&lt;/code&gt; (delete theses lines)&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;git config --global filter.ignoreline.smudge cat&lt;/code&gt; (do nothing when pulling file from the repository)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;And then, you can ignore some lines useing &lt;code&gt;#ignoreline&lt;/code&gt; comment:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ssh_connect&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;username&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;root&amp;quot;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#ignoreline&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;password&amp;quot;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#ignoreline&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;ip&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;192.168.1.1&amp;quot;&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Happy hacking!&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Write simple scheme interpreter on ruby</title>

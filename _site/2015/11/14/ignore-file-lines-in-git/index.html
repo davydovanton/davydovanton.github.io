@@ -11,7 +11,7 @@
 
   <title>
     
-      Convert string to color hash &middot; Anton Davydov
+      Ignore file lines in git &middot; Anton Davydov
     
   </title>
 
@@ -30,6 +30,8 @@
   <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
 
   <!-- SEO -->
+  
+    <meta name="description" content="In this post we'll use git to ignore special lines in file" />
   
 
   <link rel="author" href="https://plus.google.com/u/0/104253015484296728880"/>
@@ -107,35 +109,48 @@
 
       <div class="container content">
         <div class="post">
-  <h1 class="post-title">Convert string to color hash</h1>
-  <span class="post-date">29 Mar 2015</span>
-  <p>So it happens that sometimes you need to convert string to color hash. I think that
-<code>Digest::MD5</code> class is easiest way for this. For this you need call hexdigest method
-with necessary string.</p>
+  <h1 class="post-title">Ignore file lines in git</h1>
+  <span class="post-date">14 Nov 2015</span>
+  <p>For example, you have this code and you want to ignore in git lines which contain <code>username</code> and <code>password</code> values:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Digest</span><span class="o">::</span><span class="no">MD5</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">(</span><span class="s1">&#39;My string&#39;</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">5</span><span class="o">]</span> <span class="c1"># =&gt; &#39;a537d0&#39;</span></code></pre></div>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ssh_connect</span>
+  <span class="n">username</span> <span class="o">=</span> <span class="s2">&quot;root&quot;</span> <span class="c1"># ignore this line</span>
+  <span class="n">password</span> <span class="o">=</span> <span class="s2">&quot;password&quot;</span> <span class="c1"># ignore this line too</span>
+  <span class="n">ip</span> <span class="o">=</span> <span class="s2">&quot;192.168.1.1&quot;</span>
+  <span class="c1"># ...</span>
+<span class="k">end</span></code></pre></div>
 
-<p>And if you will create rgb color you need convert hex to decimal with <code>to_i(16)</code> method.</p>
+<p>To ignore some special lines in git you need to:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Digest</span><span class="o">::</span><span class="no">MD5</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">(</span><span class="n">worker</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">5</span><span class="o">]</span>
-  <span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="sr">/../</span><span class="p">)</span>
-  <span class="o">.</span><span class="n">map</span><span class="p">{</span> <span class="o">|</span><span class="n">color</span><span class="o">|</span> <span class="n">color</span><span class="o">.</span><span class="n">to_i</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="p">}</span></code></pre></div>
+<ol>
+  <li>Create a <code>.gitattributes</code> in your repository (remember that <code>.gitattributes</code> will be commited into the repository, if you don’t want that, add it to <code>.git/info/attributes</code>)</li>
+  <li>Add <code>*.rb filter=ignoreline</code> (run filter named ignoreline on all <code>*.rb</code> files)</li>
+  <li>Now, we need to define ignoreline filter in <code>.gitconfig</code></li>
+  <li><code>git config --global filter.ignoreline.clean "sed '/#ignoreline$/'d"</code> (delete theses lines)</li>
+  <li><code>git config --global filter.ignoreline.smudge cat</code> (do nothing when pulling file from the repository)</li>
+</ol>
 
+<p>And then, you can ignore some lines useing <code>#ignoreline</code> comment:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ssh_connect</span>
+  <span class="n">username</span> <span class="o">=</span> <span class="s2">&quot;root&quot;</span> <span class="c1">#ignoreline</span>
+  <span class="n">password</span> <span class="o">=</span> <span class="s2">&quot;password&quot;</span> <span class="c1">#ignoreline</span>
+  <span class="n">ip</span> <span class="o">=</span> <span class="s2">&quot;192.168.1.1&quot;</span>
+  <span class="c1"># ...</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Happy hacking!</p>
 
 
   <div class="tag-cloud post-tags">
     <ul>
     
       <li>
-        <a href="/tags/#color hash"><span>color hash</span></a>
-      </li>
-    
-      <li>
-        <a href="/tags/#ruby"><span>ruby</span></a>
-      </li>
-    
-      <li>
         <a href="/tags/#tips"><span>tips</span></a>
+      </li>
+    
+      <li>
+        <a href="/tags/#git"><span>git</span></a>
       </li>
     
     </ul>
@@ -152,15 +167,6 @@ with necessary string.</p>
     
       <li>
         <h3>
-          <a href="/2015/11/14/ignore-file-lines-in-git/">
-            Ignore file lines in git
-            <small>14 Nov 2015</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
           <a href="/2015/11/01/write-simple-scheme-interpreter-on-ruby/">
             Write simple scheme interpreter on ruby
             <small>01 Nov 2015</small>
@@ -173,6 +179,15 @@ with necessary string.</p>
           <a href="/2015/10/26/get-requiest-with-custom-locale-in-your-tests/">
             Get request with custom locale in your tests
             <small>26 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2015/04/05/ruby-memory-profiller-tools/">
+            Memory profiler tools for ruby
+            <small>05 Apr 2015</small>
           </a>
         </h3>
       </li>
