@@ -1,6 +1,10 @@
 ---
 layout: post
 title: "Convert string to color hash"
+tags:
+  - color hash
+  - ruby
+  - tips
 ---
 
 So it happens that sometimes you need to convert string to color hash. I think that
