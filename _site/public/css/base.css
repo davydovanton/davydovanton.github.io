@@ -1,0 +1,47 @@
+.tag-name {
+  color: #515151;
+  }
+.tags-list {
+  list-style-type: none;
+  }
+  .tags-list__i {
+    margin: 0 0 0 0;
+    }
+    .tags-list__date {
+      font-size: 14px;
+      }
+
+.tag-cloud ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.tag-cloud ul li {
+	display: inline-block;
+	margin: 0 .3em .3em 0;
+	padding: 0;
+}
+.tag-cloud ul li a {
+	display: inline-block;
+	max-width: 100px;
+	height: 28px;
+	line-height: 28px;
+	padding: 0 1em;
+	background-color: #fff;
+	border: 1px solid #aaa;
+	border-radius: 3px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	color: #333;
+	font-size: 13px;
+	text-decoration: none;
+	-webkit-transition: .2s;
+	transition: .2s;
+}
+.tag-cloud ul li a:hover {
+	background-color: #3498db;
+	border: 1px solid #3498db;
+	color: #fff;
+}
+

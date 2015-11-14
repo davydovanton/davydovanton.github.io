@@ -2,6 +2,10 @@
 layout: post
 title: "Write simple scheme interpreter on ruby"
 description: "In this post we'll write simple scheme interpreter with repl and base functionality on ruby language"
+tags:
+  - lisp
+  - ruby
+  - interpreters
 ---
 
 **TL;DR:** [github repo](https://github.com/davydovanton/rlisp)

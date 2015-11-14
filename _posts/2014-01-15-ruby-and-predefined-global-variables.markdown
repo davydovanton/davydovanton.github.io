@@ -1,6 +1,10 @@
 ---
 layout: post
 title: "Ruby и special/predefined variables"
+tags:
+  - ruby
+  - global variables
+  - russian
 ---
 
 Не так давно я обнаружил интересный пример в одной замечательной книге. С этого примера, я бы и хотел начать наш разговор.

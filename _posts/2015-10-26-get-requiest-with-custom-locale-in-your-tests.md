@@ -2,6 +2,10 @@
 layout: post
 title: "Get request with custom locale in your tests"
 description: "Send specifiy locale in rspec or minitest get request"
+tags:
+  - test
+  - ruby
+  - tips
 ---
 
 Sometimes in tests you have to set special locale for `get` request.
