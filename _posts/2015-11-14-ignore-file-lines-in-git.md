@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Ignore file lines in git"
-description: "In this post we'll use git to ignore special lines in file"
+description: "In this post we'll use git filter option to ignore special lines in file"
 tags:
   - tips
   - git
