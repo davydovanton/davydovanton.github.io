@@ -121,19 +121,10 @@
 
     <span class="post-date">13 Dec 2015</span>
 
-    <p>Если вы создали методы которые возвращатю содержимое блока и вызываете их в erb (slim, haml, etc) у вас могут возникнуть проблемы.</p>
+    <p>If you want to render some result of ruby block in your layout file, you may run into some problems.
+For example, your result may be repeated on page or you can get something worse.</p>
 
-<p>If you want to render some result of ruby block in your layout file you may have some problems.</p>
-
-<p>Например - репитинг контента или еще что хуже.</p>
-
-<p>for example - your result may be repeated on page or you can get something worse.</p>
-
-<p>On this post I’ll show how you can solve this problem.</p>
-
-<p>Пускай наши методы выглядят так:</p>
-
-<p>Let our methods are as follows:</p>
+<p>let’s assume we have these methods:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">add_to_head</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
   <span class="vi">@head_html</span> <span class="o">||=</span> <span class="o">[]</span>
@@ -145,24 +136,22 @@
   <span class="vi">@head_html</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:call</span><span class="p">)</span><span class="o">.</span><span class="n">join</span>
 <span class="k">end</span></code></pre></div>
 
-<p>Вы можете использовать метод <code>captire</code> который включен в <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-capture">rails</a> и <a href="https://github.com/sinatra/sinatra-contrib#common-extensions">sinatra-contrib</a> библиотеки.</p>
+<p>Of cource you can use <code>captire</code> method from <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-capture">rails</a> and <a href="https://github.com/sinatra/sinatra-contrib#common-extensions">sinatra-contrib</a> librares.
+But what will you do if you can’t use these methods or you need something easier?</p>
 
-<p>Of cource you can use <code>captire</code> method from <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-capture">rails</a> and <a href="https://github.com/sinatra/sinatra-contrib#common-extensions">sinatra-contrib</a> librares.</p>
-
-<p>Но что делать, если у вас нет возможности использовать эти методы или они имеют слишком большой оверхед для конкретной задачи?</p>
-
-<p>But what will you do if you can’t use this methods or you’ll need something easier?</p>
-
-<p>Я сталкивался с подобной проблемой (например в одном из пр в сайдкик), которую я решил собственным методом <code>capture</code> для erb файлов</p>
-
-<p>I faced a similar problem (in sidekiq for example) and for solve this problem I use own <code>capture</code> method for layout files.</p>
+<p>I faced a similar problem (<a href="https://github.com/mperham/sidekiq/pull/2270">for example, in sidekiq</a>) and I used own <code>capture</code> method for layout files.</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">capture</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
   <span class="n">block</span><span class="o">.</span><span class="n">call</span>
   <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">block</span><span class="o">.</span><span class="n">binding</span><span class="p">)</span>
 <span class="k">end</span></code></pre></div>
 
-<p>Надеюсь это будет вам полезно.</p>
+<p>And after that we can update our <code>display_custom_head</code> method:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">display_custom_head</span>
+  <span class="k">return</span> <span class="k">unless</span> <span class="vi">@head_html</span>
+  <span class="vi">@head_html</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">block</span><span class="o">|</span> <span class="n">capture</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span> <span class="p">}</span><span class="o">.</span><span class="n">join</span>
+<span class="k">end</span></code></pre></div>
 
 <p>I hope it will be useful to you  as well as for me at one time.</p>
 

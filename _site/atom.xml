@@ -4,7 +4,7 @@
  <title>Anton Davydov</title>
  <link href="http://davydovanton.github.io/atom.xml" rel="self"/>
  <link href="http://davydovanton.github.io/"/>
- <updated>2015-12-13T22:24:43+03:00</updated>
+ <updated>2015-12-13T23:13:17+03:00</updated>
  <id>http://davydovanton.github.io</id>
  <author>
    <name>Anton Davydov</name>
@@ -17,19 +17,10 @@
    <link href="http://davydovanton.github.io/2015/12/13/render-ruby-block-in-layout-file/"/>
    <updated>2015-12-13T00:00:00+03:00</updated>
    <id>http://davydovanton.github.io/2015/12/13/render-ruby-block-in-layout-file</id>
-   <content type="html">&lt;p&gt;Если вы создали методы которые возвращатю содержимое блока и вызываете их в erb (slim, haml, etc) у вас могут возникнуть проблемы.&lt;/p&gt;
+   <content type="html">&lt;p&gt;If you want to render some result of ruby block in your layout file, you may run into some problems.
+For example, your result may be repeated on page or you can get something worse.&lt;/p&gt;
 
-&lt;p&gt;If you want to render some result of ruby block in your layout file you may have some problems.&lt;/p&gt;
-
-&lt;p&gt;Например - репитинг контента или еще что хуже.&lt;/p&gt;
-
-&lt;p&gt;for example - your result may be repeated on page or you can get something worse.&lt;/p&gt;
-
-&lt;p&gt;On this post I’ll show how you can solve this problem.&lt;/p&gt;
-
-&lt;p&gt;Пускай наши методы выглядят так:&lt;/p&gt;
-
-&lt;p&gt;Let our methods are as follows:&lt;/p&gt;
+&lt;p&gt;let’s assume we have these methods:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;add_to_head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
   &lt;span class=&quot;vi&quot;&gt;@head_html&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;
@@ -41,24 +32,22 @@
   &lt;span class=&quot;vi&quot;&gt;@head_html&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Вы можете использовать метод &lt;code&gt;captire&lt;/code&gt; который включен в &lt;a href=&quot;http://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-capture&quot;&gt;rails&lt;/a&gt; и &lt;a href=&quot;https://github.com/sinatra/sinatra-contrib#common-extensions&quot;&gt;sinatra-contrib&lt;/a&gt; библиотеки.&lt;/p&gt;
+&lt;p&gt;Of cource you can use &lt;code&gt;captire&lt;/code&gt; method from &lt;a href=&quot;http://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-capture&quot;&gt;rails&lt;/a&gt; and &lt;a href=&quot;https://github.com/sinatra/sinatra-contrib#common-extensions&quot;&gt;sinatra-contrib&lt;/a&gt; librares.
+But what will you do if you can’t use these methods or you need something easier?&lt;/p&gt;
 
-&lt;p&gt;Of cource you can use &lt;code&gt;captire&lt;/code&gt; method from &lt;a href=&quot;http://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-capture&quot;&gt;rails&lt;/a&gt; and &lt;a href=&quot;https://github.com/sinatra/sinatra-contrib#common-extensions&quot;&gt;sinatra-contrib&lt;/a&gt; librares.&lt;/p&gt;
-
-&lt;p&gt;Но что делать, если у вас нет возможности использовать эти методы или они имеют слишком большой оверхед для конкретной задачи?&lt;/p&gt;
-
-&lt;p&gt;But what will you do if you can’t use this methods or you’ll need something easier?&lt;/p&gt;
-
-&lt;p&gt;Я сталкивался с подобной проблемой (например в одном из пр в сайдкик), которую я решил собственным методом &lt;code&gt;capture&lt;/code&gt; для erb файлов&lt;/p&gt;
-
-&lt;p&gt;I faced a similar problem (in sidekiq for example) and for solve this problem I use own &lt;code&gt;capture&lt;/code&gt; method for layout files.&lt;/p&gt;
+&lt;p&gt;I faced a similar problem (&lt;a href=&quot;https://github.com/mperham/sidekiq/pull/2270&quot;&gt;for example, in sidekiq&lt;/a&gt;) and I used own &lt;code&gt;capture&lt;/code&gt; method for layout files.&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;capture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt;
   &lt;span class=&quot;nb&quot;&gt;eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;binding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Надеюсь это будет вам полезно.&lt;/p&gt;
+&lt;p&gt;And after that we can update our &lt;code&gt;display_custom_head&lt;/code&gt; method:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;display_custom_head&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;unless&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@head_html&lt;/span&gt;
+  &lt;span class=&quot;vi&quot;&gt;@head_html&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;map&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;capture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;I hope it will be useful to you  as well as for me at one time.&lt;/p&gt;
 
