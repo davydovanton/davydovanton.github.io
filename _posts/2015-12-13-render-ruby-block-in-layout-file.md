@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "Rendering ruby block code in layout file"
-description: "In this post we'll create own implementation of capture method for rendering ruby block code in layout file"
+title: "Rendering ruby block result in layout file"
+description: "In this post we'll create own implementation of capture method for rendering ruby block result in layout file"
 tags:
   - ruby
   - layout

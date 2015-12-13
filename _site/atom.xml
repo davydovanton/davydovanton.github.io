@@ -4,7 +4,7 @@
  <title>Anton Davydov</title>
  <link href="http://davydovanton.github.io/atom.xml" rel="self"/>
  <link href="http://davydovanton.github.io/"/>
- <updated>2015-12-13T23:13:17+03:00</updated>
+ <updated>2015-12-13T23:17:20+03:00</updated>
  <id>http://davydovanton.github.io</id>
  <author>
    <name>Anton Davydov</name>
@@ -13,7 +13,7 @@
 
  
  <entry>
-   <title>Rendering ruby block code in layout file</title>
+   <title>Rendering ruby block result in layout file</title>
    <link href="http://davydovanton.github.io/2015/12/13/render-ruby-block-in-layout-file/"/>
    <updated>2015-12-13T00:00:00+03:00</updated>
    <id>http://davydovanton.github.io/2015/12/13/render-ruby-block-in-layout-file</id>
