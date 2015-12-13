@@ -1,10 +1,22 @@
 ---
 layout: post
-title: "Рендеринг блока в erb"
+title: "Rendering ruby block code in layout file"
+description: "In this post we'll create own implementation of capture method for rendering ruby block code in layout file"
+tags:
+  - ruby
+  - layout
+  - bicycle
 ---
 
-Если вы создали методы которые возвращатю содержимое блока и вызываете их в erb (slim, haml, etc) у вас могут возникнуть проблемы. Например - репитинг контента или еще что хуже. 
+Если вы создали методы которые возвращатю содержимое блока и вызываете их в erb (slim, haml, etc) у вас могут возникнуть проблемы.
+If you want to render some result of ruby block in your layout file you may have some problems.
+
+Например - репитинг контента или еще что хуже.
+for example - your result may be repeated on page or you can get something worse.
+
 Пускай наши методы выглядят так:
+Let our methods are as follows:
+
 
 ``` ruby
 def add_to_head(&block)
@@ -18,8 +30,14 @@ def display_custom_head
 end
 ```
 
-Вы можете использовать метод `captire` который включен в [rails](http://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-capture) и [sinatra-contrib](https://github.com/sinatra/sinatra-contrib#common-extensions) библиотеки. Но что делать, если у вас нет возможности использовать эти методы или они имеют слишком большой оверхед для конкретной задачи?
-Как раз такой случай возник у меня в pull request-е в sidekiq, где я написал простой вариант метода `capture` для erb файлов:
+Вы можете использовать метод `captire` который включен в [rails](http://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-capture) и [sinatra-contrib](https://github.com/sinatra/sinatra-contrib#common-extensions) библиотеки.
+Of cource you can use `captire` method from [rails](http://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-capture) and [sinatra-contrib](https://github.com/sinatra/sinatra-contrib#common-extensions) librares.
+
+Но что делать, если у вас нет возможности использовать эти методы или они имеют слишком большой оверхед для конкретной задачи?
+But what will you do if you can't use this methods or you'll need something easier?
+
+Я сталкивался с подобной проблемой (например в одном из пр в сайдкик), которую я решил собственным методом `capture` для erb файлов
+I faced a similar problem (in sidekiq for example) and for solve this problem I use own `capture` method for layout files.
 
 ``` ruby
 def capture(&block)
@@ -29,4 +47,6 @@ end
 ```
 
 Надеюсь это будет вам полезно.
+I hope it will be useful to you  as well as for me at one time.
+
 Happy hacking!
