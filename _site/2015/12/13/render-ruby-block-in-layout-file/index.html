@@ -11,7 +11,7 @@
 
   <title>
     
-      Get request with custom locale in your tests &middot; Anton Davydov
+      Rendering ruby block code in layout file &middot; Anton Davydov
     
   </title>
 
@@ -31,7 +31,7 @@
 
   <!-- SEO -->
   
-    <meta name="description" content="Send specifiy locale in rspec or minitest get request" />
+    <meta name="description" content="In this post we'll create own implementation of capture method for rendering ruby block code in layout file" />
   
 
   <link rel="author" href="https://plus.google.com/u/0/104253015484296728880"/>
@@ -113,34 +113,69 @@
 
       <div class="container content">
         <div class="post">
-  <h1 class="post-title">Get request with custom locale in your tests</h1>
-  <span class="post-date">26 Oct 2015</span>
-  <p>Sometimes in tests you have to set special locale for <code>get</code> request.
-For example you want to <a href="https://github.com/mperham/sidekiq/blob/master/test/test_web.rb#L33-L50">test selecting locale language</a>.
-For this you have to set locale in <code>'HTTP_ACCEPT_LANGUAGE'</code> variable in params hash.</p>
+  <h1 class="post-title">Rendering ruby block code in layout file</h1>
+  <span class="post-date">13 Dec 2015</span>
+  <p>Если вы создали методы которые возвращатю содержимое блока и вызываете их в erb (slim, haml, etc) у вас могут возникнуть проблемы.</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">it</span> <span class="s1">&#39;your test description&#39;</span> <span class="k">do</span>
-  <span class="n">rackenv</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;HTTP_ACCEPT_LANGUAGE&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;ru,en&#39;</span><span class="p">}</span>
-  <span class="n">get</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="p">{},</span> <span class="n">rackenv</span>
+<p>If you want to render some result of ruby block in your layout file you may have some problems.</p>
 
-  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+<p>Например - репитинг контента или еще что хуже.</p>
+
+<p>for example - your result may be repeated on page or you can get something worse.</p>
+
+<p>On this post I’ll show how you can solve this problem.</p>
+
+<p>Пускай наши методы выглядят так:</p>
+
+<p>Let our methods are as follows:</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">add_to_head</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+  <span class="vi">@head_html</span> <span class="o">||=</span> <span class="o">[]</span>
+  <span class="vi">@head_html</span> <span class="o">&lt;&lt;</span> <span class="n">block</span> <span class="k">if</span> <span class="nb">block_given?</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">display_custom_head</span>
+  <span class="k">return</span> <span class="k">unless</span> <span class="vi">@head_html</span>
+  <span class="vi">@head_html</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:call</span><span class="p">)</span><span class="o">.</span><span class="n">join</span>
 <span class="k">end</span></code></pre></div>
 
+<p>Вы можете использовать метод <code>captire</code> который включен в <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-capture">rails</a> и <a href="https://github.com/sinatra/sinatra-contrib#common-extensions">sinatra-contrib</a> библиотеки.</p>
+
+<p>Of cource you can use <code>captire</code> method from <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-capture">rails</a> and <a href="https://github.com/sinatra/sinatra-contrib#common-extensions">sinatra-contrib</a> librares.</p>
+
+<p>Но что делать, если у вас нет возможности использовать эти методы или они имеют слишком большой оверхед для конкретной задачи?</p>
+
+<p>But what will you do if you can’t use this methods or you’ll need something easier?</p>
+
+<p>Я сталкивался с подобной проблемой (например в одном из пр в сайдкик), которую я решил собственным методом <code>capture</code> для erb файлов</p>
+
+<p>I faced a similar problem (in sidekiq for example) and for solve this problem I use own <code>capture</code> method for layout files.</p>
+
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">capture</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+  <span class="n">block</span><span class="o">.</span><span class="n">call</span>
+  <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">block</span><span class="o">.</span><span class="n">binding</span><span class="p">)</span>
+<span class="k">end</span></code></pre></div>
+
+<p>Надеюсь это будет вам полезно.</p>
+
+<p>I hope it will be useful to you  as well as for me at one time.</p>
+
+<p>Happy hacking!</p>
 
 
   <div class="tag-cloud post-tags">
     <ul>
     
       <li>
-        <a href="/tags/#test"><span>test</span></a>
-      </li>
-    
-      <li>
         <a href="/tags/#ruby"><span>ruby</span></a>
       </li>
     
       <li>
-        <a href="/tags/#tips"><span>tips</span></a>
+        <a href="/tags/#layout"><span>layout</span></a>
+      </li>
+    
+      <li>
+        <a href="/tags/#bicycle"><span>bicycle</span></a>
       </li>
     
     </ul>
@@ -157,15 +192,6 @@ For this you have to set locale in <code>'HTTP_ACCEPT_LANGUAGE'</code> variable 
     
       <li>
         <h3>
-          <a href="/2015/12/13/render-ruby-block-in-layout-file/">
-            Rendering ruby block code in layout file
-            <small>13 Dec 2015</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
           <a href="/2015/11/14/ignore-file-lines-in-git/">
             Ignore file lines in git
             <small>14 Nov 2015</small>
@@ -178,6 +204,15 @@ For this you have to set locale in <code>'HTTP_ACCEPT_LANGUAGE'</code> variable 
           <a href="/2015/11/01/write-simple-scheme-interpreter-on-ruby/">
             Write simple scheme interpreter on ruby
             <small>01 Nov 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2015/10/26/get-requiest-with-custom-locale-in-your-tests/">
+            Get request with custom locale in your tests
+            <small>26 Oct 2015</small>
           </a>
         </h3>
       </li>
