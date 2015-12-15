@@ -11,7 +11,7 @@
 
   <title>
     
-      Memory profiler tools for ruby &middot; Anton Davydov
+      Profiling minitest examples with Stackprof &middot; Anton Davydov
     
   </title>
 
@@ -31,7 +31,7 @@
 
   <!-- SEO -->
   
-    <meta name="description" content="How to profile you ruby code" />
+    <meta name="description" content="In this post we'll min minitest examples with Stackprof profiling gem" />
   
 
   <link rel="author" href="https://plus.google.com/u/0/104253015484296728880"/>
@@ -113,70 +113,51 @@
 
       <div class="container content">
         <div class="post">
-  <h1 class="post-title">Memory profiler tools for ruby</h1>
-  <span class="post-date">05 Apr 2015</span>
-  <p>Memory profiler tools for ruby It so happened that I was need know how much ruby objects created
-for each call sidekiq <code>perform_async</code> method
-(<a href="https://github.com/mperham/sidekiq/pull/2288">mperham/sidekiq#2288</a>).
-That’s why I decided to create list with tools which helps you to know all required information.</p>
+  <h1 class="post-title">Profiling minitest examples with Stackprof</h1>
+  <span class="post-date">15 Dec 2015</span>
+  <p>Today I read a nice blog post by Kir Shatrov about <a href="http://blog.iempire.ru/2015/10/13/profiling-specs">Profiling RSpec examples with Stackprof</a>
+and I wondered if I could repeat this trick with minitest? This question is very important for me
+because I ofen use minitest for my job and OSS projects. Also a lot of cool projects use minitest
+(for example, sidekiq, rails, lotus, etc).</p>
 
-<h2 id="ruby-gc">1. Ruby GC</h2>
-<p>Sam Saffron has written great post, in which he talk about ruby garbage collector and wonderful
-<code>GC.start</code> method which returns data hash:</p>
+<p>In reality, to do that in minitest as easy as in RSpec, and the only difference is that you need
+to install a separate gem.</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="mo">001</span> <span class="o">&gt;</span> <span class="no">GC</span><span class="o">.</span><span class="n">stat</span>
-<span class="c1"># =&gt; {:count=&gt;21, :heap_allocated_pages=&gt;236, :heap_sorted_length=&gt;237, :heap_allocatable_pages=&gt;0, :heap_available_slots=&gt;96193, :heap_live_slots=&gt;95354, … }</span></code></pre></div>
+<ol>
+  <li>Firstly you have to install <a href="https://github.com/splattael/minitest-around">minitest-around</a> gem;</li>
+  <li>And secondly you have to add this block of code to your <code>test_helper</code> file;</li>
+</ol>
 
-<p>Also author mentions a <code>ObjectSpace</code> module that lets you know information about object/memory management.
-For example you can easily know general number of created objects. For this you need write this code:</p>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># test/test_helper.rb</span>
+<span class="nb">require</span> <span class="s1">&#39;stackprof&#39;</span>
+<span class="nb">require</span> <span class="s1">&#39;minitest/around/spec&#39;</span>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="mo">002</span> <span class="o">&gt;</span> <span class="no">ObjectSpace</span><span class="o">.</span><span class="n">count_objects</span><span class="o">[</span><span class="ss">:TOTAL</span><span class="o">]</span>
-<span class="c1"># =&gt; 96193</span></code></pre></div>
+<span class="k">class</span> <span class="nc">Minitest</span><span class="o">::</span><span class="no">Test</span>
+  <span class="k">def</span> <span class="nf">around</span><span class="p">(</span><span class="o">&amp;</span><span class="n">example</span><span class="p">)</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;path/to/repo/tmp/stackprof.dump&quot;</span>
+    <span class="no">StackProf</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="ss">mode</span><span class="p">:</span> <span class="ss">:object</span><span class="p">,</span> <span class="ss">out</span><span class="p">:</span> <span class="n">path</span><span class="o">.</span><span class="n">to_s</span><span class="p">)</span> <span class="k">do</span>
+      <span class="n">example</span><span class="o">.</span><span class="n">call</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></div>
 
-<h2 id="ruby-memory-profiler">2. Ruby Memory Profiler</h2>
-<p>Also Sam wrote great tool (<a href="https://github.com/SamSaffron/memory_profiler">ruby-memory-profiler</a>) which provide
-easily display all required information for any code in block. For this you will need call something like
-this (I called this code in my sidekiq reduce allocation PR):</p>
+<p>Happy profiling!</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">MemoryProfiler</span><span class="o">.</span><span class="n">report</span><span class="p">{</span> <span class="mi">100</span><span class="o">.</span><span class="n">times</span><span class="p">{</span> <span class="no">HardWorker</span><span class="o">.</span><span class="n">perform_async</span> <span class="p">}</span> <span class="p">}</span><span class="o">.</span><span class="n">pretty_print</span></code></pre></div>
-
-<h2 id="ruby-prof">3. ruby-prof</h2>
-<p>General features:</p>
-
-<ul>
-  <li>display <a href="https://github.com/ruby-prof/ruby-prof#reports">different</a> reports;</li>
-  <li>fast;</li>
-  <li>easily profiles rails apps;</li>
-</ul>
-
-<p>How to use:</p>
-
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">&#39;ruby-prof&#39;</span>
-
-<span class="c1"># Profile the code</span>
-<span class="no">RubyProf</span><span class="o">.</span><span class="n">start</span>
-<span class="c1"># [code to profile]</span>
-<span class="no">RubyProf</span><span class="o">.</span><span class="n">pause</span>
-<span class="c1"># [other code]</span>
-<span class="no">RubyProf</span><span class="o">.</span><span class="n">resume</span>
-<span class="c1"># [code to profile]</span>
-<span class="n">result</span> <span class="o">=</span> <span class="no">RubyProf</span><span class="o">.</span><span class="n">stop</span></code></pre></div>
-
-<h2 id="conclusions">Conclusions</h2>
-<p>Profiling Ruby isn’t as difficult as it seems at first glance. There are a lot of great
-libraries. The only thing I was missing — profiling the code from a file, but I’m sure it will soon add
-(maybe it will add myself ☺ ).</p>
 
 
   <div class="tag-cloud post-tags">
     <ul>
     
       <li>
-        <a href="/tags/#profile"><span>profile</span></a>
+        <a href="/tags/#ruby"><span>ruby</span></a>
       </li>
     
       <li>
-        <a href="/tags/#ruby"><span>ruby</span></a>
+        <a href="/tags/#profiling"><span>profiling</span></a>
+      </li>
+    
+      <li>
+        <a href="/tags/#minitest"><span>minitest</span></a>
       </li>
     
     </ul>
@@ -193,15 +174,6 @@ libraries. The only thing I was missing — profiling the code from a file, 
     
       <li>
         <h3>
-          <a href="/2015/12/15/stackprof-with-minitest/">
-            Profiling minitest examples with Stackprof
-            <small>15 Dec 2015</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
           <a href="/2015/12/13/render-ruby-block-in-layout-file/">
             Rendering ruby block result in layout file
             <small>13 Dec 2015</small>
@@ -214,6 +186,15 @@ libraries. The only thing I was missing — profiling the code from a file, 
           <a href="/2015/11/14/ignore-file-lines-in-git/">
             Ignore file lines in git
             <small>14 Nov 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2015/11/01/write-simple-scheme-interpreter-on-ruby/">
+            Write simple scheme interpreter on ruby
+            <small>01 Nov 2015</small>
           </a>
         </h3>
       </li>

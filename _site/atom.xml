@@ -4,13 +4,49 @@
  <title>Anton Davydov</title>
  <link href="http://davydovanton.github.io/atom.xml" rel="self"/>
  <link href="http://davydovanton.github.io/"/>
- <updated>2015-12-13T23:17:20+03:00</updated>
+ <updated>2015-12-15T18:54:25+03:00</updated>
  <id>http://davydovanton.github.io</id>
  <author>
    <name>Anton Davydov</name>
    <email>antondavydov.o@gmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>Profiling minitest examples with Stackprof</title>
+   <link href="http://davydovanton.github.io/2015/12/15/stackprof-with-minitest/"/>
+   <updated>2015-12-15T00:00:00+03:00</updated>
+   <id>http://davydovanton.github.io/2015/12/15/stackprof-with-minitest</id>
+   <content type="html">&lt;p&gt;Today I read a nice blog post by Kir Shatrov about &lt;a href=&quot;http://blog.iempire.ru/2015/10/13/profiling-specs&quot;&gt;Profiling RSpec examples with Stackprof&lt;/a&gt;
+and I wondered if I could repeat this trick with minitest? This question is very important for me
+because I ofen use minitest for my job and OSS projects. Also a lot of cool projects use minitest
+(for example, sidekiq, rails, lotus, etc).&lt;/p&gt;
+
+&lt;p&gt;In reality, to do that in minitest as easy as in RSpec, and the only difference is that you need
+to install a separate gem.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Firstly you have to install &lt;a href=&quot;https://github.com/splattael/minitest-around&quot;&gt;minitest-around&lt;/a&gt; gem;&lt;/li&gt;
+  &lt;li&gt;And secondly you have to add this block of code to your &lt;code&gt;test_helper&lt;/code&gt; file;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# test/test_helper.rb&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;stackprof&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;minitest/around/spec&amp;#39;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Minitest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Test&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;around&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;example&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;path/to/repo/tmp/stackprof.dump&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;no&quot;&gt;StackProf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;mode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;example&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;call&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Happy profiling!&lt;/p&gt;
+
+</content>
+ </entry>
  
  <entry>
    <title>Rendering ruby block result in layout file</title>
