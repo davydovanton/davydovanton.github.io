@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Profiling minitest examples with Stackprof"
-description: "In this post we'll min minitest examples with Stackprof profiling gem"
+description: "In this post we'll profile code from minitest examples with Stackprof profiling gem"
 tags:
   - ruby
   - profiling
