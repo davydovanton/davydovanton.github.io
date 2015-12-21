@@ -11,46 +11,84 @@ tags:
 tl;dr: https://github.com/davydovanton/server-monitoring
 
 В серии статей мы познакомимся с вами с замечательным фреймворком lotus.
+In a series of articles, we will get acquainted with a lotus framework.
+
 Для начала, в этой статье мы напишем простое JSON API приложение, которое будет отдавать нам значение расходуемой лотусом памяти.
+in the first part we will write simple JSON API application which returns how many memory lotus server is used.
+
 Сразу оговорюсь у нас не будет моделей, только один экшен и тесты.
+Just make a reservation we will not have models, only one action and tests.
 
 ## Why lotus?
 Лотус - минималистичный, модульный веб фреймвор, похожий на рельсу, но со свежим взглядом на некоторые вещи.
+Lotus is monomalistic, modulus web framework similar to the rails but with a fresh look at something things.
+
 Да и всегда интересно попробовать что-то новое.
+and for me it is always interesting to try something new.
+
 Больше информации - по ссылке: http://lotusrb.org.
+More information on this link: http://lotusrb.org.
 
 ## Create application
 https://github.com/davydovanton/server-monitoring/commit/6d4126127664ba2cec704aa2c36c5ae42d7f540d
 
 Для начала нам нужно инициализировать наше приложение.
+Firstly we need to initialize our application.
+
 Для этого выполняем `lotus new server-monitoring --application=api`.
+Call `lotus new server-monitoring --application=api` command for this.
+
 Лотус поддерживает несколько приложений (http://lotusrb.org/guides/architectures/application/), поэтому их надо различать.
+Lotus provide simular applications in one repository (http://lotusrb.org/guides/architectures/application/), therefore it is necessary to specify a specific name for each application.
+
 Для этого используем опцию `--application`.
+For this we use `--application` option.
+
 После чего переходим в папку `server-monitoring` и выполняем комманду `bundle`.
+After that we need to move to `server-monitoring` folder and call `bundle` command.
 
 Для того, что бы убедиться, что все работает - запускаем тесты (дефолтная комманда `rake`) и видим пустоту.
+So we need to make sure that everything is working. For this run tests (by default - `rake` command ).
 
 _**Примечание:** если вы хотите использовать rspec, то при инициализации приложения, укажите опцию `--test=rspec`._
+_**Note:** if you want to use rspec you need to write `--test=rspec` option in application initializer command._
 
 ## Create empty action
 https://github.com/davydovanton/server-monitoring/commit/843b189af8cea42b04823bc6fc3e67c44ee9cf82
 
 Для начала удалим все ненужные файлы.
+Firstly we need to remove all unnecessary files and folders.
+
 Для этого удалим папки `apps/api/views` и `apps/api/templates`.
+Remove `apps/api/views` and `apps/api/templates` folders for this.
 
 https://github.com/davydovanton/server-monitoring/commit/066e374496cfe7a10780e7bc4001c1228a36e5e3
 
 Следующий шаг - настроить конфигурационный файл для нашего API приложения.
+Next step - configure a config file for our API application.
+
 Для этого ставим основную DB - память, а в настройках приложения ставим опции для json запростов и ответов.
+For this we need to set primary DB is memory and json request and responce in application file.
+``` ruby
+# database file
+...
+
+# apps/api/application.rb
+...
+```
 
 https://github.com/davydovanton/server-monitoring/commit/346f0245ee642b171b6d0dfca54ac94ec87b023a
 
 Пускай наш главный экшен будет такого вида: `Statistic#index`
+Let's call main action is `Statistic#index`
 
 Для того, что бы быстро создать экшен, нам нужно набрать следующую комманду в консоли: `lotus generate action api 'statistics#index'` (это создаст нам нужные файлы, добавит тесы и пропишет роуты)
+
 Теперь опять удаляем не нужные файлы.
+Now we can delete unnecessary files.
 
 Запускаем тесты и видим, что наш экшен успешно добавился:
+Run test and see that all tests passed:
 ```
 server-monitoring(master) » rake
 Run options: --seed 12711
