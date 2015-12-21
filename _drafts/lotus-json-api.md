@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Build simple JSON API with lotus framework. Part 1."
-description: ""
+description: "В этом посте мы сделаем простой JSON API используя лотус и разберемся с основными идеями фреймворка."
 tags:
   - ruby
   - JSON API
@@ -16,6 +16,7 @@ tl;dr: https://github.com/davydovanton/server-monitoring
 
 ## Why lotus?
 Лотус - минималистичный, модульный веб фреймвор, похожий на рельсу, но со свежим взглядом на некоторые вещи.
+Да и всегда интересно попробовать что-то новое.
 Больше информации - по ссылке: http://lotusrb.org.
 
 ## Create application
@@ -295,7 +296,7 @@ module Api::Controllers::Statistics
 end
 ```
 
-Запускаем тесты и ура, все проходит!
+Запускаем тесты. Ура, все проходит!
 
 ## Conclusion
 Сегодня мы познакомились с первой частью лотуса - с контроллерами.
