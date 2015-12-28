@@ -13,3 +13,6 @@ working with rom
 first step in vim and tmux
 
 working with mruby and nginx
+
+mix lotus with webpack
+https://github.com/davydovanton/lotus-webpack-reactjs
