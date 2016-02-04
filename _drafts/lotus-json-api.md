@@ -164,7 +164,7 @@ module Api::Controllers::Statistics
     accept :json
 
     def call(params)
-      self.body = JSON.dump({ memory_usage: true })
+      self.body = JSON.dump(memory_usage: true)
     end
   end
 end
