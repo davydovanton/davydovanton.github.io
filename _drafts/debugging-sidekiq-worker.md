@@ -1,4 +1,4 @@
-@frey: там же есть фейк-стабы для воркеров https://github.com/mperham/sidekiq/wiki/Testing
+там же есть фейк-стабы для воркеров https://github.com/mperham/sidekiq/wiki/Testing
 
 Не, ты можешь по хардкору код вызывать
 
