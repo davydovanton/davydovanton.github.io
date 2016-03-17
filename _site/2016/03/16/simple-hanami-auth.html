@@ -11,7 +11,7 @@
 
   <title>
     
-      Profiling minitest examples with Stackprof &middot; Anton Davydov
+      Simplest way to authenticate user in hanami app &middot; Anton Davydov
     
   </title>
 
@@ -64,21 +64,17 @@
     
       
         
-          <a class="sidebar-nav-item" href="/about/">About</a>
+          <a class="sidebar-nav-item" href="/about.html">About</a>
         
       
     
       
     
       
-        
-      
-    
-      
     
       
         
-          <a class="sidebar-nav-item" href="/tags/">All tags</a>
+          <a class="sidebar-nav-item" href="/tags.html">All tags</a>
         
       
     
@@ -113,35 +109,26 @@
 
       <div class="container content">
         <div class="post">
-  <h1 class="post-title">Profiling minitest examples with Stackprof</h1>
-  <span class="post-date">15 Dec 2015</span>
-  <p>Today I read a nice blog post by Kir Shatrov about <a href="http://blog.iempire.ru/2015/10/13/profiling-specs">Profiling RSpec examples with Stackprof</a>
-and I wondered if I could repeat this trick with minitest? This question is very important for me
-because I ofen use minitest for my job and OSS projects. Also a lot of cool projects use minitest
-(for example, sidekiq, rails, lotus, etc).</p>
+  <h1 class="post-title">Simplest way to authenticate user in hanami app</h1>
+  <span class="post-date">16 Mar 2016</span>
+  <p>If you need the simplest and easiest way to adding authentication logic in your <a href="http://hanamirb.org">hanami</a> app (to admin app for example) you always can use <a href="https://github.com/rack/rack/blob/master/lib/rack/auth/basic.rb"><code class="highlighter-rouge">Rack::Auth::Basic</code></a> class.</p>
 
-<p>In reality, to do that in minitest as easy as in RSpec, and the only difference is that you need
-to install a separate gem.</p>
+<p>For this you need to add following lines of code to your <code class="highlighter-rouge">controller.prepare</code> configuration block:</p>
 
-<ol>
-  <li>Firstly you have to install <a href="https://github.com/splattael/minitest-around">minitest-around</a> gem;</li>
-  <li>And secondly you have to add this block of code to your <code class="highlighter-rouge">test_helper</code> file;</li>
-</ol>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># apps/admin/application.rb</span>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># test/test_helper.rb</span>
-<span class="nb">require</span> <span class="s1">'stackprof'</span>
-<span class="nb">require</span> <span class="s1">'minitest/around/spec'</span>
+<span class="n">controller</span><span class="p">.</span><span class="nf">prepare</span> <span class="k">do</span>
+  <span class="c1"># ...</span>
+  <span class="c1"># some code</span>
 
-<span class="k">class</span> <span class="nc">Minitest</span><span class="o">::</span><span class="no">Test</span>
-  <span class="k">def</span> <span class="nf">around</span><span class="p">(</span><span class="o">&amp;</span><span class="n">example</span><span class="p">)</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="s2">"path/to/repo/tmp/stackprof.dump"</span>
-    <span class="no">StackProf</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="ss">mode: :object</span><span class="p">,</span> <span class="ss">out: </span><span class="n">path</span><span class="p">.</span><span class="nf">to_s</span><span class="p">)</span> <span class="k">do</span>
-      <span class="n">example</span><span class="p">.</span><span class="nf">call</span>
-    <span class="k">end</span>
+  <span class="n">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Auth</span><span class="o">::</span><span class="no">Basic</span><span class="p">,</span> <span class="s2">"Server message"</span> <span class="k">do</span> <span class="o">|</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">|</span>
+    <span class="n">username</span> <span class="o">==</span> <span class="s1">'admin'</span> <span class="o">&amp;&amp;</span> <span class="n">password</span> <span class="o">==</span> <span class="s1">'password'</span>
   <span class="k">end</span>
 <span class="k">end</span></code></pre></figure>
 
-<p>Happy profiling!</p>
+<p>Happy authenticating!</p>
+
+<p><strong>P.S.:</strong> also if you need something more complicated you can reed <a href="https://discuss.hanamirb.org/t/authentication-for-lotus-app/178">this</a> thread on hanami forum.</p>
 
 
 
@@ -153,11 +140,11 @@ to install a separate gem.</p>
       </li>
     
       <li>
-        <a href="/tags/#profiling"><span>profiling</span></a>
+        <a href="/tags/#hanami"><span>hanami</span></a>
       </li>
     
       <li>
-        <a href="/tags/#minitest"><span>minitest</span></a>
+        <a href="/tags/#tips"><span>tips</span></a>
       </li>
     
     </ul>
@@ -174,16 +161,16 @@ to install a separate gem.</p>
     
       <li>
         <h3>
-          <a href="/2016/03/16/simple-hanami-auth/">
-            Simplest way to authenticate user in hanami app
-            <small>16 Mar 2016</small>
+          <a href="/2015/12/15/stackprof-with-minitest.html">
+            Profiling minitest examples with Stackprof
+            <small>15 Dec 2015</small>
           </a>
         </h3>
       </li>
     
       <li>
         <h3>
-          <a href="/2015/12/13/render-ruby-block-in-layout-file/">
+          <a href="/2015/12/13/render-ruby-block-in-layout-file.html">
             Rendering ruby block result in layout file
             <small>13 Dec 2015</small>
           </a>
@@ -192,7 +179,7 @@ to install a separate gem.</p>
     
       <li>
         <h3>
-          <a href="/2015/11/14/ignore-file-lines-in-git/">
+          <a href="/2015/11/14/ignore-file-lines-in-git.html">
             Ignore file lines in git
             <small>14 Nov 2015</small>
           </a>

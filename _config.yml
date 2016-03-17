@@ -7,13 +7,15 @@ permalink:           pretty
 title:               Anton Davydov
 tagline:             Blog
 description:         "Simple blog where I'll write about ruby, my ideas and technologies which I love<br><a href=\"https://twitter.com/anton_davydov\" target=\"_blank\">@anton_davydov</a>"
-url:                 http://davydovanton.github.io
-paginate:            9
+url:                 http://blog.davydovanton.com
+paginate:            10
+
+gems:                ['jekyll-paginate']
 
 # About/contact
 author:
   name:              Anton Davydov
-  url:               https://github.com/davydovanton
+  url:               https://davydovanton.com
   email:             antondavydov.o@gmail.com
 
 # Custom vars

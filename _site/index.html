@@ -87,7 +87,7 @@
 
   <div class="sidebar-item">
     <p>
-      &copy; 2015. All rights reserved.
+      &copy; 2016. All rights reserved.
     </p>
   </div>
 </div>
@@ -114,6 +114,55 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/2016/03/16/simple-hanami-auth/">
+        Simplest way to authenticate user in hanami app
+      </a>
+    </h1>
+
+    <span class="post-date">16 Mar 2016</span>
+
+    <p>If you need the simplest and easiest way to adding authentication logic in your <a href="http://hanamirb.org">hanami</a> app (to admin app for example) you always can use <a href="https://github.com/rack/rack/blob/master/lib/rack/auth/basic.rb"><code class="highlighter-rouge">Rack::Auth::Basic</code></a> class.</p>
+
+<p>For this you need to add following lines of code to your <code class="highlighter-rouge">controller.prepare</code> configuration block:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># apps/admin/application.rb</span>
+
+<span class="n">controller</span><span class="p">.</span><span class="nf">prepare</span> <span class="k">do</span>
+  <span class="c1"># ...</span>
+  <span class="c1"># some code</span>
+
+  <span class="n">use</span> <span class="no">Rack</span><span class="o">::</span><span class="no">Auth</span><span class="o">::</span><span class="no">Basic</span><span class="p">,</span> <span class="s1">'Message'</span> <span class="k">do</span> <span class="o">|</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">|</span>
+    <span class="n">username</span> <span class="o">==</span> <span class="s1">'admin'</span> <span class="o">&amp;&amp;</span> <span class="n">password</span> <span class="o">==</span> <span class="s1">'password'</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Happy authenticating!</p>
+
+<p><strong>P.S.:</strong> also if you need something more complicated you can reed <a href="https://discuss.hanamirb.org/t/authentication-for-lotus-app/178">this</a> thread on hanami forum.</p>
+
+
+
+    <div class="tag-cloud">
+      <ul>
+      
+        <li>
+          <a href="/tags/#ruby"><span>ruby</span></a>
+        </li>
+      
+        <li>
+          <a href="/tags/#hanami"><span>hanami</span></a>
+        </li>
+      
+        <li>
+          <a href="/tags/#tips"><span>tips</span></a>
+        </li>
+      
+      </ul>
+    </div>
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/2015/12/15/stackprof-with-minitest/">
         Profiling minitest examples with Stackprof
       </a>
@@ -131,21 +180,21 @@ to install a separate gem.</p>
 
 <ol>
   <li>Firstly you have to install <a href="https://github.com/splattael/minitest-around">minitest-around</a> gem;</li>
-  <li>And secondly you have to add this block of code to your <code>test_helper</code> file;</li>
+  <li>And secondly you have to add this block of code to your <code class="highlighter-rouge">test_helper</code> file;</li>
 </ol>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># test/test_helper.rb</span>
-<span class="nb">require</span> <span class="s1">&#39;stackprof&#39;</span>
-<span class="nb">require</span> <span class="s1">&#39;minitest/around/spec&#39;</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># test/test_helper.rb</span>
+<span class="nb">require</span> <span class="s1">'stackprof'</span>
+<span class="nb">require</span> <span class="s1">'minitest/around/spec'</span>
 
 <span class="k">class</span> <span class="nc">Minitest</span><span class="o">::</span><span class="no">Test</span>
   <span class="k">def</span> <span class="nf">around</span><span class="p">(</span><span class="o">&amp;</span><span class="n">example</span><span class="p">)</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;path/to/repo/tmp/stackprof.dump&quot;</span>
-    <span class="no">StackProf</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="ss">mode</span><span class="p">:</span> <span class="ss">:object</span><span class="p">,</span> <span class="ss">out</span><span class="p">:</span> <span class="n">path</span><span class="o">.</span><span class="n">to_s</span><span class="p">)</span> <span class="k">do</span>
-      <span class="n">example</span><span class="o">.</span><span class="n">call</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="s2">"path/to/repo/tmp/stackprof.dump"</span>
+    <span class="no">StackProf</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="ss">mode: :object</span><span class="p">,</span> <span class="ss">out: </span><span class="n">path</span><span class="p">.</span><span class="nf">to_s</span><span class="p">)</span> <span class="k">do</span>
+      <span class="n">example</span><span class="p">.</span><span class="nf">call</span>
     <span class="k">end</span>
   <span class="k">end</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
 <p>Happy profiling!</p>
 
@@ -184,32 +233,32 @@ For example, your result may be repeated on page or you can get something worse.
 
 <p>let’s assume we have these methods:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">add_to_head</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-  <span class="vi">@head_html</span> <span class="o">||=</span> <span class="o">[]</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">add_to_head</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+  <span class="vi">@head_html</span> <span class="o">||=</span> <span class="p">[]</span>
   <span class="vi">@head_html</span> <span class="o">&lt;&lt;</span> <span class="n">block</span> <span class="k">if</span> <span class="nb">block_given?</span>
 <span class="k">end</span>
 
 <span class="k">def</span> <span class="nf">display_custom_head</span>
   <span class="k">return</span> <span class="k">unless</span> <span class="vi">@head_html</span>
-  <span class="vi">@head_html</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:call</span><span class="p">)</span><span class="o">.</span><span class="n">join</span>
-<span class="k">end</span></code></pre></div>
+  <span class="vi">@head_html</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:call</span><span class="p">).</span><span class="nf">join</span>
+<span class="k">end</span></code></pre></figure>
 
-<p>Of cource you can use <code>captire</code> method from <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-capture">rails</a> and <a href="https://github.com/sinatra/sinatra-contrib#common-extensions">sinatra-contrib</a> librares.
+<p>Of cource you can use <code class="highlighter-rouge">captire</code> method from <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-capture">rails</a> and <a href="https://github.com/sinatra/sinatra-contrib#common-extensions">sinatra-contrib</a> librares.
 But what will you do if you can’t use these methods or you need something easier?</p>
 
-<p>I faced a similar problem (<a href="https://github.com/mperham/sidekiq/pull/2270">for example, in sidekiq</a>) and I used own <code>capture</code> method for layout files.</p>
+<p>I faced a similar problem (<a href="https://github.com/mperham/sidekiq/pull/2270">for example, in sidekiq</a>) and I used own <code class="highlighter-rouge">capture</code> method for layout files.</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">capture</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-  <span class="n">block</span><span class="o">.</span><span class="n">call</span>
-  <span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">block</span><span class="o">.</span><span class="n">binding</span><span class="p">)</span>
-<span class="k">end</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">capture</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+  <span class="n">block</span><span class="p">.</span><span class="nf">call</span>
+  <span class="nb">eval</span><span class="p">(</span><span class="s1">''</span><span class="p">,</span> <span class="n">block</span><span class="p">.</span><span class="nf">binding</span><span class="p">)</span>
+<span class="k">end</span></code></pre></figure>
 
-<p>And after that we can update our <code>display_custom_head</code> method:</p>
+<p>And after that we can update our <code class="highlighter-rouge">display_custom_head</code> method:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">display_custom_head</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">display_custom_head</span>
   <span class="k">return</span> <span class="k">unless</span> <span class="vi">@head_html</span>
-  <span class="vi">@head_html</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">block</span><span class="o">|</span> <span class="n">capture</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span> <span class="p">}</span><span class="o">.</span><span class="n">join</span>
-<span class="k">end</span></code></pre></div>
+  <span class="vi">@head_html</span><span class="p">.</span><span class="nf">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">block</span><span class="o">|</span> <span class="n">capture</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span> <span class="p">}.</span><span class="nf">join</span>
+<span class="k">end</span></code></pre></figure>
 
 <p>I hope it will be useful to you  as well as for me at one time.</p>
 
@@ -244,33 +293,33 @@ But what will you do if you can’t use these methods or you need something easi
 
     <span class="post-date">14 Nov 2015</span>
 
-    <p>For example, you have this code and you want to ignore in git lines which contain <code>username</code> and <code>password</code> values:</p>
+    <p>For example, you have this code and you want to ignore in git lines which contain <code class="highlighter-rouge">username</code> and <code class="highlighter-rouge">password</code> values:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ssh_connect</span>
-  <span class="n">username</span> <span class="o">=</span> <span class="s2">&quot;root&quot;</span> <span class="c1"># ignore this line</span>
-  <span class="n">password</span> <span class="o">=</span> <span class="s2">&quot;password&quot;</span> <span class="c1"># ignore this line too</span>
-  <span class="n">ip</span> <span class="o">=</span> <span class="s2">&quot;192.168.1.1&quot;</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ssh_connect</span>
+  <span class="n">username</span> <span class="o">=</span> <span class="s2">"root"</span> <span class="c1"># ignore this line</span>
+  <span class="n">password</span> <span class="o">=</span> <span class="s2">"password"</span> <span class="c1"># ignore this line too</span>
+  <span class="n">ip</span> <span class="o">=</span> <span class="s2">"192.168.1.1"</span>
   <span class="c1"># ...</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
 <p>To ignore some special lines in git you need to:</p>
 
 <ol>
-  <li>Create a <code>.gitattributes</code> in your repository (remember that <code>.gitattributes</code> will be commited into the repository, if you don’t want that, add it to <code>.git/info/attributes</code>)</li>
-  <li>Add <code>*.rb filter=ignoreline</code> (run filter named ignoreline on all <code>*.rb</code> files)</li>
-  <li>Now, we need to define ignoreline filter in <code>.gitconfig</code></li>
-  <li><code>git config --global filter.ignoreline.clean "sed '/#ignoreline$/'d"</code> (delete theses lines)</li>
-  <li><code>git config --global filter.ignoreline.smudge cat</code> (do nothing when pulling file from the repository)</li>
+  <li>Create a <code class="highlighter-rouge">.gitattributes</code> in your repository (remember that <code class="highlighter-rouge">.gitattributes</code> will be commited into the repository, if you don’t want that, add it to <code class="highlighter-rouge">.git/info/attributes</code>)</li>
+  <li>Add <code class="highlighter-rouge">*.rb filter=ignoreline</code> (run filter named ignoreline on all <code class="highlighter-rouge">*.rb</code> files)</li>
+  <li>Now, we need to define ignoreline filter in <code class="highlighter-rouge">.gitconfig</code></li>
+  <li><code class="highlighter-rouge">git config --global filter.ignoreline.clean "sed '/#ignoreline$/'d"</code> (delete theses lines)</li>
+  <li><code class="highlighter-rouge">git config --global filter.ignoreline.smudge cat</code> (do nothing when pulling file from the repository)</li>
 </ol>
 
-<p>And then, you can ignore some lines useing <code>#ignoreline</code> comment:</p>
+<p>And then, you can ignore some lines useing <code class="highlighter-rouge">#ignoreline</code> comment:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ssh_connect</span>
-  <span class="n">username</span> <span class="o">=</span> <span class="s2">&quot;root&quot;</span> <span class="c1">#ignoreline</span>
-  <span class="n">password</span> <span class="o">=</span> <span class="s2">&quot;password&quot;</span> <span class="c1">#ignoreline</span>
-  <span class="n">ip</span> <span class="o">=</span> <span class="s2">&quot;192.168.1.1&quot;</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ssh_connect</span>
+  <span class="n">username</span> <span class="o">=</span> <span class="s2">"root"</span> <span class="c1">#ignoreline</span>
+  <span class="n">password</span> <span class="o">=</span> <span class="s2">"password"</span> <span class="c1">#ignoreline</span>
+  <span class="n">ip</span> <span class="o">=</span> <span class="s2">"192.168.1.1"</span>
   <span class="c1"># ...</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
 <p>Happy hacking!</p>
 
@@ -307,8 +356,8 @@ In this article, I want to show you how to do this for a simple lisp compiler.</
 <h2 id="why-scheme-and-lisp">Why scheme and lisp?</h2>
 <p>Firstly, lisp is very simple for create and for understanding.
 Lisp (<em>LISt Processor</em>) is a family of languages which is based on the idea of <a href="http://www.wikiwand.com/en/S-expression">S-expressions</a>.
-<a href="http://www.wikiwand.com/en/S-expression">S-Expression</a> are needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or are the expression of the form <code>(x . y)</code> where <code>x</code> and <code>y</code> are <a href="http://www.wikiwand.com/en/S-expression">s-expressions</a>.
-This expression may be formed as lists (<code>(1 . ( 2 . 3))</code> this equals <code>(1 2 3)</code>) and trees (<code>((1 . (2 . 3)) . (4 . 5))</code>).</p>
+<a href="http://www.wikiwand.com/en/S-expression">S-Expression</a> are needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or are the expression of the form <code class="highlighter-rouge">(x . y)</code> where <code class="highlighter-rouge">x</code> and <code class="highlighter-rouge">y</code> are <a href="http://www.wikiwand.com/en/S-expression">s-expressions</a>.
+This expression may be formed as lists (<code class="highlighter-rouge">(1 . ( 2 . 3))</code> this equals <code class="highlighter-rouge">(1 2 3)</code>) and trees (<code class="highlighter-rouge">((1 . (2 . 3)) . (4 . 5))</code>).</p>
 
 <p>Secondly, after creating interpreter you can better understand the language (the author fully understood the environment idea).
 Also you can understand the main idea of compilers and interpreters.</p>
@@ -316,243 +365,243 @@ Also you can understand the main idea of compilers and interpreters.</p>
 <p>Now let’s begin our journey into the world of compilers and interpreters so that we can write a simple scheme interpreter.</p>
 
 <h2 id="main-idea">Main idea</h2>
-<p>Our language will contain two parts: a parser which translates the string to <a href="http://www.wikiwand.com/en/Abstract_syntax_tree">AST</a> and <code>eval</code> function.
+<p>Our language will contain two parts: a parser which translates the string to <a href="http://www.wikiwand.com/en/Abstract_syntax_tree">AST</a> and <code class="highlighter-rouge">eval</code> function.
 This function will take the <a href="http://www.wikiwand.com/en/Abstract_syntax_tree">AST</a> with envariement value and will return the result of the code.</p>
 
 <p>Schematically, it looks like this:</p>
 
-<div class="highlight"><pre><code class="language-text" data-lang="text">code(string) =&gt; parse function =&gt; AST =&gt; eval function =&gt; result</code></pre></div>
+<figure class="highlight"><pre><code class="language-text" data-lang="text">code(string) =&gt; parse function =&gt; AST =&gt; eval function =&gt; result</code></pre></figure>
 
 <h2 id="first-step-parser">First step. Parser.</h2>
 <p>To begin, let’s define what we want to get.
-For example, we have a string <code>'(+ 1 1 1)'</code>.
+For example, we have a string <code class="highlighter-rouge">'(+ 1 1 1)'</code>.
 What should our parser return? What kind of data structure should we receive? I think, that an array would be correct.</p>
 
 <p>Let write simple test code:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">program</span> <span class="o">=</span> <span class="s1">&#39;(+ 1 1 1)&#39;</span>
-<span class="n">lisp</span> <span class="o">=</span> <span class="no">Lisp</span><span class="o">.</span><span class="n">new</span>
-<span class="n">lisp</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span> <span class="o">==</span> <span class="o">[</span><span class="ss">:+</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">]</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">program</span> <span class="o">=</span> <span class="s1">'(+ 1 1 1)'</span>
+<span class="n">lisp</span> <span class="o">=</span> <span class="no">Lisp</span><span class="p">.</span><span class="nf">new</span>
+<span class="n">lisp</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span> <span class="o">==</span> <span class="p">[:</span><span class="o">+</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span></code></pre></figure>
 
-<p>As you can see, this is a simple code, so I just displayed <code>parse</code> method code:</p>
+<p>As you can see, this is a simple code, so I just displayed <code class="highlighter-rouge">parse</code> method code:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
   <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
     <span class="n">tokenize</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
   <span class="k">end</span>
 
   <span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="n">chars</span><span class="p">)</span>
     <span class="n">chars</span>
-      <span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/\s\s+/</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
-      <span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">,</span> <span class="s1">&#39; ( &#39;</span><span class="p">)</span>
-      <span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="s1">&#39; ) &#39;</span><span class="p">)</span>
-      <span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
-      <span class="o">.</span><span class="n">map</span><span class="p">{</span> <span class="o">|</span><span class="n">token</span><span class="o">|</span> <span class="n">atom</span><span class="p">(</span><span class="n">token</span><span class="p">)</span> <span class="p">}</span>
-      <span class="o">.</span><span class="n">compact</span>
+      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="sr">/\s\s+/</span><span class="p">,</span> <span class="s1">' '</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="s1">'('</span><span class="p">,</span> <span class="s1">' ( '</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="s1">')'</span><span class="p">,</span> <span class="s1">' ) '</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="s1">' '</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">map</span><span class="p">{</span> <span class="o">|</span><span class="n">token</span><span class="o">|</span> <span class="n">atom</span><span class="p">(</span><span class="n">token</span><span class="p">)</span> <span class="p">}</span>
+      <span class="p">.</span><span class="nf">compact</span>
   <span class="k">end</span>
 
   <span class="k">def</span> <span class="nf">atom</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">token</span><span class="o">[</span><span class="sr">/\.\d+/</span><span class="o">]</span>
-      <span class="n">token</span><span class="o">.</span><span class="n">to_f</span>
-    <span class="k">elsif</span> <span class="n">token</span> <span class="o">==</span> <span class="s1">&#39;(&#39;</span> <span class="o">||</span> <span class="n">token</span> <span class="o">==</span> <span class="s1">&#39;)&#39;</span>
+    <span class="k">if</span> <span class="n">token</span><span class="p">[</span><span class="sr">/\.\d+/</span><span class="p">]</span>
+      <span class="n">token</span><span class="p">.</span><span class="nf">to_f</span>
+    <span class="k">elsif</span> <span class="n">token</span> <span class="o">==</span> <span class="s1">'('</span> <span class="o">||</span> <span class="n">token</span> <span class="o">==</span> <span class="s1">')'</span>
       <span class="kp">nil</span>
-    <span class="k">elsif</span> <span class="n">token</span><span class="o">[</span><span class="sr">/\d+/</span><span class="o">]</span>
-      <span class="n">token</span><span class="o">.</span><span class="n">to_i</span>
+    <span class="k">elsif</span> <span class="n">token</span><span class="p">[</span><span class="sr">/\d+/</span><span class="p">]</span>
+      <span class="n">token</span><span class="p">.</span><span class="nf">to_i</span>
     <span class="k">else</span>
-      <span class="n">token</span><span class="o">.</span><span class="n">to_sym</span>
+      <span class="n">token</span><span class="p">.</span><span class="nf">to_sym</span>
     <span class="k">end</span>
   <span class="k">end</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
-<p>As you know, in lisp you can write your code with nested operators, for example - <code>(+ (* 2 2) (- 5 3))</code>.
+<p>As you know, in lisp you can write your code with nested operators, for example - <code class="highlighter-rouge">(+ (* 2 2) (- 5 3))</code>.
 And this code will return 6.</p>
 
 <p>When we use our parser for this code, the result is not quite what we need, so let’s update our test code:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">program</span> <span class="o">=</span> <span class="s1">&#39;(+ (* (1 2) 3) 4)&#39;</span>
-<span class="n">lisp</span> <span class="o">=</span> <span class="no">Lisp</span><span class="o">.</span><span class="n">new</span>
-<span class="n">lisp</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span> <span class="o">==</span> <span class="o">[</span><span class="ss">:+</span><span class="p">,</span> <span class="o">[</span><span class="ss">:*</span><span class="p">,</span> <span class="o">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">]</span><span class="p">,</span> <span class="mi">3</span><span class="o">]</span><span class="p">,</span> <span class="mi">4</span><span class="o">]</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">program</span> <span class="o">=</span> <span class="s1">'(+ (* (1 2) 3) 4)'</span>
+<span class="n">lisp</span> <span class="o">=</span> <span class="no">Lisp</span><span class="p">.</span><span class="nf">new</span>
+<span class="n">lisp</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span> <span class="o">==</span> <span class="p">[:</span><span class="o">+</span><span class="p">,</span> <span class="p">[:</span><span class="o">*</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="mi">3</span><span class="p">],</span> <span class="mi">4</span><span class="p">]</span></code></pre></figure>
 
-<p>As you might guess, the most obvious way to fix our code is to call <code>parse</code> method in recursion and all array elements from <code>'('</code> to <code>')'</code>.
+<p>As you might guess, the most obvious way to fix our code is to call <code class="highlighter-rouge">parse</code> method in recursion and all array elements from <code class="highlighter-rouge">'('</code> to <code class="highlighter-rouge">')'</code>.
 We will move to a nested array.
 The code will be look loke this:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
   <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
     <span class="n">read_from_tokens</span><span class="p">(</span><span class="n">tokenize</span><span class="p">(</span><span class="n">program</span><span class="p">))</span>
   <span class="k">end</span>
 
   <span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="n">chars</span><span class="p">)</span>
     <span class="n">chars</span>
-      <span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/\s\s+/</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
-      <span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">,</span> <span class="s1">&#39; ( &#39;</span><span class="p">)</span>
-      <span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="s1">&#39; ) &#39;</span><span class="p">)</span>
-      <span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="sr">/\s\s+/</span><span class="p">,</span> <span class="s1">' '</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="s1">'('</span><span class="p">,</span> <span class="s1">' ( '</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="s1">')'</span><span class="p">,</span> <span class="s1">' ) '</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="s1">' '</span><span class="p">)</span>
   <span class="k">end</span>
 
   <span class="k">def</span> <span class="nf">read_from_tokens</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
-    <span class="k">return</span> <span class="k">if</span> <span class="n">tokens</span><span class="o">.</span><span class="n">empty?</span>
+    <span class="k">return</span> <span class="k">if</span> <span class="n">tokens</span><span class="p">.</span><span class="nf">empty?</span>
 
-    <span class="n">token</span> <span class="o">=</span> <span class="n">tokens</span><span class="o">.</span><span class="n">shift</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">.</span><span class="nf">shift</span>
 
-    <span class="k">if</span> <span class="s1">&#39;(&#39;</span> <span class="o">==</span> <span class="n">token</span>
-      <span class="n">list</span> <span class="o">=</span> <span class="o">[]</span>
+    <span class="k">if</span> <span class="s1">'('</span> <span class="o">==</span> <span class="n">token</span>
+      <span class="n">list</span> <span class="o">=</span> <span class="p">[]</span>
 
-      <span class="k">while</span> <span class="n">tokens</span><span class="o">.</span><span class="n">first</span> <span class="o">!=</span> <span class="s1">&#39;)&#39;</span>
+      <span class="k">while</span> <span class="n">tokens</span><span class="p">.</span><span class="nf">first</span> <span class="o">!=</span> <span class="s1">')'</span>
         <span class="n">list</span> <span class="o">&lt;&lt;</span> <span class="n">read_from_tokens</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
       <span class="k">end</span>
-      <span class="n">tokens</span><span class="o">.</span><span class="n">shift</span>
+      <span class="n">tokens</span><span class="p">.</span><span class="nf">shift</span>
 
       <span class="n">list</span>
-    <span class="k">elsif</span> <span class="s1">&#39;)&#39;</span> <span class="o">==</span> <span class="n">token</span>
-      <span class="k">raise</span> <span class="s1">&#39;unexpected )&#39;</span>
+    <span class="k">elsif</span> <span class="s1">')'</span> <span class="o">==</span> <span class="n">token</span>
+      <span class="k">raise</span> <span class="s1">'unexpected )'</span>
     <span class="k">else</span>
       <span class="n">atom</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
     <span class="k">end</span>
   <span class="k">end</span>
 
   <span class="k">def</span> <span class="nf">atom</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">token</span><span class="o">[</span><span class="sr">/\.\d+/</span><span class="o">]</span>
-      <span class="n">token</span><span class="o">.</span><span class="n">to_f</span>
-    <span class="k">elsif</span> <span class="n">token</span><span class="o">[</span><span class="sr">/\d+/</span><span class="o">]</span>
-      <span class="n">token</span><span class="o">.</span><span class="n">to_i</span>
+    <span class="k">if</span> <span class="n">token</span><span class="p">[</span><span class="sr">/\.\d+/</span><span class="p">]</span>
+      <span class="n">token</span><span class="p">.</span><span class="nf">to_f</span>
+    <span class="k">elsif</span> <span class="n">token</span><span class="p">[</span><span class="sr">/\d+/</span><span class="p">]</span>
+      <span class="n">token</span><span class="p">.</span><span class="nf">to_i</span>
     <span class="k">else</span>
-      <span class="n">token</span><span class="o">.</span><span class="n">to_sym</span>
+      <span class="n">token</span><span class="p">.</span><span class="nf">to_sym</span>
     <span class="k">end</span>
   <span class="k">end</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
-<p>We did it! Let’s start to make <code>eval</code> method.</p>
+<p>We did it! Let’s start to make <code class="highlighter-rouge">eval</code> method.</p>
 
 <h2 id="eval-method">Eval method</h2>
-<p>As I said earlier, our interpreter consists of two parts: a parser and <code>eval</code> function.</p>
+<p>As I said earlier, our interpreter consists of two parts: a parser and <code class="highlighter-rouge">eval</code> function.</p>
 
-<p>The <code>eval</code> function will take two arguments: an expression, <code>exp</code>, that we want to evaluate, and an environment, <code>env</code>, in which to evaluate it. An environment is a mapping from variable names to their values.
+<p>The <code class="highlighter-rouge">eval</code> function will take two arguments: an expression, <code class="highlighter-rouge">exp</code>, that we want to evaluate, and an environment, <code class="highlighter-rouge">env</code>, in which to evaluate it. An environment is a mapping from variable names to their values.
 By default, eval will use a instance value that includes the names for a bunch of standard things.</p>
 
-<p>let’s implement <code>@env</code> variable with <code>car</code>, <code>cdr</code> and <code>cons</code> functions:</p>
+<p>let’s implement <code class="highlighter-rouge">@env</code> variable with <code class="highlighter-rouge">car</code>, <code class="highlighter-rouge">cdr</code> and <code class="highlighter-rouge">cons</code> functions:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">env</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="ss">:car</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="p">},</span>
-  <span class="ss">:cdr</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="o">.</span><span class="n">drop</span> <span class="mi">1</span> <span class="p">},</span>
-  <span class="ss">:cons</span> <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">cell</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="o">[</span><span class="n">e</span><span class="o">]</span> <span class="o">+</span> <span class="n">cell</span> <span class="p">},</span>
-<span class="p">}</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">env</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="ss">:car</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">},</span>
+  <span class="ss">:cdr</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="p">.</span><span class="nf">drop</span> <span class="mi">1</span> <span class="p">},</span>
+  <span class="ss">:cons</span> <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">cell</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="o">+</span> <span class="n">cell</span> <span class="p">},</span>
+<span class="p">}</span></code></pre></figure>
 
-<p>The next step is to make <code>eval</code> function which will look for a match on the first element of the input array</p>
+<p>The next step is to make <code class="highlighter-rouge">eval</code> function which will look for a match on the first element of the input array</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
   <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">ext</span> <span class="o">=</span> <span class="p">{})</span>
     <span class="vi">@env</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="ss">:car</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="p">},</span>
-      <span class="ss">:cdr</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="o">.</span><span class="n">drop</span> <span class="mi">1</span> <span class="p">},</span>
-      <span class="ss">:cons</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">cell</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="o">[</span><span class="n">e</span><span class="o">]</span> <span class="o">+</span> <span class="n">cell</span> <span class="p">},</span>
-    <span class="p">}</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
+      <span class="ss">:car</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">},</span>
+      <span class="ss">:cdr</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="p">.</span><span class="nf">drop</span> <span class="mi">1</span> <span class="p">},</span>
+      <span class="ss">:cons</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">cell</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="o">+</span> <span class="n">cell</span> <span class="p">},</span>
+    <span class="p">}.</span><span class="nf">merge</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
   <span class="k">end</span>
 
   <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span> <span class="o">=</span> <span class="vi">@env</span><span class="p">)</span>
-    <span class="n">env</span><span class="o">[</span><span class="n">exp</span><span class="o">.</span><span class="n">first</span><span class="o">].</span><span class="p">(</span><span class="n">exp</span><span class="o">[</span><span class="mi">1</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span><span class="p">)</span>
+    <span class="n">env</span><span class="p">[</span><span class="n">exp</span><span class="p">.</span><span class="nf">first</span><span class="p">]</span><span class="o">.</span><span class="p">(</span><span class="n">exp</span><span class="p">[</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
   <span class="k">end</span>
 
   <span class="c1"># ...</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
 <p>Now we have a problem: what will happen when the first element of the array will be not be a symbol (integer for example) and what will be happen when we have nested functions?
 I think we can add a check to the element type like this:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
   <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">ext</span> <span class="o">=</span> <span class="p">{})</span>
     <span class="vi">@env</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="ss">:car</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="p">},</span>
-      <span class="ss">:cdr</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="o">.</span><span class="n">drop</span> <span class="mi">1</span> <span class="p">},</span>
-      <span class="ss">:cons</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">cell</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="o">[</span><span class="n">e</span><span class="o">]</span> <span class="o">+</span> <span class="n">cell</span> <span class="p">},</span>
-    <span class="p">}</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
+      <span class="ss">:car</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">},</span>
+      <span class="ss">:cdr</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="p">.</span><span class="nf">drop</span> <span class="mi">1</span> <span class="p">},</span>
+      <span class="ss">:cons</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">cell</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="o">+</span> <span class="n">cell</span> <span class="p">},</span>
+    <span class="p">}.</span><span class="nf">merge</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
   <span class="k">end</span>
 
   <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span> <span class="o">=</span> <span class="vi">@env</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">exp</span><span class="o">.</span><span class="n">is_a?</span> <span class="no">Numeric</span>
+    <span class="k">if</span> <span class="n">exp</span><span class="p">.</span><span class="nf">is_a?</span> <span class="no">Numeric</span>
       <span class="n">exp</span>
-    <span class="k">elsif</span> <span class="n">exp</span><span class="o">.</span><span class="n">is_a?</span> <span class="no">Symbol</span>
-      <span class="n">env</span><span class="o">[</span><span class="n">exp</span><span class="o">]</span>
+    <span class="k">elsif</span> <span class="n">exp</span><span class="p">.</span><span class="nf">is_a?</span> <span class="no">Symbol</span>
+      <span class="n">env</span><span class="p">[</span><span class="n">exp</span><span class="p">]</span>
     <span class="k">else</span>
-      <span class="n">code</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">exp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
-      <span class="n">args</span> <span class="o">=</span> <span class="n">exp</span><span class="o">[</span><span class="mi">1</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">1</span><span class="o">].</span><span class="n">map</span><span class="p">{</span> <span class="o">|</span><span class="n">arg</span><span class="o">|</span> <span class="nb">eval</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="p">}</span>
+      <span class="n">code</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">env</span><span class="p">)</span>
+      <span class="n">args</span> <span class="o">=</span> <span class="n">exp</span><span class="p">[</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nf">map</span><span class="p">{</span> <span class="o">|</span><span class="n">arg</span><span class="o">|</span> <span class="nb">eval</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="p">}</span>
       <span class="n">code</span><span class="o">.</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
     <span class="k">end</span>
   <span class="k">end</span>
 
   <span class="c1"># ...</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
-<p>Some (eg arithmetic), we can easily add to <code>env</code> variable, and some do not.
-Therefore, we need to extend the checking in <code>eval</code> function. We will add a check for function name.
-For example, the code below will demonstrate <code>quote</code> and <code>if</code> functions:</p>
+<p>Some (eg arithmetic), we can easily add to <code class="highlighter-rouge">env</code> variable, and some do not.
+Therefore, we need to extend the checking in <code class="highlighter-rouge">eval</code> function. We will add a check for function name.
+For example, the code below will demonstrate <code class="highlighter-rouge">quote</code> and <code class="highlighter-rouge">if</code> functions:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
   <span class="c1"># ...</span>
-  <span class="k">elsif</span> <span class="n">exp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">==</span> <span class="ss">:quote</span>
-    <span class="n">exp</span><span class="o">[</span><span class="mi">1</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span>
-  <span class="k">elsif</span> <span class="n">exp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">==</span> <span class="ss">:if</span>
+  <span class="k">elsif</span> <span class="n">exp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="ss">:quote</span>
+    <span class="n">exp</span><span class="p">[</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+  <span class="k">elsif</span> <span class="n">exp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="ss">:if</span>
     <span class="n">_</span><span class="p">,</span> <span class="nb">test</span><span class="p">,</span> <span class="n">conseq</span><span class="p">,</span> <span class="n">alt</span> <span class="o">=</span> <span class="n">exp</span>
     <span class="n">exp</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="nb">test</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="p">?</span> <span class="n">conseq</span> <span class="p">:</span> <span class="n">alt</span>
     <span class="nb">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
   <span class="c1"># ...</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
-<p>The next step is to initialize <code>define</code> and <code>lambda</code> functions.
-In scheme <code>define</code> function syntax is as follows:</p>
+<p>The next step is to initialize <code class="highlighter-rouge">define</code> and <code class="highlighter-rouge">lambda</code> functions.
+In scheme <code class="highlighter-rouge">define</code> function syntax is as follows:</p>
 
-<div class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">define </span><span class="nv">name</span>
-  <span class="p">(</span><span class="nf">expression</span><span class="p">))</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">define</span> <span class="nv">name</span>
+  <span class="p">(</span><span class="nf">expression</span><span class="p">))</span></code></pre></figure>
 
-<p>And our code must create a new key-value pair in the <code>env</code> hash:</p>
+<p>And our code must create a new key-value pair in the <code class="highlighter-rouge">env</code> hash:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
   <span class="c1"># ...</span>
-  <span class="k">elsif</span> <span class="n">exp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">==</span> <span class="ss">:define</span>
+  <span class="k">elsif</span> <span class="n">exp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="ss">:define</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">e</span> <span class="o">=</span> <span class="n">exp</span>
-    <span class="n">env</span><span class="o">[</span><span class="n">var</span><span class="o">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+    <span class="n">env</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
   <span class="c1"># ...</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
-<p>The last function, <code>lambda</code> in scheme will have this syntax:</p>
+<p>The last function, <code class="highlighter-rouge">lambda</code> in scheme will have this syntax:</p>
 
-<div class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">lambda </span><span class="p">(</span><span class="nf">arg1,</span> <span class="nv">arg2,</span> <span class="o">...</span><span class="p">)</span>
-  <span class="p">(</span><span class="nf">block</span> <span class="nv">of</span> <span class="nv">code</span><span class="p">))</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">lambda</span> <span class="p">(</span><span class="nf">arg1,</span> <span class="nv">arg2,</span> <span class="o">...</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">block</span> <span class="nv">of</span> <span class="nv">code</span><span class="p">))</span></code></pre></figure>
 
-<p>The first thing that comes to mind is to return the new <code>lambda</code> object with a new value inside <code>env</code> that will serve our code:</p>
+<p>The first thing that comes to mind is to return the new <code class="highlighter-rouge">lambda</code> object with a new value inside <code class="highlighter-rouge">env</code> that will serve our code:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
   <span class="c1"># ...</span>
-  <span class="k">elsif</span> <span class="n">exp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">==</span> <span class="ss">:lambda</span>
+  <span class="k">elsif</span> <span class="n">exp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="ss">:lambda</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">e</span> <span class="o">=</span> <span class="n">exp</span>
-    <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">args</span><span class="o">|</span> <span class="nb">self</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="no">Hash</span><span class="o">[</span><span class="n">params</span><span class="o">.</span><span class="n">zip</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="o">]</span><span class="p">))</span> <span class="p">}</span>
+    <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">args</span><span class="o">|</span> <span class="nb">self</span><span class="p">.</span><span class="nf">eval</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">env</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span><span class="no">Hash</span><span class="p">[</span><span class="n">params</span><span class="p">.</span><span class="nf">zip</span><span class="p">(</span><span class="n">args</span><span class="p">)]))</span> <span class="p">}</span>
   <span class="c1"># ...</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
 <p>As you can see, we made basic functionality of the our interpreter.
-I will leave learning how to do the implement the arithmetic methods and other methods such as <code>true</code>, <code>false</code>, <code>list</code>, etc up to the reader.</p>
+I will leave learning how to do the implement the arithmetic methods and other methods such as <code class="highlighter-rouge">true</code>, <code class="highlighter-rouge">false</code>, <code class="highlighter-rouge">list</code>, etc up to the reader.</p>
 
 <h2 id="repl">REPL</h2>
 <p>In main REPL have really simple idea repl takes single user inputs, evaluates them, and returns the result to the user.
 And all this is happens in an infinite loop:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">repl</span><span class="p">(</span><span class="n">prompt</span> <span class="o">=</span> <span class="s1">&#39;lisp &gt;&gt; &#39;</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">repl</span><span class="p">(</span><span class="n">prompt</span> <span class="o">=</span> <span class="s1">'lisp &gt;&gt; '</span><span class="p">)</span>
   <span class="k">while</span> <span class="kp">true</span>
     <span class="nb">print</span> <span class="n">prompt</span>
     <span class="n">program</span> <span class="o">=</span> <span class="nb">gets</span>
 
     <span class="nb">p</span> <span class="nb">eval</span><span class="p">(</span><span class="n">parse</span><span class="p">(</span><span class="n">program</span><span class="p">))</span>
   <span class="k">end</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
 <p>As a result, you should get something like this:</p>
 
-<div class="highlight"><pre><code class="language-text" data-lang="text">lisp &gt;&gt; (define pi 3.14)
+<figure class="highlight"><pre><code class="language-text" data-lang="text">lisp &gt;&gt; (define pi 3.14)
 3.14
 lisp &gt;&gt; (define circle-area (lambda (r) (* pi (* r r))))
 #&lt;Proc:0x007fa6140c6cc0@lib/rlisp.rb:86 (lambda)&gt;
 lisp &gt;&gt; (circle-area 11)
-379.94</code></pre></div>
+379.94</code></pre></figure>
 
 <h2 id="conclusions">Conclusions</h2>
 <p>Right now, we have a simple scheme interpreter.
@@ -597,16 +646,16 @@ These concepts will be discussed in future articles.</p>
 
     <span class="post-date">26 Oct 2015</span>
 
-    <p>Sometimes in tests you have to set special locale for <code>get</code> request.
+    <p>Sometimes in tests you have to set special locale for <code class="highlighter-rouge">get</code> request.
 For example you want to <a href="https://github.com/mperham/sidekiq/blob/master/test/test_web.rb#L33-L50">test selecting locale language</a>.
-For this you have to set locale in <code>'HTTP_ACCEPT_LANGUAGE'</code> variable in params hash.</p>
+For this you have to set locale in <code class="highlighter-rouge">'HTTP_ACCEPT_LANGUAGE'</code> variable in params hash.</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">it</span> <span class="s1">&#39;your test description&#39;</span> <span class="k">do</span>
-  <span class="n">rackenv</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;HTTP_ACCEPT_LANGUAGE&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;ru,en&#39;</span><span class="p">}</span>
-  <span class="n">get</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="p">{},</span> <span class="n">rackenv</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">it</span> <span class="s1">'your test description'</span> <span class="k">do</span>
+  <span class="n">rackenv</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'HTTP_ACCEPT_LANGUAGE'</span> <span class="o">=&gt;</span> <span class="s1">'ru,en'</span><span class="p">}</span>
+  <span class="n">get</span> <span class="s1">'/'</span><span class="p">,</span> <span class="p">{},</span> <span class="n">rackenv</span>
 
-  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-<span class="k">end</span></code></pre></div>
+  <span class="p">.</span><span class="nf">.</span><span class="p">.</span>
+<span class="nf">end</span></code></pre></figure>
 
 
 
@@ -639,29 +688,29 @@ For this you have to set locale in <code>'HTTP_ACCEPT_LANGUAGE'</code> variable 
     <span class="post-date">05 Apr 2015</span>
 
     <p>Memory profiler tools for ruby It so happened that I was need know how much ruby objects created
-for each call sidekiq <code>perform_async</code> method
+for each call sidekiq <code class="highlighter-rouge">perform_async</code> method
 (<a href="https://github.com/mperham/sidekiq/pull/2288">mperham/sidekiq#2288</a>).
 That’s why I decided to create list with tools which helps you to know all required information.</p>
 
 <h2 id="ruby-gc">1. Ruby GC</h2>
 <p>Sam Saffron has written great post, in which he talk about ruby garbage collector and wonderful
-<code>GC.start</code> method which returns data hash:</p>
+<code class="highlighter-rouge">GC.start</code> method which returns data hash:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="mo">001</span> <span class="o">&gt;</span> <span class="no">GC</span><span class="o">.</span><span class="n">stat</span>
-<span class="c1"># =&gt; {:count=&gt;21, :heap_allocated_pages=&gt;236, :heap_sorted_length=&gt;237, :heap_allocatable_pages=&gt;0, :heap_available_slots=&gt;96193, :heap_live_slots=&gt;95354, … }</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="mo">001</span> <span class="o">&gt;</span> <span class="no">GC</span><span class="p">.</span><span class="nf">stat</span>
+<span class="c1"># =&gt; {:count=&gt;21, :heap_allocated_pages=&gt;236, :heap_sorted_length=&gt;237, :heap_allocatable_pages=&gt;0, :heap_available_slots=&gt;96193, :heap_live_slots=&gt;95354, … }</span></code></pre></figure>
 
-<p>Also author mentions a <code>ObjectSpace</code> module that lets you know information about object/memory management.
+<p>Also author mentions a <code class="highlighter-rouge">ObjectSpace</code> module that lets you know information about object/memory management.
 For example you can easily know general number of created objects. For this you need write this code:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="mo">002</span> <span class="o">&gt;</span> <span class="no">ObjectSpace</span><span class="o">.</span><span class="n">count_objects</span><span class="o">[</span><span class="ss">:TOTAL</span><span class="o">]</span>
-<span class="c1"># =&gt; 96193</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="mo">002</span> <span class="o">&gt;</span> <span class="no">ObjectSpace</span><span class="p">.</span><span class="nf">count_objects</span><span class="p">[</span><span class="ss">:TOTAL</span><span class="p">]</span>
+<span class="c1"># =&gt; 96193</span></code></pre></figure>
 
 <h2 id="ruby-memory-profiler">2. Ruby Memory Profiler</h2>
 <p>Also Sam wrote great tool (<a href="https://github.com/SamSaffron/memory_profiler">ruby-memory-profiler</a>) which provide
 easily display all required information for any code in block. For this you will need call something like
 this (I called this code in my sidekiq reduce allocation PR):</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">MemoryProfiler</span><span class="o">.</span><span class="n">report</span><span class="p">{</span> <span class="mi">100</span><span class="o">.</span><span class="n">times</span><span class="p">{</span> <span class="no">HardWorker</span><span class="o">.</span><span class="n">perform_async</span> <span class="p">}</span> <span class="p">}</span><span class="o">.</span><span class="n">pretty_print</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">MemoryProfiler</span><span class="p">.</span><span class="nf">report</span><span class="p">{</span> <span class="mi">100</span><span class="p">.</span><span class="nf">times</span><span class="p">{</span> <span class="no">HardWorker</span><span class="p">.</span><span class="nf">perform_async</span> <span class="p">}</span> <span class="p">}.</span><span class="nf">pretty_print</span></code></pre></figure>
 
 <h2 id="ruby-prof">3. ruby-prof</h2>
 <p>General features:</p>
@@ -674,16 +723,16 @@ this (I called this code in my sidekiq reduce allocation PR):</p>
 
 <p>How to use:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">&#39;ruby-prof&#39;</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">'ruby-prof'</span>
 
 <span class="c1"># Profile the code</span>
-<span class="no">RubyProf</span><span class="o">.</span><span class="n">start</span>
+<span class="no">RubyProf</span><span class="p">.</span><span class="nf">start</span>
 <span class="c1"># [code to profile]</span>
-<span class="no">RubyProf</span><span class="o">.</span><span class="n">pause</span>
+<span class="no">RubyProf</span><span class="p">.</span><span class="nf">pause</span>
 <span class="c1"># [other code]</span>
-<span class="no">RubyProf</span><span class="o">.</span><span class="n">resume</span>
+<span class="no">RubyProf</span><span class="p">.</span><span class="nf">resume</span>
 <span class="c1"># [code to profile]</span>
-<span class="n">result</span> <span class="o">=</span> <span class="no">RubyProf</span><span class="o">.</span><span class="n">stop</span></code></pre></div>
+<span class="n">result</span> <span class="o">=</span> <span class="no">RubyProf</span><span class="p">.</span><span class="nf">stop</span></code></pre></figure>
 
 <h2 id="conclusions">Conclusions</h2>
 <p>Profiling Ruby isn’t as difficult as it seems at first glance. There are a lot of great
@@ -716,16 +765,16 @@ libraries. The only thing I was missing — profiling the code from a file, 
     <span class="post-date">29 Mar 2015</span>
 
     <p>So it happens that sometimes you need to convert string to color hash. I think that
-<code>Digest::MD5</code> class is easiest way for this. For this you need call hexdigest method
+<code class="highlighter-rouge">Digest::MD5</code> class is easiest way for this. For this you need call hexdigest method
 with necessary string.</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Digest</span><span class="o">::</span><span class="no">MD5</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">(</span><span class="s1">&#39;My string&#39;</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">5</span><span class="o">]</span> <span class="c1"># =&gt; &#39;a537d0&#39;</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Digest</span><span class="o">::</span><span class="no">MD5</span><span class="p">.</span><span class="nf">hexdigest</span><span class="p">(</span><span class="s1">'My string'</span><span class="p">)[</span><span class="mi">0</span><span class="p">.</span><span class="nf">.</span><span class="mi">5</span><span class="p">]</span> <span class="c1"># =&gt; 'a537d0'</span></code></pre></figure>
 
-<p>And if you will create rgb color you need convert hex to decimal with <code>to_i(16)</code> method.</p>
+<p>And if you will create rgb color you need convert hex to decimal with <code class="highlighter-rouge">to_i(16)</code> method.</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Digest</span><span class="o">::</span><span class="no">MD5</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">(</span><span class="n">worker</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="mi">5</span><span class="o">]</span>
-  <span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="sr">/../</span><span class="p">)</span>
-  <span class="o">.</span><span class="n">map</span><span class="p">{</span> <span class="o">|</span><span class="n">color</span><span class="o">|</span> <span class="n">color</span><span class="o">.</span><span class="n">to_i</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="p">}</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Digest</span><span class="o">::</span><span class="no">MD5</span><span class="p">.</span><span class="nf">hexdigest</span><span class="p">(</span><span class="n">worker</span><span class="p">)[</span><span class="mi">0</span><span class="p">.</span><span class="nf">.</span><span class="mi">5</span><span class="p">]</span>
+  <span class="p">.</span><span class="nf">scan</span><span class="p">(</span><span class="sr">/../</span><span class="p">)</span>
+  <span class="p">.</span><span class="nf">map</span><span class="p">{</span> <span class="o">|</span><span class="n">color</span><span class="o">|</span> <span class="n">color</span><span class="p">.</span><span class="nf">to_i</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="p">}</span></code></pre></figure>
 
 
 
@@ -788,7 +837,7 @@ with necessary string.</p>
 
 <p>В третьих, вы получаете необычный, и оттого интересный, удобный, после привыкания, способ взаимодействия с текстом. Подумайте сами, вы взаимодействуете с текстом как с объектом, а не как с набором символов, что позволяет вам выбирать не просто последовательность символов, а целые слова, параграфы, линии, блоки текста и оперировать с ними как захотите.</p>
 
-<p>Но для начала стоит вернуться к режимам. В vim-е их 4: нормальный, в котором вы посредством хоткеев выполняете операции над текстом; коммандный, в котором вы можете вводить комманды как в консоли(и, кстати, выполнять консольные комманды тоже); режим вставки, в котором вы можете набирать текст и оперировать им, как в обычном текстовом редакторе, а-ля sublime; ну и последний, визуальный, в котором вы можете выбирать текст для дальнейшего взаимодействия с ним. Стоит отметить, что визуальных режимов 3 - обычный, в котором вы выбираете текст посимвольно, строчный, в котором вы вы выбираете текст построчно, и блочный, в этом режиме вы задаете 2 точки прямоугольника, весь текст в котором выделяется и пригоден для взаимодействия. ( Сказать по правде, есть еще один режим, режим эмуляции ex редактора. Вызывается он с помощью <code>Q</code>, обязательно с шифтом, после чего вы попадаете в отдельное окно, в котором вы можете вводить комманды без префикса <code>:</code>. Чтобы выйти из этого режима достаточно набрать <code>visual</code> или <code>vi</code>. Для справки советую набрать <code>:h Ex-mode</code> в vim. )</p>
+<p>Но для начала стоит вернуться к режимам. В vim-е их 4: нормальный, в котором вы посредством хоткеев выполняете операции над текстом; коммандный, в котором вы можете вводить комманды как в консоли(и, кстати, выполнять консольные комманды тоже); режим вставки, в котором вы можете набирать текст и оперировать им, как в обычном текстовом редакторе, а-ля sublime; ну и последний, визуальный, в котором вы можете выбирать текст для дальнейшего взаимодействия с ним. Стоит отметить, что визуальных режимов 3 - обычный, в котором вы выбираете текст посимвольно, строчный, в котором вы вы выбираете текст построчно, и блочный, в этом режиме вы задаете 2 точки прямоугольника, весь текст в котором выделяется и пригоден для взаимодействия. ( Сказать по правде, есть еще один режим, режим эмуляции ex редактора. Вызывается он с помощью <code class="highlighter-rouge">Q</code>, обязательно с шифтом, после чего вы попадаете в отдельное окно, в котором вы можете вводить комманды без префикса <code class="highlighter-rouge">:</code>. Чтобы выйти из этого режима достаточно набрать <code class="highlighter-rouge">visual</code> или <code class="highlighter-rouge">vi</code>. Для справки советую набрать <code class="highlighter-rouge">:h Ex-mode</code> в vim. )</p>
 
 <p>Исходя из всего, что я написал выше - вам придется полностью изменить свое отношение к взаимодействию с текстом, что, в свою очередь, позволит вам увеличить вашу скорость редактирования/поиска текста. Скажу сразу, это непривычно, но с другой стороны, это как изучение нового языка программирования. Вы можете оставаться в собственной зоне комфорта, а можете сломать свой мозг, изучив какой-нибудь lisp или haskell. Тут то же самое, вы можете всю жизнь использовать привычный sublime, а можете попробовать что-то новое. Ну а в следующей записи мы более детально обсудим редактор и рассмотрим, как же он может облегчить нам жизнь.</p>
 
@@ -821,29 +870,29 @@ with necessary string.</p>
 
     <span class="post-date">10 Mar 2014</span>
 
-    <p>Совсем недавно, на работе, потребовалось мне заполнить новый проект данными для дальнейшего тестирования и разработки. Конечно же, данные должны быть в любом виде, и первое, о чем я подумал, был seed файл, поэтому сегодня мы поговорим именно о нем. Как всем известно, данный файл служит для генерации данных в рельсовых приложениях. Вы пишите скрипт, выполняете <code>rake db:seed</code> и радуетесь жизни. В моем случае данные были типовыми, а именно, нужно было сгенерировать пользователей, посты и комментарии к этим постам. Я думаю все прекрасно понимают, как все взаимосвязанно, поэтому на этом останавливаться не вижу особого смысла.</p>
+    <p>Совсем недавно, на работе, потребовалось мне заполнить новый проект данными для дальнейшего тестирования и разработки. Конечно же, данные должны быть в любом виде, и первое, о чем я подумал, был seed файл, поэтому сегодня мы поговорим именно о нем. Как всем известно, данный файл служит для генерации данных в рельсовых приложениях. Вы пишите скрипт, выполняете <code class="highlighter-rouge">rake db:seed</code> и радуетесь жизни. В моем случае данные были типовыми, а именно, нужно было сгенерировать пользователей, посты и комментарии к этим постам. Я думаю все прекрасно понимают, как все взаимосвязанно, поэтому на этом останавливаться не вижу особого смысла.</p>
 
 <p>Обычная практика многих людей - задать одинаковые данные для всех типов данных и наплодить их с десяток. Смотрится это обычно как-то так:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">user</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nb">name</span><span class="p">:</span>  <span class="s1">&#39;Jon&#39;</span>
-  <span class="ss">email</span><span class="p">:</span> <span class="s1">&#39;my@email.org&#39;</span>
-  <span class="ss">password</span><span class="p">:</span> <span class="s1">&#39;12345678&#39;</span><span class="p">,</span>
-  <span class="ss">password_confirmation</span><span class="p">:</span> <span class="s1">&#39;12345678&#39;</span>  
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">user</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="ss">name:  </span><span class="s1">'Jon'</span>
+  <span class="ss">email: </span><span class="s1">'my@email.org'</span>
+  <span class="ss">password: </span><span class="s1">'12345678'</span><span class="p">,</span>
+  <span class="ss">password_confirmation: </span><span class="s1">'12345678'</span>  
   <span class="p">}</span>
 
 <span class="n">post</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="ss">title</span><span class="p">:</span>  <span class="s1">&#39;My Post&#39;</span>
-  <span class="ss">body</span><span class="p">:</span>   <span class="s1">&#39;My body&#39;</span>
+  <span class="ss">title:  </span><span class="s1">'My Post'</span>
+  <span class="ss">body:   </span><span class="s1">'My body'</span>
   <span class="p">}</span>
 
-<span class="n">comment</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">body</span><span class="p">:</span> <span class="s1">&#39;comment&#39;</span> <span class="p">}</span>
+<span class="n">comment</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">body: </span><span class="s1">'comment'</span> <span class="p">}</span>
 
-<span class="mi">10</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
-  <span class="n">my_user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
-  <span class="n">my_post</span> <span class="o">=</span> <span class="n">my_user</span><span class="o">.</span><span class="n">create_post</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
-  <span class="n">my_post</span><span class="o">.</span><span class="n">create_comment</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">comment</span><span class="p">)</span>
-<span class="k">end</span></code></pre></div>
+<span class="mi">10</span><span class="p">.</span><span class="nf">times</span> <span class="k">do</span>
+  <span class="n">my_user</span> <span class="o">=</span> <span class="no">User</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+  <span class="n">my_post</span> <span class="o">=</span> <span class="n">my_user</span><span class="p">.</span><span class="nf">create_post</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+  <span class="n">my_post</span><span class="p">.</span><span class="nf">create_comment</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">comment</span><span class="p">)</span>
+<span class="k">end</span></code></pre></figure>
 
 <p>Но согласитесь, это скучно, банально и задевает чувство прекрасного. Поэтому давайте плюнем на все и развлечемся, создав свой собственный, изменяющийся из раза в раз мир :)</p>
 
@@ -851,83 +900,83 @@ with necessary string.</p>
 
 <p>Для того, чтобы наш воображаемый мир существовал, нам, естественно, нужны пользователи. И наша цель - создать абсолютно разных пользователей, не похожих друг на друга. Конечно же, первое, что всплывает в голову - замечательный гем <a href="https://github.com/stympy/faker">faker</a>, который поможет нам генерировать произвольные имена и почтовые адресса для наших пользователей. Но при всем при этом, не будем забывать про нашего админа. Так же, давайте зададим рандомное количество записей в интервале от 18 до 25 штук (числа, как вы догадались, могут быть абсолютно любые):</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">user</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="nb">name</span><span class="p">:</span>  <span class="n">admin</span>
-  <span class="ss">email</span><span class="p">:</span> <span class="n">admin</span><span class="vi">@my_app</span><span class="o">.</span><span class="n">com</span>
-  <span class="ss">password</span><span class="p">:</span> <span class="s1">&#39;12345678&#39;</span><span class="p">,</span>
-  <span class="ss">password_confirmation</span><span class="p">:</span> <span class="s1">&#39;12345678&#39;</span>  
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">user</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="ss">name:  </span><span class="n">admin</span>
+  <span class="ss">email: </span><span class="n">admin</span><span class="vi">@my_app</span><span class="p">.</span><span class="nf">com</span>
+  <span class="ss">password: </span><span class="s1">'12345678'</span><span class="p">,</span>
+  <span class="ss">password_confirmation: </span><span class="s1">'12345678'</span>  
   <span class="p">}</span>
 
-<span class="n">rnd</span> <span class="o">=</span> <span class="no">Random</span><span class="o">.</span><span class="n">new</span>
-<span class="n">user_count</span> <span class="o">=</span> <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">18</span><span class="o">.</span><span class="n">.</span><span class="mi">23</span><span class="p">)</span>
-<span class="no">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+<span class="n">rnd</span> <span class="o">=</span> <span class="no">Random</span><span class="p">.</span><span class="nf">new</span>
+<span class="n">user_count</span> <span class="o">=</span> <span class="n">rnd</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="mi">18</span><span class="p">.</span><span class="nf">.</span><span class="mi">23</span><span class="p">)</span>
+<span class="no">User</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
 
-<span class="n">user_count</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
-  <span class="n">user</span><span class="o">[</span><span class="ss">:name</span><span class="o">]</span>  <span class="o">=</span> <span class="no">Faker</span><span class="o">::</span><span class="no">Name</span><span class="o">.</span><span class="n">name</span>
-  <span class="n">user</span><span class="o">[</span><span class="ss">:email</span><span class="o">]</span> <span class="o">=</span> <span class="no">Faker</span><span class="o">::</span><span class="no">Internet</span><span class="o">.</span><span class="n">email</span>  
-  <span class="no">User</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
-<span class="k">end</span></code></pre></div>
+<span class="n">user_count</span><span class="p">.</span><span class="nf">times</span> <span class="k">do</span>
+  <span class="n">user</span><span class="p">[</span><span class="ss">:name</span><span class="p">]</span>  <span class="o">=</span> <span class="no">Faker</span><span class="o">::</span><span class="no">Name</span><span class="p">.</span><span class="nf">name</span>
+  <span class="n">user</span><span class="p">[</span><span class="ss">:email</span><span class="p">]</span> <span class="o">=</span> <span class="no">Faker</span><span class="o">::</span><span class="no">Internet</span><span class="p">.</span><span class="nf">email</span>  
+  <span class="no">User</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+<span class="k">end</span></code></pre></figure>
 
 <p>Cобственно я уверен, faker поможет вам сгенерировать почти любую информацию, стоит только открыть доки. Ну а если вам не угодил этот гем, то существует достаточно <a href="https://www.ruby-toolbox.com/categories/random_data_generation">много</a> других data генераторов.</p>
 
 <p>Не думаю, что тут что-то было сложно, поэтому пререйдем к постам. Сказать по правде, в нашем проекте посты состояли из строго заданных кусков html-a, поэтому тут ничего не оставалось, кроме как делать в лоб. Единственный момент, мы будем выбирать произвольно пользователя, чтобы от его имени создавать наш пост:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">posts</span> <span class="o">=</span> <span class="o">[</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">posts</span> <span class="o">=</span> <span class="p">[</span>
   <span class="p">{</span>
-    <span class="ss">title</span><span class="p">:</span>  <span class="s1">&#39;My first Post&#39;</span>
-    <span class="ss">body</span><span class="p">:</span>   <span class="s1">&#39;My body&#39;</span>
+    <span class="ss">title:  </span><span class="s1">'My first Post'</span>
+    <span class="ss">body:   </span><span class="s1">'My body'</span>
   <span class="p">},</span>
   <span class="p">{</span>
-    <span class="ss">title</span><span class="p">:</span>  <span class="s1">&#39;My second Post&#39;</span>
-    <span class="ss">body</span><span class="p">:</span>   <span class="s1">&#39;My body&#39;</span>    
+    <span class="ss">title:  </span><span class="s1">'My second Post'</span>
+    <span class="ss">body:   </span><span class="s1">'My body'</span>    
   <span class="p">},</span>
   <span class="c1"># Еще какое-то количество данных для постов ...</span>
-<span class="o">]</span>
+<span class="p">]</span>
 
 <span class="k">def</span> <span class="nf">rnd_user</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">rnd</span><span class="p">)</span>
-  <span class="n">random_user_id</span> <span class="o">=</span> <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="n">.</span><span class="p">(</span><span class="n">count</span><span class="p">))</span>
-  <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">random_user_id</span><span class="p">)</span>
+  <span class="n">random_user_id</span> <span class="o">=</span> <span class="n">rnd</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="p">(</span><span class="n">count</span><span class="p">))</span>
+  <span class="no">User</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="n">random_user_id</span><span class="p">)</span>
 <span class="k">end</span>
 
-<span class="n">posts</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
+<span class="n">posts</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
   <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
 
-  <span class="n">post</span><span class="o">[</span><span class="ss">:user_id</span><span class="o">]</span> <span class="o">=</span> <span class="n">rand_user</span><span class="o">.</span><span class="n">id</span>
-  <span class="n">created_post</span> <span class="o">=</span> <span class="n">rand_user</span><span class="o">.</span><span class="n">create_post</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
-<span class="k">end</span></code></pre></div>
+  <span class="n">post</span><span class="p">[</span><span class="ss">:user_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand_user</span><span class="p">.</span><span class="nf">id</span>
+  <span class="n">created_post</span> <span class="o">=</span> <span class="n">rand_user</span><span class="p">.</span><span class="nf">create_post</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+<span class="k">end</span></code></pre></figure>
 
 <p>Настало время самого интересного и забавного, комментарии. В данном проекте мы использовали гем <a href="https://github.com/elight/acts_as_commentable_with_threading">acts_as_commentable_with_threading</a>. Он содержит 2ух уровневую структуру комментариев, поэтому работы нам немного прибавилось. Чтобы создать комментарий, нам необходимы 3 значения: пост, где будет этот комментарий, пользователь, оставивший комментарий, и непосредственно сам текст комментария. Смотрится все это примерно так:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">post</span><span class="o">.</span><span class="n">build_comment</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">post</span><span class="p">.</span><span class="nf">build_comment</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span></code></pre></figure>
 
 <p>Ну а для “подкомментария” нам так же необходимо знать родительский комментарий, от которого ветка и пойдет, т.е. создание подобного комментария будет выглядеть примерно так:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">child_comment</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">build_comment</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
-<span class="n">child_comment</span><span class="o">.</span><span class="n">move_to_child_of</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">child_comment</span> <span class="o">=</span> <span class="n">post</span><span class="p">.</span><span class="nf">build_comment</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
+<span class="n">child_comment</span><span class="p">.</span><span class="nf">move_to_child_of</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span></code></pre></figure>
 
 <p>А теперь давайте создадим от 10 до 21 главных комментариев и до 9ти дочерних для каждого главного, при этом каждый комментарий будет оставлять рандомный пользователь:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">posts</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">posts</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
   <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
 
-  <span class="n">post</span><span class="o">[</span><span class="ss">:user_id</span><span class="o">]</span> <span class="o">=</span> <span class="n">rand_user</span><span class="o">.</span><span class="n">id</span>
-  <span class="n">created_post</span> <span class="o">=</span> <span class="n">rand_user</span><span class="o">.</span><span class="n">create_post</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+  <span class="n">post</span><span class="p">[</span><span class="ss">:user_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand_user</span><span class="p">.</span><span class="nf">id</span>
+  <span class="n">created_post</span> <span class="o">=</span> <span class="n">rand_user</span><span class="p">.</span><span class="nf">create_post</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
 
-  <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="o">.</span><span class="n">.</span><span class="mi">21</span><span class="p">)</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
+  <span class="n">rnd</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">.</span><span class="nf">.</span><span class="mi">21</span><span class="p">).</span><span class="nf">times</span> <span class="k">do</span>
     <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
-    <span class="n">comment</span> <span class="o">=</span> <span class="n">created_post</span><span class="o">.</span><span class="n">build_comment</span><span class="p">(</span><span class="n">rand_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;Comment body&#39;</span><span class="p">)</span>
-    <span class="n">comment</span><span class="o">.</span><span class="n">save!</span>
+    <span class="n">comment</span> <span class="o">=</span> <span class="n">created_post</span><span class="p">.</span><span class="nf">build_comment</span><span class="p">(</span><span class="n">rand_user</span><span class="p">.</span><span class="nf">id</span><span class="p">,</span> <span class="s1">'Comment body'</span><span class="p">)</span>
+    <span class="n">comment</span><span class="p">.</span><span class="nf">save!</span>
 
-    <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
+    <span class="n">rnd</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="mi">9</span><span class="p">).</span><span class="nf">times</span> <span class="k">do</span>
       <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
-      <span class="n">child_comment</span> <span class="o">=</span> <span class="n">created_post</span><span class="o">.</span><span class="n">build_comment</span><span class="p">(</span><span class="n">rand_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;Comment body&#39;</span><span class="p">)</span>
-      <span class="n">child_comment</span><span class="o">.</span><span class="n">save!</span>
-      <span class="n">child_comment</span><span class="o">.</span><span class="n">move_to_child_of</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span>
+      <span class="n">child_comment</span> <span class="o">=</span> <span class="n">created_post</span><span class="p">.</span><span class="nf">build_comment</span><span class="p">(</span><span class="n">rand_user</span><span class="p">.</span><span class="nf">id</span><span class="p">,</span> <span class="s1">'Comment body'</span><span class="p">)</span>
+      <span class="n">child_comment</span><span class="p">.</span><span class="nf">save!</span>
+      <span class="n">child_comment</span><span class="p">.</span><span class="nf">move_to_child_of</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span>
     <span class="k">end</span>
   <span class="k">end</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
-<p>Хм, рандомное количество комментариев мы сделали, пользователей тоже разных назначили, но вот незадача, у нас body каждого комментария одно и тоже, а именно <code>'Comment body'</code>.Что же делать и как нам быть? Раз уж мы договорились создать подобие “живого” приложения, то и комментарии у нас должны быть разные и тоже живые. Первое, что приходит в голову, - опять использовать массив данных, но я слишков ленив (да и не путь самурая это), чтобы все это набирать, пусть даже копипастить и тем более придумывать. Второе, что приходит на ум, генерировать рандомную строчку текста. Да, идея не плохая, как минимум, нам придется писать меньше кода, и он по-любому будет всегда разный. Но есть одно но: мы пытаемся достигнуть абсолютной правдоподобности, а строки вида <code>'skjafnskdjn ksajdnf'</code> нам точно не подойдут как комментарии. Поэтому нам на помощь приходит отличное решение - гем <a href="https://github.com/postmodern/raingrams">raingrams</a>.</p>
+<p>Хм, рандомное количество комментариев мы сделали, пользователей тоже разных назначили, но вот незадача, у нас body каждого комментария одно и тоже, а именно <code class="highlighter-rouge">'Comment body'</code>.Что же делать и как нам быть? Раз уж мы договорились создать подобие “живого” приложения, то и комментарии у нас должны быть разные и тоже живые. Первое, что приходит в голову, - опять использовать массив данных, но я слишков ленив (да и не путь самурая это), чтобы все это набирать, пусть даже копипастить и тем более придумывать. Второе, что приходит на ум, генерировать рандомную строчку текста. Да, идея не плохая, как минимум, нам придется писать меньше кода, и он по-любому будет всегда разный. Но есть одно но: мы пытаемся достигнуть абсолютной правдоподобности, а строки вида <code class="highlighter-rouge">'skjafnskdjn ksajdnf'</code> нам точно не подойдут как комментарии. Поэтому нам на помощь приходит отличное решение - гем <a href="https://github.com/postmodern/raingrams">raingrams</a>.</p>
 
 <p>Что же такого может этот гем, спросите Вы? На самом деле, ничего особенного, Вы просто скармливаете ему текст, а он, в свою очередь, разбивает его на куски и рандомно выдает обратно. В чем плюсы? Да, они не отличаются от банальной генерации строки, единственное и очевидное отличие - генерируемый текст будет логичен в пределах строки.</p>
 
@@ -938,41 +987,41 @@ with necessary string.</p>
     <p>Во первых, гем не поддерживает русский язык. Скажем так, он его не видит. Поэтому, если для Вас важен русский язык, используйте наш <a href="https://github.com/dointeractive/raingrams">форк</a>, в котором исправлен этот косяк.</p>
   </li>
   <li>
-    <p>Ну а второй момент, в старых версиях существовал метод <code>train_with_url</code>, в который передавалась ссылка, а он уже все парсил и выдавал конечный результат. К сожалению, в свежих версиях этот метод был убран, причем убран очень хитро. Если быть точным, то автор просто вырезал часть этого метода, а вторую забыл(а может, решил стебануться над простыми парнями как мы, этого я, к сожалению, не знаю :) ).</p>
+    <p>Ну а второй момент, в старых версиях существовал метод <code class="highlighter-rouge">train_with_url</code>, в который передавалась ссылка, а он уже все парсил и выдавал конечный результат. К сожалению, в свежих версиях этот метод был убран, причем убран очень хитро. Если быть точным, то автор просто вырезал часть этого метода, а вторую забыл(а может, решил стебануться над простыми парнями как мы, этого я, к сожалению, не знаю :) ).</p>
   </li>
 </ul>
 
 <p>А теперь, используя полученные знания, перепишем наш метод. В качестве текста для raingrams мы будем использовать комментарии из пикабу, которые предварительно распарсим:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">model</span> <span class="o">=</span> <span class="no">QuadgramModel</span><span class="o">.</span><span class="n">build</span> <span class="k">do</span> <span class="o">|</span><span class="n">model</span><span class="o">|</span>
-  <span class="n">doc</span> <span class="o">=</span> <span class="no">Nokogiri</span><span class="o">::</span><span class="no">HTML</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;http://pikabu.ru/story/v_den_programmista_pro_logiku_pikabu_685289&#39;</span><span class="p">))</span>
-  <span class="n">doc</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;div.comment_desc&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">div</span><span class="o">|</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">train_with_text</span><span class="p">(</span><span class="n">div</span><span class="o">.</span><span class="n">inner_text</span><span class="p">)</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">refresh</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">model</span> <span class="o">=</span> <span class="no">QuadgramModel</span><span class="p">.</span><span class="nf">build</span> <span class="k">do</span> <span class="o">|</span><span class="n">model</span><span class="o">|</span>
+  <span class="n">doc</span> <span class="o">=</span> <span class="no">Nokogiri</span><span class="o">::</span><span class="no">HTML</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">'http://pikabu.ru/story/v_den_programmista_pro_logiku_pikabu_685289'</span><span class="p">))</span>
+  <span class="n">doc</span><span class="p">.</span><span class="nf">search</span><span class="p">(</span><span class="s1">'div.comment_desc'</span><span class="p">).</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">div</span><span class="o">|</span>
+    <span class="n">model</span><span class="p">.</span><span class="nf">train_with_text</span><span class="p">(</span><span class="n">div</span><span class="p">.</span><span class="nf">inner_text</span><span class="p">)</span>
+    <span class="n">model</span><span class="p">.</span><span class="nf">refresh</span>
   <span class="k">end</span>
 <span class="k">end</span>
 
 <span class="c1"># ....</span>
 
-<span class="n">posts</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
+<span class="n">posts</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">post</span><span class="o">|</span>
   <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
 
-  <span class="n">post</span><span class="o">[</span><span class="ss">:user_id</span><span class="o">]</span> <span class="o">=</span> <span class="n">rand_user</span><span class="o">.</span><span class="n">id</span>
-  <span class="n">created_post</span> <span class="o">=</span> <span class="n">rand_user</span><span class="o">.</span><span class="n">create_post</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
+  <span class="n">post</span><span class="p">[</span><span class="ss">:user_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand_user</span><span class="p">.</span><span class="nf">id</span>
+  <span class="n">created_post</span> <span class="o">=</span> <span class="n">rand_user</span><span class="p">.</span><span class="nf">create_post</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
 
-  <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="o">.</span><span class="n">.</span><span class="mi">21</span><span class="p">)</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
+  <span class="n">rnd</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">.</span><span class="nf">.</span><span class="mi">21</span><span class="p">).</span><span class="nf">times</span> <span class="k">do</span>
     <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
-    <span class="n">comment</span> <span class="o">=</span> <span class="n">created_post</span><span class="o">.</span><span class="n">build_comment</span><span class="p">(</span><span class="n">rand_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">random_sentence</span><span class="p">)</span>
-    <span class="n">comment</span><span class="o">.</span><span class="n">save!</span>
+    <span class="n">comment</span> <span class="o">=</span> <span class="n">created_post</span><span class="p">.</span><span class="nf">build_comment</span><span class="p">(</span><span class="n">rand_user</span><span class="p">.</span><span class="nf">id</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="nf">random_sentence</span><span class="p">)</span>
+    <span class="n">comment</span><span class="p">.</span><span class="nf">save!</span>
 
-    <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span><span class="o">.</span><span class="n">times</span> <span class="k">do</span>
+    <span class="n">rnd</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="mi">9</span><span class="p">).</span><span class="nf">times</span> <span class="k">do</span>
       <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
-      <span class="n">child_comment</span> <span class="o">=</span> <span class="n">created_post</span><span class="o">.</span><span class="n">build_comment</span><span class="p">(</span><span class="n">rand_user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">random_sentence</span><span class="p">)</span>
-      <span class="n">child_comment</span><span class="o">.</span><span class="n">save!</span>
-      <span class="n">child_comment</span><span class="o">.</span><span class="n">move_to_child_of</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span>
+      <span class="n">child_comment</span> <span class="o">=</span> <span class="n">created_post</span><span class="p">.</span><span class="nf">build_comment</span><span class="p">(</span><span class="n">rand_user</span><span class="p">.</span><span class="nf">id</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="nf">random_sentence</span><span class="p">)</span>
+      <span class="n">child_comment</span><span class="p">.</span><span class="nf">save!</span>
+      <span class="n">child_comment</span><span class="p">.</span><span class="nf">move_to_child_of</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span>
     <span class="k">end</span>
   <span class="k">end</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
 <p>Кстати, я уверен, что немного изменив наш скрипт, можно будет создать подобную генератию текстов непосредственно для постов.</p>
 
@@ -982,26 +1031,26 @@ with necessary string.</p>
 
 <p>Для начала определим нашего пользователя и администратора:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Fabricator</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="k">do</span>
-  <span class="n">email</span> <span class="no">Faker</span><span class="o">::</span><span class="no">Internet</span><span class="o">.</span><span class="n">email</span>
-  <span class="nb">name</span> <span class="no">Faker</span><span class="o">::</span><span class="no">Name</span><span class="o">.</span><span class="n">name</span>
-  <span class="n">password</span> <span class="s1">&#39;12345678&#39;</span>
-  <span class="n">password_confirmation</span> <span class="s1">&#39;12345678&#39;</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Fabricator</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="k">do</span>
+  <span class="n">email</span> <span class="no">Faker</span><span class="o">::</span><span class="no">Internet</span><span class="p">.</span><span class="nf">email</span>
+  <span class="nb">name</span> <span class="no">Faker</span><span class="o">::</span><span class="no">Name</span><span class="p">.</span><span class="nf">name</span>
+  <span class="n">password</span> <span class="s1">'12345678'</span>
+  <span class="n">password_confirmation</span> <span class="s1">'12345678'</span>
 <span class="k">end</span>
 
 <span class="no">Fabricator</span><span class="p">(</span><span class="ss">:admin</span><span class="p">)</span> <span class="k">do</span>
-  <span class="n">email</span> <span class="s1">&#39;admin@my_app.org&#39;</span>
-  <span class="nb">name</span> <span class="s1">&#39;admin&#39;</span>
-  <span class="n">password</span> <span class="s1">&#39;12345678&#39;</span>
-  <span class="n">password_confirmation</span> <span class="s1">&#39;12345678&#39;</span>
-<span class="k">end</span></code></pre></div>
+  <span class="n">email</span> <span class="s1">'admin@my_app.org'</span>
+  <span class="nb">name</span> <span class="s1">'admin'</span>
+  <span class="n">password</span> <span class="s1">'12345678'</span>
+  <span class="n">password_confirmation</span> <span class="s1">'12345678'</span>
+<span class="k">end</span></code></pre></figure>
 
 <p>Ну а теперь, воспользуемся нашей новосозданной фабрикой для избавления от лишнего кода в seed файле:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">user_count</span> <span class="o">=</span> <span class="n">rnd</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">18</span><span class="o">.</span><span class="n">.</span><span class="mi">23</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">user_count</span> <span class="o">=</span> <span class="n">rnd</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="mi">18</span><span class="p">.</span><span class="nf">.</span><span class="mi">23</span><span class="p">)</span>
 <span class="no">Fabricate</span><span class="p">(</span><span class="ss">:admin</span><span class="p">)</span>
 
-<span class="n">user_count</span><span class="o">.</span><span class="n">times</span> <span class="p">{</span> <span class="no">Fabricate</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">}</span></code></pre></div>
+<span class="n">user_count</span><span class="p">.</span><span class="nf">times</span> <span class="p">{</span> <span class="no">Fabricate</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">}</span></code></pre></figure>
 
 <p>В итоге, мы смогли убрать достаточно приличный кусок cкрипта, избавшись от явного повтора кода.</p>
 

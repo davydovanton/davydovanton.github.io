@@ -89,7 +89,7 @@
 
   <div class="sidebar-item">
     <p>
-      &copy; 2015. All rights reserved.
+      &copy; 2016. All rights reserved.
     </p>
   </div>
 </div>
@@ -115,16 +115,16 @@
         <div class="post">
   <h1 class="post-title">Get request with custom locale in your tests</h1>
   <span class="post-date">26 Oct 2015</span>
-  <p>Sometimes in tests you have to set special locale for <code>get</code> request.
+  <p>Sometimes in tests you have to set special locale for <code class="highlighter-rouge">get</code> request.
 For example you want to <a href="https://github.com/mperham/sidekiq/blob/master/test/test_web.rb#L33-L50">test selecting locale language</a>.
-For this you have to set locale in <code>'HTTP_ACCEPT_LANGUAGE'</code> variable in params hash.</p>
+For this you have to set locale in <code class="highlighter-rouge">'HTTP_ACCEPT_LANGUAGE'</code> variable in params hash.</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">it</span> <span class="s1">&#39;your test description&#39;</span> <span class="k">do</span>
-  <span class="n">rackenv</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;HTTP_ACCEPT_LANGUAGE&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;ru,en&#39;</span><span class="p">}</span>
-  <span class="n">get</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="p">{},</span> <span class="n">rackenv</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">it</span> <span class="s1">'your test description'</span> <span class="k">do</span>
+  <span class="n">rackenv</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'HTTP_ACCEPT_LANGUAGE'</span> <span class="o">=&gt;</span> <span class="s1">'ru,en'</span><span class="p">}</span>
+  <span class="n">get</span> <span class="s1">'/'</span><span class="p">,</span> <span class="p">{},</span> <span class="n">rackenv</span>
 
-  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
-<span class="k">end</span></code></pre></div>
+  <span class="p">.</span><span class="nf">.</span><span class="p">.</span>
+<span class="nf">end</span></code></pre></figure>
 
 
 
@@ -157,6 +157,15 @@ For this you have to set locale in <code>'HTTP_ACCEPT_LANGUAGE'</code> variable 
     
       <li>
         <h3>
+          <a href="/2016/03/16/simple-hanami-auth/">
+            Simplest way to authenticate user in hanami app
+            <small>16 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/2015/12/15/stackprof-with-minitest/">
             Profiling minitest examples with Stackprof
             <small>15 Dec 2015</small>
@@ -169,15 +178,6 @@ For this you have to set locale in <code>'HTTP_ACCEPT_LANGUAGE'</code> variable 
           <a href="/2015/12/13/render-ruby-block-in-layout-file/">
             Rendering ruby block result in layout file
             <small>13 Dec 2015</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2015/11/14/ignore-file-lines-in-git/">
-            Ignore file lines in git
-            <small>14 Nov 2015</small>
           </a>
         </h3>
       </li>

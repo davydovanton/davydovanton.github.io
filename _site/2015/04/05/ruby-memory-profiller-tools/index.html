@@ -89,7 +89,7 @@
 
   <div class="sidebar-item">
     <p>
-      &copy; 2015. All rights reserved.
+      &copy; 2016. All rights reserved.
     </p>
   </div>
 </div>
@@ -116,29 +116,29 @@
   <h1 class="post-title">Memory profiler tools for ruby</h1>
   <span class="post-date">05 Apr 2015</span>
   <p>Memory profiler tools for ruby It so happened that I was need know how much ruby objects created
-for each call sidekiq <code>perform_async</code> method
+for each call sidekiq <code class="highlighter-rouge">perform_async</code> method
 (<a href="https://github.com/mperham/sidekiq/pull/2288">mperham/sidekiq#2288</a>).
 That’s why I decided to create list with tools which helps you to know all required information.</p>
 
 <h2 id="ruby-gc">1. Ruby GC</h2>
 <p>Sam Saffron has written great post, in which he talk about ruby garbage collector and wonderful
-<code>GC.start</code> method which returns data hash:</p>
+<code class="highlighter-rouge">GC.start</code> method which returns data hash:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="mo">001</span> <span class="o">&gt;</span> <span class="no">GC</span><span class="o">.</span><span class="n">stat</span>
-<span class="c1"># =&gt; {:count=&gt;21, :heap_allocated_pages=&gt;236, :heap_sorted_length=&gt;237, :heap_allocatable_pages=&gt;0, :heap_available_slots=&gt;96193, :heap_live_slots=&gt;95354, … }</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="mo">001</span> <span class="o">&gt;</span> <span class="no">GC</span><span class="p">.</span><span class="nf">stat</span>
+<span class="c1"># =&gt; {:count=&gt;21, :heap_allocated_pages=&gt;236, :heap_sorted_length=&gt;237, :heap_allocatable_pages=&gt;0, :heap_available_slots=&gt;96193, :heap_live_slots=&gt;95354, … }</span></code></pre></figure>
 
-<p>Also author mentions a <code>ObjectSpace</code> module that lets you know information about object/memory management.
+<p>Also author mentions a <code class="highlighter-rouge">ObjectSpace</code> module that lets you know information about object/memory management.
 For example you can easily know general number of created objects. For this you need write this code:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="mo">002</span> <span class="o">&gt;</span> <span class="no">ObjectSpace</span><span class="o">.</span><span class="n">count_objects</span><span class="o">[</span><span class="ss">:TOTAL</span><span class="o">]</span>
-<span class="c1"># =&gt; 96193</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="mo">002</span> <span class="o">&gt;</span> <span class="no">ObjectSpace</span><span class="p">.</span><span class="nf">count_objects</span><span class="p">[</span><span class="ss">:TOTAL</span><span class="p">]</span>
+<span class="c1"># =&gt; 96193</span></code></pre></figure>
 
 <h2 id="ruby-memory-profiler">2. Ruby Memory Profiler</h2>
 <p>Also Sam wrote great tool (<a href="https://github.com/SamSaffron/memory_profiler">ruby-memory-profiler</a>) which provide
 easily display all required information for any code in block. For this you will need call something like
 this (I called this code in my sidekiq reduce allocation PR):</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">MemoryProfiler</span><span class="o">.</span><span class="n">report</span><span class="p">{</span> <span class="mi">100</span><span class="o">.</span><span class="n">times</span><span class="p">{</span> <span class="no">HardWorker</span><span class="o">.</span><span class="n">perform_async</span> <span class="p">}</span> <span class="p">}</span><span class="o">.</span><span class="n">pretty_print</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">MemoryProfiler</span><span class="p">.</span><span class="nf">report</span><span class="p">{</span> <span class="mi">100</span><span class="p">.</span><span class="nf">times</span><span class="p">{</span> <span class="no">HardWorker</span><span class="p">.</span><span class="nf">perform_async</span> <span class="p">}</span> <span class="p">}.</span><span class="nf">pretty_print</span></code></pre></figure>
 
 <h2 id="ruby-prof">3. ruby-prof</h2>
 <p>General features:</p>
@@ -151,16 +151,16 @@ this (I called this code in my sidekiq reduce allocation PR):</p>
 
 <p>How to use:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">&#39;ruby-prof&#39;</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">'ruby-prof'</span>
 
 <span class="c1"># Profile the code</span>
-<span class="no">RubyProf</span><span class="o">.</span><span class="n">start</span>
+<span class="no">RubyProf</span><span class="p">.</span><span class="nf">start</span>
 <span class="c1"># [code to profile]</span>
-<span class="no">RubyProf</span><span class="o">.</span><span class="n">pause</span>
+<span class="no">RubyProf</span><span class="p">.</span><span class="nf">pause</span>
 <span class="c1"># [other code]</span>
-<span class="no">RubyProf</span><span class="o">.</span><span class="n">resume</span>
+<span class="no">RubyProf</span><span class="p">.</span><span class="nf">resume</span>
 <span class="c1"># [code to profile]</span>
-<span class="n">result</span> <span class="o">=</span> <span class="no">RubyProf</span><span class="o">.</span><span class="n">stop</span></code></pre></div>
+<span class="n">result</span> <span class="o">=</span> <span class="no">RubyProf</span><span class="p">.</span><span class="nf">stop</span></code></pre></figure>
 
 <h2 id="conclusions">Conclusions</h2>
 <p>Profiling Ruby isn’t as difficult as it seems at first glance. There are a lot of great
@@ -193,6 +193,15 @@ libraries. The only thing I was missing — profiling the code from a file, 
     
       <li>
         <h3>
+          <a href="/2016/03/16/simple-hanami-auth/">
+            Simplest way to authenticate user in hanami app
+            <small>16 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/2015/12/15/stackprof-with-minitest/">
             Profiling minitest examples with Stackprof
             <small>15 Dec 2015</small>
@@ -205,15 +214,6 @@ libraries. The only thing I was missing — profiling the code from a file, 
           <a href="/2015/12/13/render-ruby-block-in-layout-file/">
             Rendering ruby block result in layout file
             <small>13 Dec 2015</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2015/11/14/ignore-file-lines-in-git/">
-            Ignore file lines in git
-            <small>14 Nov 2015</small>
           </a>
         </h3>
       </li>

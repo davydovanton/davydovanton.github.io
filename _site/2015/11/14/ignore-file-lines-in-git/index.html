@@ -89,7 +89,7 @@
 
   <div class="sidebar-item">
     <p>
-      &copy; 2015. All rights reserved.
+      &copy; 2016. All rights reserved.
     </p>
   </div>
 </div>
@@ -115,33 +115,33 @@
         <div class="post">
   <h1 class="post-title">Ignore file lines in git</h1>
   <span class="post-date">14 Nov 2015</span>
-  <p>For example, you have this code and you want to ignore in git lines which contain <code>username</code> and <code>password</code> values:</p>
+  <p>For example, you have this code and you want to ignore in git lines which contain <code class="highlighter-rouge">username</code> and <code class="highlighter-rouge">password</code> values:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ssh_connect</span>
-  <span class="n">username</span> <span class="o">=</span> <span class="s2">&quot;root&quot;</span> <span class="c1"># ignore this line</span>
-  <span class="n">password</span> <span class="o">=</span> <span class="s2">&quot;password&quot;</span> <span class="c1"># ignore this line too</span>
-  <span class="n">ip</span> <span class="o">=</span> <span class="s2">&quot;192.168.1.1&quot;</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ssh_connect</span>
+  <span class="n">username</span> <span class="o">=</span> <span class="s2">"root"</span> <span class="c1"># ignore this line</span>
+  <span class="n">password</span> <span class="o">=</span> <span class="s2">"password"</span> <span class="c1"># ignore this line too</span>
+  <span class="n">ip</span> <span class="o">=</span> <span class="s2">"192.168.1.1"</span>
   <span class="c1"># ...</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
 <p>To ignore some special lines in git you need to:</p>
 
 <ol>
-  <li>Create a <code>.gitattributes</code> in your repository (remember that <code>.gitattributes</code> will be commited into the repository, if you don’t want that, add it to <code>.git/info/attributes</code>)</li>
-  <li>Add <code>*.rb filter=ignoreline</code> (run filter named ignoreline on all <code>*.rb</code> files)</li>
-  <li>Now, we need to define ignoreline filter in <code>.gitconfig</code></li>
-  <li><code>git config --global filter.ignoreline.clean "sed '/#ignoreline$/'d"</code> (delete theses lines)</li>
-  <li><code>git config --global filter.ignoreline.smudge cat</code> (do nothing when pulling file from the repository)</li>
+  <li>Create a <code class="highlighter-rouge">.gitattributes</code> in your repository (remember that <code class="highlighter-rouge">.gitattributes</code> will be commited into the repository, if you don’t want that, add it to <code class="highlighter-rouge">.git/info/attributes</code>)</li>
+  <li>Add <code class="highlighter-rouge">*.rb filter=ignoreline</code> (run filter named ignoreline on all <code class="highlighter-rouge">*.rb</code> files)</li>
+  <li>Now, we need to define ignoreline filter in <code class="highlighter-rouge">.gitconfig</code></li>
+  <li><code class="highlighter-rouge">git config --global filter.ignoreline.clean "sed '/#ignoreline$/'d"</code> (delete theses lines)</li>
+  <li><code class="highlighter-rouge">git config --global filter.ignoreline.smudge cat</code> (do nothing when pulling file from the repository)</li>
 </ol>
 
-<p>And then, you can ignore some lines useing <code>#ignoreline</code> comment:</p>
+<p>And then, you can ignore some lines useing <code class="highlighter-rouge">#ignoreline</code> comment:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ssh_connect</span>
-  <span class="n">username</span> <span class="o">=</span> <span class="s2">&quot;root&quot;</span> <span class="c1">#ignoreline</span>
-  <span class="n">password</span> <span class="o">=</span> <span class="s2">&quot;password&quot;</span> <span class="c1">#ignoreline</span>
-  <span class="n">ip</span> <span class="o">=</span> <span class="s2">&quot;192.168.1.1&quot;</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ssh_connect</span>
+  <span class="n">username</span> <span class="o">=</span> <span class="s2">"root"</span> <span class="c1">#ignoreline</span>
+  <span class="n">password</span> <span class="o">=</span> <span class="s2">"password"</span> <span class="c1">#ignoreline</span>
+  <span class="n">ip</span> <span class="o">=</span> <span class="s2">"192.168.1.1"</span>
   <span class="c1"># ...</span>
-<span class="k">end</span></code></pre></div>
+<span class="k">end</span></code></pre></figure>
 
 <p>Happy hacking!</p>
 
@@ -171,6 +171,15 @@
     
       <li>
         <h3>
+          <a href="/2016/03/16/simple-hanami-auth/">
+            Simplest way to authenticate user in hanami app
+            <small>16 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/2015/12/15/stackprof-with-minitest/">
             Profiling minitest examples with Stackprof
             <small>15 Dec 2015</small>
@@ -183,15 +192,6 @@
           <a href="/2015/12/13/render-ruby-block-in-layout-file/">
             Rendering ruby block result in layout file
             <small>13 Dec 2015</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2015/11/01/write-simple-scheme-interpreter-on-ruby/">
-            Write simple scheme interpreter on ruby
-            <small>01 Nov 2015</small>
           </a>
         </h3>
       </li>

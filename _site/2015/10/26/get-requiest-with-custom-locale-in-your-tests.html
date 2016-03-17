@@ -11,7 +11,7 @@
 
   <title>
     
-      Profiling minitest examples with Stackprof &middot; Anton Davydov
+      Get request with custom locale in your tests &middot; Anton Davydov
     
   </title>
 
@@ -31,7 +31,7 @@
 
   <!-- SEO -->
   
-    <meta name="description" content="In this post we'll profile code from minitest examples with Stackprof profiling gem" />
+    <meta name="description" content="Send specifiy locale in rspec or minitest get request" />
   
 
   <link rel="author" href="https://plus.google.com/u/0/104253015484296728880"/>
@@ -64,21 +64,17 @@
     
       
         
-          <a class="sidebar-nav-item" href="/about/">About</a>
+          <a class="sidebar-nav-item" href="/about.html">About</a>
         
       
     
       
     
       
-        
-      
-    
-      
     
       
         
-          <a class="sidebar-nav-item" href="/tags/">All tags</a>
+          <a class="sidebar-nav-item" href="/tags.html">All tags</a>
         
       
     
@@ -113,35 +109,18 @@
 
       <div class="container content">
         <div class="post">
-  <h1 class="post-title">Profiling minitest examples with Stackprof</h1>
-  <span class="post-date">15 Dec 2015</span>
-  <p>Today I read a nice blog post by Kir Shatrov about <a href="http://blog.iempire.ru/2015/10/13/profiling-specs">Profiling RSpec examples with Stackprof</a>
-and I wondered if I could repeat this trick with minitest? This question is very important for me
-because I ofen use minitest for my job and OSS projects. Also a lot of cool projects use minitest
-(for example, sidekiq, rails, lotus, etc).</p>
+  <h1 class="post-title">Get request with custom locale in your tests</h1>
+  <span class="post-date">26 Oct 2015</span>
+  <p>Sometimes in tests you have to set special locale for <code class="highlighter-rouge">get</code> request.
+For example you want to <a href="https://github.com/mperham/sidekiq/blob/master/test/test_web.rb#L33-L50">test selecting locale language</a>.
+For this you have to set locale in <code class="highlighter-rouge">'HTTP_ACCEPT_LANGUAGE'</code> variable in params hash.</p>
 
-<p>In reality, to do that in minitest as easy as in RSpec, and the only difference is that you need
-to install a separate gem.</p>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">it</span> <span class="s1">'your test description'</span> <span class="k">do</span>
+  <span class="n">rackenv</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'HTTP_ACCEPT_LANGUAGE'</span> <span class="o">=&gt;</span> <span class="s1">'ru,en'</span><span class="p">}</span>
+  <span class="n">get</span> <span class="s1">'/'</span><span class="p">,</span> <span class="p">{},</span> <span class="n">rackenv</span>
 
-<ol>
-  <li>Firstly you have to install <a href="https://github.com/splattael/minitest-around">minitest-around</a> gem;</li>
-  <li>And secondly you have to add this block of code to your <code class="highlighter-rouge">test_helper</code> file;</li>
-</ol>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># test/test_helper.rb</span>
-<span class="nb">require</span> <span class="s1">'stackprof'</span>
-<span class="nb">require</span> <span class="s1">'minitest/around/spec'</span>
-
-<span class="k">class</span> <span class="nc">Minitest</span><span class="o">::</span><span class="no">Test</span>
-  <span class="k">def</span> <span class="nf">around</span><span class="p">(</span><span class="o">&amp;</span><span class="n">example</span><span class="p">)</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="s2">"path/to/repo/tmp/stackprof.dump"</span>
-    <span class="no">StackProf</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="ss">mode: :object</span><span class="p">,</span> <span class="ss">out: </span><span class="n">path</span><span class="p">.</span><span class="nf">to_s</span><span class="p">)</span> <span class="k">do</span>
-      <span class="n">example</span><span class="p">.</span><span class="nf">call</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span></code></pre></figure>
-
-<p>Happy profiling!</p>
+  <span class="p">.</span><span class="nf">.</span><span class="p">.</span>
+<span class="nf">end</span></code></pre></figure>
 
 
 
@@ -149,15 +128,15 @@ to install a separate gem.</p>
     <ul>
     
       <li>
+        <a href="/tags/#test"><span>test</span></a>
+      </li>
+    
+      <li>
         <a href="/tags/#ruby"><span>ruby</span></a>
       </li>
     
       <li>
-        <a href="/tags/#profiling"><span>profiling</span></a>
-      </li>
-    
-      <li>
-        <a href="/tags/#minitest"><span>minitest</span></a>
+        <a href="/tags/#tips"><span>tips</span></a>
       </li>
     
     </ul>
@@ -174,7 +153,7 @@ to install a separate gem.</p>
     
       <li>
         <h3>
-          <a href="/2016/03/16/simple-hanami-auth/">
+          <a href="/2016/03/16/simple-hanami-auth.html">
             Simplest way to authenticate user in hanami app
             <small>16 Mar 2016</small>
           </a>
@@ -183,18 +162,18 @@ to install a separate gem.</p>
     
       <li>
         <h3>
-          <a href="/2015/12/13/render-ruby-block-in-layout-file/">
-            Rendering ruby block result in layout file
-            <small>13 Dec 2015</small>
+          <a href="/2015/12/15/stackprof-with-minitest.html">
+            Profiling minitest examples with Stackprof
+            <small>15 Dec 2015</small>
           </a>
         </h3>
       </li>
     
       <li>
         <h3>
-          <a href="/2015/11/14/ignore-file-lines-in-git/">
-            Ignore file lines in git
-            <small>14 Nov 2015</small>
+          <a href="/2015/12/13/render-ruby-block-in-layout-file.html">
+            Rendering ruby block result in layout file
+            <small>13 Dec 2015</small>
           </a>
         </h3>
       </li>

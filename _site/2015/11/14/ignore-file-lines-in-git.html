@@ -11,7 +11,7 @@
 
   <title>
     
-      Profiling minitest examples with Stackprof &middot; Anton Davydov
+      Ignore file lines in git &middot; Anton Davydov
     
   </title>
 
@@ -31,7 +31,7 @@
 
   <!-- SEO -->
   
-    <meta name="description" content="In this post we'll profile code from minitest examples with Stackprof profiling gem" />
+    <meta name="description" content="In this post we'll use git filter option to ignore special lines in file" />
   
 
   <link rel="author" href="https://plus.google.com/u/0/104253015484296728880"/>
@@ -64,21 +64,17 @@
     
       
         
-          <a class="sidebar-nav-item" href="/about/">About</a>
+          <a class="sidebar-nav-item" href="/about.html">About</a>
         
       
     
       
     
       
-        
-      
-    
-      
     
       
         
-          <a class="sidebar-nav-item" href="/tags/">All tags</a>
+          <a class="sidebar-nav-item" href="/tags.html">All tags</a>
         
       
     
@@ -113,51 +109,48 @@
 
       <div class="container content">
         <div class="post">
-  <h1 class="post-title">Profiling minitest examples with Stackprof</h1>
-  <span class="post-date">15 Dec 2015</span>
-  <p>Today I read a nice blog post by Kir Shatrov about <a href="http://blog.iempire.ru/2015/10/13/profiling-specs">Profiling RSpec examples with Stackprof</a>
-and I wondered if I could repeat this trick with minitest? This question is very important for me
-because I ofen use minitest for my job and OSS projects. Also a lot of cool projects use minitest
-(for example, sidekiq, rails, lotus, etc).</p>
+  <h1 class="post-title">Ignore file lines in git</h1>
+  <span class="post-date">14 Nov 2015</span>
+  <p>For example, you have this code and you want to ignore in git lines which contain <code class="highlighter-rouge">username</code> and <code class="highlighter-rouge">password</code> values:</p>
 
-<p>In reality, to do that in minitest as easy as in RSpec, and the only difference is that you need
-to install a separate gem.</p>
-
-<ol>
-  <li>Firstly you have to install <a href="https://github.com/splattael/minitest-around">minitest-around</a> gem;</li>
-  <li>And secondly you have to add this block of code to your <code class="highlighter-rouge">test_helper</code> file;</li>
-</ol>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># test/test_helper.rb</span>
-<span class="nb">require</span> <span class="s1">'stackprof'</span>
-<span class="nb">require</span> <span class="s1">'minitest/around/spec'</span>
-
-<span class="k">class</span> <span class="nc">Minitest</span><span class="o">::</span><span class="no">Test</span>
-  <span class="k">def</span> <span class="nf">around</span><span class="p">(</span><span class="o">&amp;</span><span class="n">example</span><span class="p">)</span>
-    <span class="n">path</span> <span class="o">=</span> <span class="s2">"path/to/repo/tmp/stackprof.dump"</span>
-    <span class="no">StackProf</span><span class="p">.</span><span class="nf">run</span><span class="p">(</span><span class="ss">mode: :object</span><span class="p">,</span> <span class="ss">out: </span><span class="n">path</span><span class="p">.</span><span class="nf">to_s</span><span class="p">)</span> <span class="k">do</span>
-      <span class="n">example</span><span class="p">.</span><span class="nf">call</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ssh_connect</span>
+  <span class="n">username</span> <span class="o">=</span> <span class="s2">"root"</span> <span class="c1"># ignore this line</span>
+  <span class="n">password</span> <span class="o">=</span> <span class="s2">"password"</span> <span class="c1"># ignore this line too</span>
+  <span class="n">ip</span> <span class="o">=</span> <span class="s2">"192.168.1.1"</span>
+  <span class="c1"># ...</span>
 <span class="k">end</span></code></pre></figure>
 
-<p>Happy profiling!</p>
+<p>To ignore some special lines in git you need to:</p>
 
+<ol>
+  <li>Create a <code class="highlighter-rouge">.gitattributes</code> in your repository (remember that <code class="highlighter-rouge">.gitattributes</code> will be commited into the repository, if you don’t want that, add it to <code class="highlighter-rouge">.git/info/attributes</code>)</li>
+  <li>Add <code class="highlighter-rouge">*.rb filter=ignoreline</code> (run filter named ignoreline on all <code class="highlighter-rouge">*.rb</code> files)</li>
+  <li>Now, we need to define ignoreline filter in <code class="highlighter-rouge">.gitconfig</code></li>
+  <li><code class="highlighter-rouge">git config --global filter.ignoreline.clean "sed '/#ignoreline$/'d"</code> (delete theses lines)</li>
+  <li><code class="highlighter-rouge">git config --global filter.ignoreline.smudge cat</code> (do nothing when pulling file from the repository)</li>
+</ol>
+
+<p>And then, you can ignore some lines useing <code class="highlighter-rouge">#ignoreline</code> comment:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ssh_connect</span>
+  <span class="n">username</span> <span class="o">=</span> <span class="s2">"root"</span> <span class="c1">#ignoreline</span>
+  <span class="n">password</span> <span class="o">=</span> <span class="s2">"password"</span> <span class="c1">#ignoreline</span>
+  <span class="n">ip</span> <span class="o">=</span> <span class="s2">"192.168.1.1"</span>
+  <span class="c1"># ...</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Happy hacking!</p>
 
 
   <div class="tag-cloud post-tags">
     <ul>
     
       <li>
-        <a href="/tags/#ruby"><span>ruby</span></a>
+        <a href="/tags/#tips"><span>tips</span></a>
       </li>
     
       <li>
-        <a href="/tags/#profiling"><span>profiling</span></a>
-      </li>
-    
-      <li>
-        <a href="/tags/#minitest"><span>minitest</span></a>
+        <a href="/tags/#git"><span>git</span></a>
       </li>
     
     </ul>
@@ -174,7 +167,7 @@ to install a separate gem.</p>
     
       <li>
         <h3>
-          <a href="/2016/03/16/simple-hanami-auth/">
+          <a href="/2016/03/16/simple-hanami-auth.html">
             Simplest way to authenticate user in hanami app
             <small>16 Mar 2016</small>
           </a>
@@ -183,18 +176,18 @@ to install a separate gem.</p>
     
       <li>
         <h3>
-          <a href="/2015/12/13/render-ruby-block-in-layout-file/">
-            Rendering ruby block result in layout file
-            <small>13 Dec 2015</small>
+          <a href="/2015/12/15/stackprof-with-minitest.html">
+            Profiling minitest examples with Stackprof
+            <small>15 Dec 2015</small>
           </a>
         </h3>
       </li>
     
       <li>
         <h3>
-          <a href="/2015/11/14/ignore-file-lines-in-git/">
-            Ignore file lines in git
-            <small>14 Nov 2015</small>
+          <a href="/2015/12/13/render-ruby-block-in-layout-file.html">
+            Rendering ruby block result in layout file
+            <small>13 Dec 2015</small>
           </a>
         </h3>
       </li>
