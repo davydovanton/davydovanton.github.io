@@ -127,14 +127,14 @@
 <p>To ignore some special lines in git you need to:</p>
 
 <ol>
-  <li>Create a <code class="highlighter-rouge">.gitattributes</code> in your repository (remember that <code class="highlighter-rouge">.gitattributes</code> will be commited into the repository, if you don’t want that, add it to <code class="highlighter-rouge">.git/info/attributes</code>)</li>
+  <li>Create a <code class="highlighter-rouge">.gitattributes</code> in your repository (remember that <code class="highlighter-rouge">.gitattributes</code> will be committed into the repository, if you don’t want that, add it to <code class="highlighter-rouge">.git/info/attributes</code>)</li>
   <li>Add <code class="highlighter-rouge">*.rb filter=ignoreline</code> (run filter named ignoreline on all <code class="highlighter-rouge">*.rb</code> files)</li>
   <li>Now, we need to define ignoreline filter in <code class="highlighter-rouge">.gitconfig</code></li>
   <li><code class="highlighter-rouge">git config --global filter.ignoreline.clean "sed '/#ignoreline$/'d"</code> (delete theses lines)</li>
   <li><code class="highlighter-rouge">git config --global filter.ignoreline.smudge cat</code> (do nothing when pulling file from the repository)</li>
 </ol>
 
-<p>And then, you can ignore some lines useing <code class="highlighter-rouge">#ignoreline</code> comment:</p>
+<p>And then, you can ignore some lines using <code class="highlighter-rouge">#ignoreline</code> comment:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ssh_connect</span>
   <span class="n">username</span> <span class="o">=</span> <span class="s2">"root"</span> <span class="c1">#ignoreline</span>

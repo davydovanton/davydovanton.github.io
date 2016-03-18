@@ -19,13 +19,13 @@ end
 
 To ignore some special lines in git you need to:
 
-1. Create a `.gitattributes` in your repository (remember that `.gitattributes` will be commited into the repository, if you don’t want that, add it to `.git/info/attributes`)
+1. Create a `.gitattributes` in your repository (remember that `.gitattributes` will be committed into the repository, if you don’t want that, add it to `.git/info/attributes`)
 2. Add `*.rb filter=ignoreline` (run filter named ignoreline on all `*.rb` files)
 3. Now, we need to define ignoreline filter in `.gitconfig`
 4. `git config --global filter.ignoreline.clean "sed '/#ignoreline$/'d"` (delete theses lines)
 5. `git config --global filter.ignoreline.smudge cat` (do nothing when pulling file from the repository)
 
-And then, you can ignore some lines useing `#ignoreline` comment:
+And then, you can ignore some lines using `#ignoreline` comment:
 {% highlight ruby %}
 def ssh_connect
   username = "root" #ignoreline

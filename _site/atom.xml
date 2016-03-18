@@ -4,7 +4,7 @@
  <title>Anton Davydov</title>
  <link href="http://blog.davydovanton.com/atom.xml" rel="self"/>
  <link href="http://blog.davydovanton.com/"/>
- <updated>2016-03-17T15:49:26+03:00</updated>
+ <updated>2016-03-18T03:19:53+03:00</updated>
  <id>http://blog.davydovanton.com</id>
  <author>
    <name>Anton Davydov</name>
@@ -135,14 +135,14 @@ But what will you do if you can’t use these methods or you need something easi
 &lt;p&gt;To ignore some special lines in git you need to:&lt;/p&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;Create a &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitattributes&lt;/code&gt; in your repository (remember that &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitattributes&lt;/code&gt; will be commited into the repository, if you don’t want that, add it to &lt;code class=&quot;highlighter-rouge&quot;&gt;.git/info/attributes&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;Create a &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitattributes&lt;/code&gt; in your repository (remember that &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitattributes&lt;/code&gt; will be committed into the repository, if you don’t want that, add it to &lt;code class=&quot;highlighter-rouge&quot;&gt;.git/info/attributes&lt;/code&gt;)&lt;/li&gt;
   &lt;li&gt;Add &lt;code class=&quot;highlighter-rouge&quot;&gt;*.rb filter=ignoreline&lt;/code&gt; (run filter named ignoreline on all &lt;code class=&quot;highlighter-rouge&quot;&gt;*.rb&lt;/code&gt; files)&lt;/li&gt;
   &lt;li&gt;Now, we need to define ignoreline filter in &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitconfig&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git config --global filter.ignoreline.clean &quot;sed &#39;/#ignoreline$/&#39;d&quot;&lt;/code&gt; (delete theses lines)&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git config --global filter.ignoreline.smudge cat&lt;/code&gt; (do nothing when pulling file from the repository)&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;And then, you can ignore some lines useing &lt;code class=&quot;highlighter-rouge&quot;&gt;#ignoreline&lt;/code&gt; comment:&lt;/p&gt;
+&lt;p&gt;And then, you can ignore some lines using &lt;code class=&quot;highlighter-rouge&quot;&gt;#ignoreline&lt;/code&gt; comment:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ssh_connect&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;username&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;root&quot;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#ignoreline&lt;/span&gt;
