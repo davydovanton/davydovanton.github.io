@@ -18,5 +18,11 @@ author:
   url:               https://davydovanton.com
   email:             antondavydov.o@gmail.com
 
+# Conversion
+markdown: redcarpet
+redcarpet:
+  # Enable auto ID's for Redcarpet
+  extensions: ["with_toc_data"]
+
 # Custom vars
 version:             3.0.0

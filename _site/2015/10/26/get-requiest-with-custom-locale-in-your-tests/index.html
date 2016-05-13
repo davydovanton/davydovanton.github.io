@@ -115,9 +115,9 @@
         <div class="post">
   <h1 class="post-title">Get request with custom locale in your tests</h1>
   <span class="post-date">26 Oct 2015</span>
-  <p>Sometimes in tests you have to set special locale for <code class="highlighter-rouge">get</code> request.
+  <p>Sometimes in tests you have to set special locale for <code>get</code> request.
 For example you want to <a href="https://github.com/mperham/sidekiq/blob/master/test/test_web.rb#L33-L50">test selecting locale language</a>.
-For this you have to set locale in <code class="highlighter-rouge">'HTTP_ACCEPT_LANGUAGE'</code> variable in params hash.</p>
+For this you have to set locale in <code>&#39;HTTP_ACCEPT_LANGUAGE&#39;</code> variable in params hash.</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">it</span> <span class="s1">'your test description'</span> <span class="k">do</span>
   <span class="n">rackenv</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'HTTP_ACCEPT_LANGUAGE'</span> <span class="o">=&gt;</span> <span class="s1">'ru,en'</span><span class="p">}</span>
@@ -125,7 +125,6 @@ For this you have to set locale in <code class="highlighter-rouge">'HTTP_ACCEPT_
 
   <span class="p">.</span><span class="nf">.</span><span class="p">.</span>
 <span class="nf">end</span></code></pre></figure>
-
 
 
   <div class="tag-cloud post-tags">

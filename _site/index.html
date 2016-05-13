@@ -121,9 +121,9 @@
 
     <span class="post-date">16 Mar 2016</span>
 
-    <p>If you need the simplest and easiest way to adding authentication logic in your <a href="http://hanamirb.org">hanami</a> app (to admin app for example) you always can use <a href="https://github.com/rack/rack/blob/master/lib/rack/auth/basic.rb"><code class="highlighter-rouge">Rack::Auth::Basic</code></a> class.</p>
+    <p>If you need the simplest and easiest way to adding authentication logic in your <a href="http://hanamirb.org">hanami</a> app (to admin app for example) you always can use <a href="https://github.com/rack/rack/blob/master/lib/rack/auth/basic.rb"><code>Rack::Auth::Basic</code></a> class.</p>
 
-<p>For this you need to add following lines of code to your <code class="highlighter-rouge">controller.prepare</code> configuration block:</p>
+<p>For this you need to add following lines of code to your <code>controller.prepare</code> configuration block:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># apps/admin/application.rb</span>
 
@@ -139,7 +139,6 @@
 <p>Happy authenticating!</p>
 
 <p><strong>P.S.:</strong> also if you need something more complicated you can reed <a href="https://discuss.hanamirb.org/t/authentication-for-lotus-app/178">this</a> thread on hanami forum.</p>
-
 
 
     <div class="tag-cloud">
@@ -179,8 +178,8 @@ because I ofen use minitest for my job and OSS projects. Also a lot of cool proj
 to install a separate gem.</p>
 
 <ol>
-  <li>Firstly you have to install <a href="https://github.com/splattael/minitest-around">minitest-around</a> gem;</li>
-  <li>And secondly you have to add this block of code to your <code class="highlighter-rouge">test_helper</code> file;</li>
+<li>Firstly you have to install <a href="https://github.com/splattael/minitest-around">minitest-around</a> gem;</li>
+<li>And secondly you have to add this block of code to your <code>test_helper</code> file;</li>
 </ol>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># test/test_helper.rb</span>
@@ -197,7 +196,6 @@ to install a separate gem.</p>
 <span class="k">end</span></code></pre></figure>
 
 <p>Happy profiling!</p>
-
 
 
     <div class="tag-cloud">
@@ -231,7 +229,7 @@ to install a separate gem.</p>
     <p>If you want to render some result of ruby block in your layout file, you may run into some problems.
 For example, your result may be repeated on page or you can get something worse.</p>
 
-<p>let’s assume we have these methods:</p>
+<p>let&#39;s assume we have these methods:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">add_to_head</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
   <span class="vi">@head_html</span> <span class="o">||=</span> <span class="p">[]</span>
@@ -243,17 +241,17 @@ For example, your result may be repeated on page or you can get something worse.
   <span class="vi">@head_html</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:call</span><span class="p">).</span><span class="nf">join</span>
 <span class="k">end</span></code></pre></figure>
 
-<p>Of cource you can use <code class="highlighter-rouge">captire</code> method from <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-capture">rails</a> and <a href="https://github.com/sinatra/sinatra-contrib#common-extensions">sinatra-contrib</a> librares.
+<p>Of cource you can use <code>captire</code> method from <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-capture">rails</a> and <a href="https://github.com/sinatra/sinatra-contrib#common-extensions">sinatra-contrib</a> librares.
 But what will you do if you can’t use these methods or you need something easier?</p>
 
-<p>I faced a similar problem (<a href="https://github.com/mperham/sidekiq/pull/2270">for example, in sidekiq</a>) and I used own <code class="highlighter-rouge">capture</code> method for layout files.</p>
+<p>I faced a similar problem (<a href="https://github.com/mperham/sidekiq/pull/2270">for example, in sidekiq</a>) and I used own <code>capture</code> method for layout files.</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">capture</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
   <span class="n">block</span><span class="p">.</span><span class="nf">call</span>
   <span class="nb">eval</span><span class="p">(</span><span class="s1">''</span><span class="p">,</span> <span class="n">block</span><span class="p">.</span><span class="nf">binding</span><span class="p">)</span>
 <span class="k">end</span></code></pre></figure>
 
-<p>And after that we can update our <code class="highlighter-rouge">display_custom_head</code> method:</p>
+<p>And after that we can update our <code>display_custom_head</code> method:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">display_custom_head</span>
   <span class="k">return</span> <span class="k">unless</span> <span class="vi">@head_html</span>
@@ -293,7 +291,7 @@ But what will you do if you can’t use these methods or you need something easi
 
     <span class="post-date">14 Nov 2015</span>
 
-    <p>For example, you have this code and you want to ignore in git lines which contain <code class="highlighter-rouge">username</code> and <code class="highlighter-rouge">password</code> values:</p>
+    <p>For example, you have this code and you want to ignore in git lines which contain <code>username</code> and <code>password</code> values:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ssh_connect</span>
   <span class="n">username</span> <span class="o">=</span> <span class="s2">"root"</span> <span class="c1"># ignore this line</span>
@@ -305,14 +303,14 @@ But what will you do if you can’t use these methods or you need something easi
 <p>To ignore some special lines in git you need to:</p>
 
 <ol>
-  <li>Create a <code class="highlighter-rouge">.gitattributes</code> in your repository (remember that <code class="highlighter-rouge">.gitattributes</code> will be committed into the repository, if you don’t want that, add it to <code class="highlighter-rouge">.git/info/attributes</code>)</li>
-  <li>Add <code class="highlighter-rouge">*.rb filter=ignoreline</code> (run filter named ignoreline on all <code class="highlighter-rouge">*.rb</code> files)</li>
-  <li>Now, we need to define ignoreline filter in <code class="highlighter-rouge">.gitconfig</code></li>
-  <li><code class="highlighter-rouge">git config --global filter.ignoreline.clean "sed '/#ignoreline$/'d"</code> (delete theses lines)</li>
-  <li><code class="highlighter-rouge">git config --global filter.ignoreline.smudge cat</code> (do nothing when pulling file from the repository)</li>
+<li>Create a <code>.gitattributes</code> in your repository (remember that <code>.gitattributes</code> will be committed into the repository, if you don’t want that, add it to <code>.git/info/attributes</code>)</li>
+<li>Add <code>*.rb filter=ignoreline</code> (run filter named ignoreline on all <code>*.rb</code> files)</li>
+<li>Now, we need to define ignoreline filter in <code>.gitconfig</code></li>
+<li><code>git config --global filter.ignoreline.clean &quot;sed &#39;/#ignoreline$/&#39;d&quot;</code> (delete theses lines)</li>
+<li><code>git config --global filter.ignoreline.smudge cat</code> (do nothing when pulling file from the repository)</li>
 </ol>
 
-<p>And then, you can ignore some lines using <code class="highlighter-rouge">#ignoreline</code> comment:</p>
+<p>And then, you can ignore some lines using <code>#ignoreline</code> comment:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ssh_connect</span>
   <span class="n">username</span> <span class="o">=</span> <span class="s2">"root"</span> <span class="c1">#ignoreline</span>
@@ -354,18 +352,20 @@ But what will you do if you can’t use these methods or you need something easi
 In this article, I want to show you how to do this for a simple lisp compiler.</p>
 
 <h2 id="why-scheme-and-lisp">Why scheme and lisp?</h2>
+
 <p>Firstly, lisp is very simple for create and for understanding.
 Lisp (<em>LISt Processor</em>) is a family of languages which is based on the idea of <a href="http://www.wikiwand.com/en/S-expression">S-expressions</a>.
-<a href="http://www.wikiwand.com/en/S-expression">S-Expression</a> are needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or are the expression of the form <code class="highlighter-rouge">(x . y)</code> where <code class="highlighter-rouge">x</code> and <code class="highlighter-rouge">y</code> are <a href="http://www.wikiwand.com/en/S-expression">s-expressions</a>.
-This expression may be formed as lists (<code class="highlighter-rouge">(1 . ( 2 . 3))</code> this equals <code class="highlighter-rouge">(1 2 3)</code>) and trees (<code class="highlighter-rouge">((1 . (2 . 3)) . (4 . 5))</code>).</p>
+<a href="http://www.wikiwand.com/en/S-expression">S-Expression</a> are needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or are the expression of the form <code>(x . y)</code> where <code>x</code> and <code>y</code> are <a href="http://www.wikiwand.com/en/S-expression">s-expressions</a>.
+This expression may be formed as lists (<code>(1 . ( 2 . 3))</code> this equals <code>(1 2 3)</code>) and trees (<code>((1 . (2 . 3)) . (4 . 5))</code>).</p>
 
 <p>Secondly, after creating interpreter you can better understand the language (the author fully understood the environment idea).
 Also you can understand the main idea of compilers and interpreters.</p>
 
-<p>Now let’s begin our journey into the world of compilers and interpreters so that we can write a simple scheme interpreter.</p>
+<p>Now let&#39;s begin our journey into the world of compilers and interpreters so that we can write a simple scheme interpreter.</p>
 
 <h2 id="main-idea">Main idea</h2>
-<p>Our language will contain two parts: a parser which translates the string to <a href="http://www.wikiwand.com/en/Abstract_syntax_tree">AST</a> and <code class="highlighter-rouge">eval</code> function.
+
+<p>Our language will contain two parts: a parser which translates the string to <a href="http://www.wikiwand.com/en/Abstract_syntax_tree">AST</a> and <code>eval</code> function.
 This function will take the <a href="http://www.wikiwand.com/en/Abstract_syntax_tree">AST</a> with envariement value and will return the result of the code.</p>
 
 <p>Schematically, it looks like this:</p>
@@ -373,8 +373,9 @@ This function will take the <a href="http://www.wikiwand.com/en/Abstract_syntax_
 <figure class="highlight"><pre><code class="language-text" data-lang="text">code(string) =&gt; parse function =&gt; AST =&gt; eval function =&gt; result</code></pre></figure>
 
 <h2 id="first-step-parser">First step. Parser.</h2>
-<p>To begin, let’s define what we want to get.
-For example, we have a string <code class="highlighter-rouge">'(+ 1 1 1)'</code>.
+
+<p>To begin, let&#39;s define what we want to get.
+For example, we have a string <code>&#39;(+ 1 1 1)&#39;</code>.
 What should our parser return? What kind of data structure should we receive? I think, that an array would be correct.</p>
 
 <p>Let write simple test code:</p>
@@ -383,7 +384,7 @@ What should our parser return? What kind of data structure should we receive? I 
 <span class="n">lisp</span> <span class="o">=</span> <span class="no">Lisp</span><span class="p">.</span><span class="nf">new</span>
 <span class="n">lisp</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span> <span class="o">==</span> <span class="p">[:</span><span class="o">+</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span></code></pre></figure>
 
-<p>As you can see, this is a simple code, so I just displayed <code class="highlighter-rouge">parse</code> method code:</p>
+<p>As you can see, this is a simple code, so I just displayed <code>parse</code> method code:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
   <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
@@ -413,16 +414,16 @@ What should our parser return? What kind of data structure should we receive? I 
   <span class="k">end</span>
 <span class="k">end</span></code></pre></figure>
 
-<p>As you know, in lisp you can write your code with nested operators, for example - <code class="highlighter-rouge">(+ (* 2 2) (- 5 3))</code>.
+<p>As you know, in lisp you can write your code with nested operators, for example - <code>(+ (* 2 2) (- 5 3))</code>.
 And this code will return 6.</p>
 
-<p>When we use our parser for this code, the result is not quite what we need, so let’s update our test code:</p>
+<p>When we use our parser for this code, the result is not quite what we need, so let&#39;s update our test code:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">program</span> <span class="o">=</span> <span class="s1">'(+ (* (1 2) 3) 4)'</span>
 <span class="n">lisp</span> <span class="o">=</span> <span class="no">Lisp</span><span class="p">.</span><span class="nf">new</span>
 <span class="n">lisp</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span> <span class="o">==</span> <span class="p">[:</span><span class="o">+</span><span class="p">,</span> <span class="p">[:</span><span class="o">*</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="mi">3</span><span class="p">],</span> <span class="mi">4</span><span class="p">]</span></code></pre></figure>
 
-<p>As you might guess, the most obvious way to fix our code is to call <code class="highlighter-rouge">parse</code> method in recursion and all array elements from <code class="highlighter-rouge">'('</code> to <code class="highlighter-rouge">')'</code>.
+<p>As you might guess, the most obvious way to fix our code is to call <code>parse</code> method in recursion and all array elements from <code>&#39;(&#39;</code> to <code>&#39;)&#39;</code>.
 We will move to a nested array.
 The code will be look loke this:</p>
 
@@ -471,15 +472,16 @@ The code will be look loke this:</p>
   <span class="k">end</span>
 <span class="k">end</span></code></pre></figure>
 
-<p>We did it! Let’s start to make <code class="highlighter-rouge">eval</code> method.</p>
+<p>We did it! Let&#39;s start to make <code>eval</code> method.</p>
 
 <h2 id="eval-method">Eval method</h2>
-<p>As I said earlier, our interpreter consists of two parts: a parser and <code class="highlighter-rouge">eval</code> function.</p>
 
-<p>The <code class="highlighter-rouge">eval</code> function will take two arguments: an expression, <code class="highlighter-rouge">exp</code>, that we want to evaluate, and an environment, <code class="highlighter-rouge">env</code>, in which to evaluate it. An environment is a mapping from variable names to their values.
+<p>As I said earlier, our interpreter consists of two parts: a parser and <code>eval</code> function.</p>
+
+<p>The <code>eval</code> function will take two arguments: an expression, <code>exp</code>, that we want to evaluate, and an environment, <code>env</code>, in which to evaluate it. An environment is a mapping from variable names to their values.
 By default, eval will use a instance value that includes the names for a bunch of standard things.</p>
 
-<p>let’s implement <code class="highlighter-rouge">@env</code> variable with <code class="highlighter-rouge">car</code>, <code class="highlighter-rouge">cdr</code> and <code class="highlighter-rouge">cons</code> functions:</p>
+<p>let&#39;s implement <code>@env</code> variable with <code>car</code>, <code>cdr</code> and <code>cons</code> functions:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">env</span> <span class="o">=</span> <span class="p">{</span>
   <span class="ss">:car</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">},</span>
@@ -487,7 +489,7 @@ By default, eval will use a instance value that includes the names for a bunch o
   <span class="ss">:cons</span> <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">cell</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="o">+</span> <span class="n">cell</span> <span class="p">},</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>The next step is to make <code class="highlighter-rouge">eval</code> function which will look for a match on the first element of the input array</p>
+<p>The next step is to make <code>eval</code> function which will look for a match on the first element of the input array</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
   <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">ext</span> <span class="o">=</span> <span class="p">{})</span>
@@ -532,9 +534,9 @@ I think we can add a check to the element type like this:</p>
   <span class="c1"># ...</span>
 <span class="k">end</span></code></pre></figure>
 
-<p>Some (eg arithmetic), we can easily add to <code class="highlighter-rouge">env</code> variable, and some do not.
-Therefore, we need to extend the checking in <code class="highlighter-rouge">eval</code> function. We will add a check for function name.
-For example, the code below will demonstrate <code class="highlighter-rouge">quote</code> and <code class="highlighter-rouge">if</code> functions:</p>
+<p>Some (eg arithmetic), we can easily add to <code>env</code> variable, and some do not.
+Therefore, we need to extend the checking in <code>eval</code> function. We will add a check for function name.
+For example, the code below will demonstrate <code>quote</code> and <code>if</code> functions:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
   <span class="c1"># ...</span>
@@ -547,13 +549,13 @@ For example, the code below will demonstrate <code class="highlighter-rouge">quo
   <span class="c1"># ...</span>
 <span class="k">end</span></code></pre></figure>
 
-<p>The next step is to initialize <code class="highlighter-rouge">define</code> and <code class="highlighter-rouge">lambda</code> functions.
-In scheme <code class="highlighter-rouge">define</code> function syntax is as follows:</p>
+<p>The next step is to initialize <code>define</code> and <code>lambda</code> functions.
+In scheme <code>define</code> function syntax is as follows:</p>
 
 <figure class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">define</span> <span class="nv">name</span>
   <span class="p">(</span><span class="nf">expression</span><span class="p">))</span></code></pre></figure>
 
-<p>And our code must create a new key-value pair in the <code class="highlighter-rouge">env</code> hash:</p>
+<p>And our code must create a new key-value pair in the <code>env</code> hash:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
   <span class="c1"># ...</span>
@@ -563,12 +565,12 @@ In scheme <code class="highlighter-rouge">define</code> function syntax is as fo
   <span class="c1"># ...</span>
 <span class="k">end</span></code></pre></figure>
 
-<p>The last function, <code class="highlighter-rouge">lambda</code> in scheme will have this syntax:</p>
+<p>The last function, <code>lambda</code> in scheme will have this syntax:</p>
 
 <figure class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">lambda</span> <span class="p">(</span><span class="nf">arg1,</span> <span class="nv">arg2,</span> <span class="o">...</span><span class="p">)</span>
   <span class="p">(</span><span class="nf">block</span> <span class="nv">of</span> <span class="nv">code</span><span class="p">))</span></code></pre></figure>
 
-<p>The first thing that comes to mind is to return the new <code class="highlighter-rouge">lambda</code> object with a new value inside <code class="highlighter-rouge">env</code> that will serve our code:</p>
+<p>The first thing that comes to mind is to return the new <code>lambda</code> object with a new value inside <code>env</code> that will serve our code:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
   <span class="c1"># ...</span>
@@ -579,9 +581,10 @@ In scheme <code class="highlighter-rouge">define</code> function syntax is as fo
 <span class="k">end</span></code></pre></figure>
 
 <p>As you can see, we made basic functionality of the our interpreter.
-I will leave learning how to do the implement the arithmetic methods and other methods such as <code class="highlighter-rouge">true</code>, <code class="highlighter-rouge">false</code>, <code class="highlighter-rouge">list</code>, etc up to the reader.</p>
+I will leave learning how to do the implement the arithmetic methods and other methods such as <code>true</code>, <code>false</code>, <code>list</code>, etc up to the reader.</p>
 
 <h2 id="repl">REPL</h2>
+
 <p>In main REPL have really simple idea repl takes single user inputs, evaluates them, and returns the result to the user.
 And all this is happens in an infinite loop:</p>
 
@@ -604,17 +607,19 @@ lisp &gt;&gt; (circle-area 11)
 379.94</code></pre></figure>
 
 <h2 id="conclusions">Conclusions</h2>
+
 <p>Right now, we have a simple scheme interpreter.
 It is easy to expand since we wrote a simple repl, and considered the basic idea of the interpreter.
 In this article, we did not consider such important concepts as macros, multithreading, code optimization, work with the system, and much more.
 These concepts will be discussed in future articles.</p>
 
 <h2 id="further-reading">Further reading</h2>
+
 <ul>
-  <li>Lisp interpreter written on python (<a href="http://norvig.com/lispy.html">http://norvig.com/lispy.html</a>)</li>
-  <li>Lisp interpreter written on C lang (<a href="http://www.buildyourownlisp.com">http://www.buildyourownlisp.com</a>)</li>
-  <li><a href="http://www.wikiwand.com/en/Scheme_(programming_language)">http://www.wikiwand.com/en/Scheme_(programming_language)</a></li>
-  <li><a href="http://www.wikiwand.com/en/S-expression">http://www.wikiwand.com/en/S-expression</a></li>
+<li>Lisp interpreter written on python (<a href="http://norvig.com/lispy.html">http://norvig.com/lispy.html</a>)</li>
+<li>Lisp interpreter written on C lang (<a href="http://www.buildyourownlisp.com">http://www.buildyourownlisp.com</a>)</li>
+<li><a href="http://www.wikiwand.com/en/Scheme_(programming_language)">http://www.wikiwand.com/en/Scheme<em>(programming</em>language)</a></li>
+<li><a href="http://www.wikiwand.com/en/S-expression">http://www.wikiwand.com/en/S-expression</a></li>
 </ul>
 
 
@@ -646,9 +651,9 @@ These concepts will be discussed in future articles.</p>
 
     <span class="post-date">26 Oct 2015</span>
 
-    <p>Sometimes in tests you have to set special locale for <code class="highlighter-rouge">get</code> request.
+    <p>Sometimes in tests you have to set special locale for <code>get</code> request.
 For example you want to <a href="https://github.com/mperham/sidekiq/blob/master/test/test_web.rb#L33-L50">test selecting locale language</a>.
-For this you have to set locale in <code class="highlighter-rouge">'HTTP_ACCEPT_LANGUAGE'</code> variable in params hash.</p>
+For this you have to set locale in <code>&#39;HTTP_ACCEPT_LANGUAGE&#39;</code> variable in params hash.</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">it</span> <span class="s1">'your test description'</span> <span class="k">do</span>
   <span class="n">rackenv</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'HTTP_ACCEPT_LANGUAGE'</span> <span class="o">=&gt;</span> <span class="s1">'ru,en'</span><span class="p">}</span>
@@ -656,7 +661,6 @@ For this you have to set locale in <code class="highlighter-rouge">'HTTP_ACCEPT_
 
   <span class="p">.</span><span class="nf">.</span><span class="p">.</span>
 <span class="nf">end</span></code></pre></figure>
-
 
 
     <div class="tag-cloud">
@@ -688,37 +692,40 @@ For this you have to set locale in <code class="highlighter-rouge">'HTTP_ACCEPT_
     <span class="post-date">05 Apr 2015</span>
 
     <p>Memory profiler tools for ruby It so happened that I was need know how much ruby objects created
-for each call sidekiq <code class="highlighter-rouge">perform_async</code> method
+for each call sidekiq <code>perform_async</code> method
 (<a href="https://github.com/mperham/sidekiq/pull/2288">mperham/sidekiq#2288</a>).
 That’s why I decided to create list with tools which helps you to know all required information.</p>
 
-<h2 id="ruby-gc">1. Ruby GC</h2>
+<h2 id="1-ruby-gc">1. Ruby GC</h2>
+
 <p>Sam Saffron has written great post, in which he talk about ruby garbage collector and wonderful
-<code class="highlighter-rouge">GC.start</code> method which returns data hash:</p>
+<code>GC.start</code> method which returns data hash:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="mo">001</span> <span class="o">&gt;</span> <span class="no">GC</span><span class="p">.</span><span class="nf">stat</span>
 <span class="c1"># =&gt; {:count=&gt;21, :heap_allocated_pages=&gt;236, :heap_sorted_length=&gt;237, :heap_allocatable_pages=&gt;0, :heap_available_slots=&gt;96193, :heap_live_slots=&gt;95354, … }</span></code></pre></figure>
 
-<p>Also author mentions a <code class="highlighter-rouge">ObjectSpace</code> module that lets you know information about object/memory management.
+<p>Also author mentions a <code>ObjectSpace</code> module that lets you know information about object/memory management.
 For example you can easily know general number of created objects. For this you need write this code:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="mo">002</span> <span class="o">&gt;</span> <span class="no">ObjectSpace</span><span class="p">.</span><span class="nf">count_objects</span><span class="p">[</span><span class="ss">:TOTAL</span><span class="p">]</span>
 <span class="c1"># =&gt; 96193</span></code></pre></figure>
 
-<h2 id="ruby-memory-profiler">2. Ruby Memory Profiler</h2>
+<h2 id="2-ruby-memory-profiler">2. Ruby Memory Profiler</h2>
+
 <p>Also Sam wrote great tool (<a href="https://github.com/SamSaffron/memory_profiler">ruby-memory-profiler</a>) which provide
 easily display all required information for any code in block. For this you will need call something like
 this (I called this code in my sidekiq reduce allocation PR):</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">MemoryProfiler</span><span class="p">.</span><span class="nf">report</span><span class="p">{</span> <span class="mi">100</span><span class="p">.</span><span class="nf">times</span><span class="p">{</span> <span class="no">HardWorker</span><span class="p">.</span><span class="nf">perform_async</span> <span class="p">}</span> <span class="p">}.</span><span class="nf">pretty_print</span></code></pre></figure>
 
-<h2 id="ruby-prof">3. ruby-prof</h2>
+<h2 id="3-ruby-prof">3. ruby-prof</h2>
+
 <p>General features:</p>
 
 <ul>
-  <li>display <a href="https://github.com/ruby-prof/ruby-prof#reports">different</a> reports;</li>
-  <li>fast;</li>
-  <li>easily profiles rails apps;</li>
+<li>display <a href="https://github.com/ruby-prof/ruby-prof#reports">different</a> reports;</li>
+<li>fast;</li>
+<li>easily profiles rails apps;</li>
 </ul>
 
 <p>How to use:</p>
@@ -735,6 +742,7 @@ this (I called this code in my sidekiq reduce allocation PR):</p>
 <span class="n">result</span> <span class="o">=</span> <span class="no">RubyProf</span><span class="p">.</span><span class="nf">stop</span></code></pre></figure>
 
 <h2 id="conclusions">Conclusions</h2>
+
 <p>Profiling Ruby isn’t as difficult as it seems at first glance. There are a lot of great
 libraries. The only thing I was missing — profiling the code from a file, but I’m sure it will soon add
 (maybe it will add myself ☺ ).</p>
@@ -765,17 +773,16 @@ libraries. The only thing I was missing — profiling the code from a file, 
     <span class="post-date">29 Mar 2015</span>
 
     <p>So it happens that sometimes you need to convert string to color hash. I think that
-<code class="highlighter-rouge">Digest::MD5</code> class is easiest way for this. For this you need call hexdigest method
+<code>Digest::MD5</code> class is easiest way for this. For this you need call hexdigest method
 with necessary string.</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Digest</span><span class="o">::</span><span class="no">MD5</span><span class="p">.</span><span class="nf">hexdigest</span><span class="p">(</span><span class="s1">'My string'</span><span class="p">)[</span><span class="mi">0</span><span class="p">.</span><span class="nf">.</span><span class="mi">5</span><span class="p">]</span> <span class="c1"># =&gt; 'a537d0'</span></code></pre></figure>
 
-<p>And if you will create rgb color you need convert hex to decimal with <code class="highlighter-rouge">to_i(16)</code> method.</p>
+<p>And if you will create rgb color you need convert hex to decimal with <code>to_i(16)</code> method.</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Digest</span><span class="o">::</span><span class="no">MD5</span><span class="p">.</span><span class="nf">hexdigest</span><span class="p">(</span><span class="n">worker</span><span class="p">)[</span><span class="mi">0</span><span class="p">.</span><span class="nf">.</span><span class="mi">5</span><span class="p">]</span>
   <span class="p">.</span><span class="nf">scan</span><span class="p">(</span><span class="sr">/../</span><span class="p">)</span>
   <span class="p">.</span><span class="nf">map</span><span class="p">{</span> <span class="o">|</span><span class="n">color</span><span class="o">|</span> <span class="n">color</span><span class="p">.</span><span class="nf">to_i</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="p">}</span></code></pre></figure>
-
 
 
     <div class="tag-cloud">
@@ -816,28 +823,28 @@ with necessary string.</p>
 
 <p>А теперь самое интересное, как мы реализуем такое количество комманд и способов выбора объектов, и при этом нам надо как то печатать обычный текст. Думаю, многие понимают, что использовать все клавиши для комманд и для набора текста - не реально вообще никак. А тем более на такой клавиатуре, которую использовали в терминалах того времени.</p>
 
-<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/KB_Terminal_ADM3A.svg/1000px-KB_Terminal_ADM3A.svg.png" alt="old unix keybord" /></p>
+<p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/KB_Terminal_ADM3A.svg/1000px-KB_Terminal_ADM3A.svg.png" alt="old unix keybord"></p>
 
-<p>Кстати, небольшой оффтоп, вы никогда не задумывались, откуда пошло, что символ ‘~’ в nix like системах обозначает home дирикторию? Посмотрите внимательно на клавиатуру выше, а именно на клавишу home ;)</p>
+<p>Кстати, небольшой оффтоп, вы никогда не задумывались, откуда пошло, что символ &#39;~&#39; в nix like системах обозначает home дирикторию? Посмотрите внимательно на клавиатуру выше, а именно на клавишу home ;)</p>
 
 <p>Так вот, тут-то мы и приходим к модальному интерфейсу. Что же это значит? Это значит, что существует несколько режимов, в которых различные клавиши выполняют различные комманды. В vi было целых 2 режима: режим вставки, в котором пользователь мог набирать текст, и коммандный режим, в котором пользователь, посредством нажатия комбинаций клавиш, работает с текстом.</p>
 
 <p>Вся прелесть данного текстового редактора была не только в его инновациях, но и в его открытости, что позволило в 1991 году <a href="http://en.wikipedia.org/wiki/Bram_Moolenaar">Браму Мооленару</a> создать первую версию vim, которая расшифровывается как <strong>V</strong>i <strong>im</strong>proved. В нем было очень много нового, например, визуальный режим, макросы, работа с кучей файлов одновременно, итеграция с ОС и так далее.</p>
 
-<p>Так что же это все дает нам, обычным программистам? Во первых, мы можем приобщиться к истории, а если серьезно - ввиду того, что раньше не было мыши, то все комманды печатались на клавиатуре, и никакие Васи не тыкали мышкой в кнопочки на экране. Ну а так как тыкаться мышкой в интерфейсе дольше, чем использовать хоткеи, то мы получаем довольно сильный профит в скорости. Во вторых, интерфейс не перегружен излишней функциональностью, как во многих IDE или текстовых редакторах. Предлагаю вам сравнить скриншоты vim-а и какого-нибудь eclipse.</p>
+<p>Так что же это все дает нам, обычным программистам? Во первых, мы можем приобщиться к истории, а если серьезно - ввиду того, что раньше не было мыши, то все комманды печатались на клавиатуре, и никакие Васи не тыкали мышкой в кнопочки на экране. Ну а так как тыкаться мышкой в интерфейсе дольше, чем использовать хоткеи, то мы получаем довольно сильный профит в скорости. Во вторых, интерфейс не перегружен излишней функциональностью, как во многих IDE или текстовых редакторах. Предлагаю вам сравнить скриншоты vim-а и какого-нибудь eclipse. </p>
 
 <p><a class="lightbox" href="http://2.bp.blogspot.com/_ZzOZmj1dP0c/TNcTx8DygaI/AAAAAAAAA0Q/Ar2BsQs11VI/s1600/gvim.png">
-<img src="http://2.bp.blogspot.com/_ZzOZmj1dP0c/TNcTx8DygaI/AAAAAAAAA0Q/Ar2BsQs11VI/s1600/gvim.png" alt="Vim" />
+<img src="http://2.bp.blogspot.com/_ZzOZmj1dP0c/TNcTx8DygaI/AAAAAAAAA0Q/Ar2BsQs11VI/s1600/gvim.png" alt="Vim">
 </a>
 <a class="lightbox" href="http://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Eclipse_4.3.Kepler_screenshot.png/800px-Eclipse_4.3.Kepler_screenshot.png">
-<img src="http://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Eclipse_4.3.Kepler_screenshot.png/800px-Eclipse_4.3.Kepler_screenshot.png" alt="Eclipse" />
+<img src="http://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Eclipse_4.3.Kepler_screenshot.png/800px-Eclipse_4.3.Kepler_screenshot.png" alt="Eclipse">
 </a></p>
 
 <p>Сказать по правде, я давно хотел спросить, вы часто тыкаете во все эти кнопки в cтроке наверху?</p>
 
 <p>В третьих, вы получаете необычный, и оттого интересный, удобный, после привыкания, способ взаимодействия с текстом. Подумайте сами, вы взаимодействуете с текстом как с объектом, а не как с набором символов, что позволяет вам выбирать не просто последовательность символов, а целые слова, параграфы, линии, блоки текста и оперировать с ними как захотите.</p>
 
-<p>Но для начала стоит вернуться к режимам. В vim-е их 4: нормальный, в котором вы посредством хоткеев выполняете операции над текстом; коммандный, в котором вы можете вводить комманды как в консоли(и, кстати, выполнять консольные комманды тоже); режим вставки, в котором вы можете набирать текст и оперировать им, как в обычном текстовом редакторе, а-ля sublime; ну и последний, визуальный, в котором вы можете выбирать текст для дальнейшего взаимодействия с ним. Стоит отметить, что визуальных режимов 3 - обычный, в котором вы выбираете текст посимвольно, строчный, в котором вы вы выбираете текст построчно, и блочный, в этом режиме вы задаете 2 точки прямоугольника, весь текст в котором выделяется и пригоден для взаимодействия. ( Сказать по правде, есть еще один режим, режим эмуляции ex редактора. Вызывается он с помощью <code class="highlighter-rouge">Q</code>, обязательно с шифтом, после чего вы попадаете в отдельное окно, в котором вы можете вводить комманды без префикса <code class="highlighter-rouge">:</code>. Чтобы выйти из этого режима достаточно набрать <code class="highlighter-rouge">visual</code> или <code class="highlighter-rouge">vi</code>. Для справки советую набрать <code class="highlighter-rouge">:h Ex-mode</code> в vim. )</p>
+<p>Но для начала стоит вернуться к режимам. В vim-е их 4: нормальный, в котором вы посредством хоткеев выполняете операции над текстом; коммандный, в котором вы можете вводить комманды как в консоли(и, кстати, выполнять консольные комманды тоже); режим вставки, в котором вы можете набирать текст и оперировать им, как в обычном текстовом редакторе, а-ля sublime; ну и последний, визуальный, в котором вы можете выбирать текст для дальнейшего взаимодействия с ним. Стоит отметить, что визуальных режимов 3 - обычный, в котором вы выбираете текст посимвольно, строчный, в котором вы вы выбираете текст построчно, и блочный, в этом режиме вы задаете 2 точки прямоугольника, весь текст в котором выделяется и пригоден для взаимодействия. ( Сказать по правде, есть еще один режим, режим эмуляции ex редактора. Вызывается он с помощью <code>Q</code>, обязательно с шифтом, после чего вы попадаете в отдельное окно, в котором вы можете вводить комманды без префикса <code>:</code>. Чтобы выйти из этого режима достаточно набрать <code>visual</code> или <code>vi</code>. Для справки советую набрать <code>:h Ex-mode</code> в vim. )</p>
 
 <p>Исходя из всего, что я написал выше - вам придется полностью изменить свое отношение к взаимодействию с текстом, что, в свою очередь, позволит вам увеличить вашу скорость редактирования/поиска текста. Скажу сразу, это непривычно, но с другой стороны, это как изучение нового языка программирования. Вы можете оставаться в собственной зоне комфорта, а можете сломать свой мозг, изучив какой-нибудь lisp или haskell. Тут то же самое, вы можете всю жизнь использовать привычный sublime, а можете попробовать что-то новое. Ну а в следующей записи мы более детально обсудим редактор и рассмотрим, как же он может облегчить нам жизнь.</p>
 
@@ -870,7 +877,7 @@ with necessary string.</p>
 
     <span class="post-date">10 Mar 2014</span>
 
-    <p>Совсем недавно, на работе, потребовалось мне заполнить новый проект данными для дальнейшего тестирования и разработки. Конечно же, данные должны быть в любом виде, и первое, о чем я подумал, был seed файл, поэтому сегодня мы поговорим именно о нем. Как всем известно, данный файл служит для генерации данных в рельсовых приложениях. Вы пишите скрипт, выполняете <code class="highlighter-rouge">rake db:seed</code> и радуетесь жизни. В моем случае данные были типовыми, а именно, нужно было сгенерировать пользователей, посты и комментарии к этим постам. Я думаю все прекрасно понимают, как все взаимосвязанно, поэтому на этом останавливаться не вижу особого смысла.</p>
+    <p>Совсем недавно, на работе, потребовалось мне заполнить новый проект данными для дальнейшего тестирования и разработки. Конечно же, данные должны быть в любом виде, и первое, о чем я подумал, был seed файл, поэтому сегодня мы поговорим именно о нем. Как всем известно, данный файл служит для генерации данных в рельсовых приложениях. Вы пишите скрипт, выполняете <code>rake db:seed</code> и радуетесь жизни. В моем случае данные были типовыми, а именно, нужно было сгенерировать пользователей, посты и комментарии к этим постам. Я думаю все прекрасно понимают, как все взаимосвязанно, поэтому на этом останавливаться не вижу особого смысла.</p>
 
 <p>Обычная практика многих людей - задать одинаковые данные для всех типов данных и наплодить их с десяток. Смотрится это обычно как-то так:</p>
 
@@ -945,11 +952,11 @@ with necessary string.</p>
   <span class="n">created_post</span> <span class="o">=</span> <span class="n">rand_user</span><span class="p">.</span><span class="nf">create_post</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
 <span class="k">end</span></code></pre></figure>
 
-<p>Настало время самого интересного и забавного, комментарии. В данном проекте мы использовали гем <a href="https://github.com/elight/acts_as_commentable_with_threading">acts_as_commentable_with_threading</a>. Он содержит 2ух уровневую структуру комментариев, поэтому работы нам немного прибавилось. Чтобы создать комментарий, нам необходимы 3 значения: пост, где будет этот комментарий, пользователь, оставивший комментарий, и непосредственно сам текст комментария. Смотрится все это примерно так:</p>
+<p>Настало время самого интересного и забавного, комментарии. В данном проекте мы использовали гем <a href="https://github.com/elight/acts_as_commentable_with_threading">acts<em>as</em>commentable<em>with</em>threading</a>. Он содержит 2ух уровневую структуру комментариев, поэтому работы нам немного прибавилось. Чтобы создать комментарий, нам необходимы 3 значения: пост, где будет этот комментарий, пользователь, оставивший комментарий, и непосредственно сам текст комментария. Смотрится все это примерно так:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">post</span><span class="p">.</span><span class="nf">build_comment</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span></code></pre></figure>
 
-<p>Ну а для “подкомментария” нам так же необходимо знать родительский комментарий, от которого ветка и пойдет, т.е. создание подобного комментария будет выглядеть примерно так:</p>
+<p>Ну а для &quot;подкомментария&quot; нам так же необходимо знать родительский комментарий, от которого ветка и пойдет, т.е. создание подобного комментария будет выглядеть примерно так:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">child_comment</span> <span class="o">=</span> <span class="n">post</span><span class="p">.</span><span class="nf">build_comment</span><span class="p">(</span><span class="n">user_id</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
 <span class="n">child_comment</span><span class="p">.</span><span class="nf">move_to_child_of</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span></code></pre></figure>
@@ -976,19 +983,15 @@ with necessary string.</p>
   <span class="k">end</span>
 <span class="k">end</span></code></pre></figure>
 
-<p>Хм, рандомное количество комментариев мы сделали, пользователей тоже разных назначили, но вот незадача, у нас body каждого комментария одно и тоже, а именно <code class="highlighter-rouge">'Comment body'</code>.Что же делать и как нам быть? Раз уж мы договорились создать подобие “живого” приложения, то и комментарии у нас должны быть разные и тоже живые. Первое, что приходит в голову, - опять использовать массив данных, но я слишков ленив (да и не путь самурая это), чтобы все это набирать, пусть даже копипастить и тем более придумывать. Второе, что приходит на ум, генерировать рандомную строчку текста. Да, идея не плохая, как минимум, нам придется писать меньше кода, и он по-любому будет всегда разный. Но есть одно но: мы пытаемся достигнуть абсолютной правдоподобности, а строки вида <code class="highlighter-rouge">'skjafnskdjn ksajdnf'</code> нам точно не подойдут как комментарии. Поэтому нам на помощь приходит отличное решение - гем <a href="https://github.com/postmodern/raingrams">raingrams</a>.</p>
+<p>Хм, рандомное количество комментариев мы сделали, пользователей тоже разных назначили, но вот незадача, у нас body каждого комментария одно и тоже, а именно <code>&#39;Comment body&#39;</code>.Что же делать и как нам быть? Раз уж мы договорились создать подобие &quot;живого&quot; приложения, то и комментарии у нас должны быть разные и тоже живые. Первое, что приходит в голову, - опять использовать массив данных, но я слишков ленив (да и не путь самурая это), чтобы все это набирать, пусть даже копипастить и тем более придумывать. Второе, что приходит на ум, генерировать рандомную строчку текста. Да, идея не плохая, как минимум, нам придется писать меньше кода, и он по-любому будет всегда разный. Но есть одно но: мы пытаемся достигнуть абсолютной правдоподобности, а строки вида <code>&#39;skjafnskdjn ksajdnf&#39;</code> нам точно не подойдут как комментарии. Поэтому нам на помощь приходит отличное решение - гем <a href="https://github.com/postmodern/raingrams">raingrams</a>.</p>
 
-<p>Что же такого может этот гем, спросите Вы? На самом деле, ничего особенного, Вы просто скармливаете ему текст, а он, в свою очередь, разбивает его на куски и рандомно выдает обратно. В чем плюсы? Да, они не отличаются от банальной генерации строки, единственное и очевидное отличие - генерируемый текст будет логичен в пределах строки.</p>
+<p>Что же такого может этот гем, спросите Вы? На самом деле, ничего особенного, Вы просто скармливаете ему текст, а он, в свою очередь, разбивает его на куски и рандомно выдает обратно. В чем плюсы? Да, они не отличаются от банальной генерации строки, единственное и очевидное отличие - генерируемый текст будет логичен в пределах строки. </p>
 
 <p>В документации достаточно подробно описано, как гем ставится и настраивается, но я бы хотел уделить внимание 2ум подводным камням, с которыми мы столкнулись:</p>
 
 <ul>
-  <li>
-    <p>Во первых, гем не поддерживает русский язык. Скажем так, он его не видит. Поэтому, если для Вас важен русский язык, используйте наш <a href="https://github.com/dointeractive/raingrams">форк</a>, в котором исправлен этот косяк.</p>
-  </li>
-  <li>
-    <p>Ну а второй момент, в старых версиях существовал метод <code class="highlighter-rouge">train_with_url</code>, в который передавалась ссылка, а он уже все парсил и выдавал конечный результат. К сожалению, в свежих версиях этот метод был убран, причем убран очень хитро. Если быть точным, то автор просто вырезал часть этого метода, а вторую забыл(а может, решил стебануться над простыми парнями как мы, этого я, к сожалению, не знаю :) ).</p>
-  </li>
+<li><p>Во первых, гем не поддерживает русский язык. Скажем так, он его не видит. Поэтому, если для Вас важен русский язык, используйте наш <a href="https://github.com/dointeractive/raingrams">форк</a>, в котором исправлен этот косяк. </p></li>
+<li><p>Ну а второй момент, в старых версиях существовал метод <code>train_with_url</code>, в который передавалась ссылка, а он уже все парсил и выдавал конечный результат. К сожалению, в свежих версиях этот метод был убран, причем убран очень хитро. Если быть точным, то автор просто вырезал часть этого метода, а вторую забыл(а может, решил стебануться над простыми парнями как мы, этого я, к сожалению, не знаю :) ). </p></li>
 </ul>
 
 <p>А теперь, используя полученные знания, перепишем наш метод. В качестве текста для raingrams мы будем использовать комментарии из пикабу, которые предварительно распарсим:</p>
@@ -1052,7 +1055,7 @@ with necessary string.</p>
 
 <span class="n">user_count</span><span class="p">.</span><span class="nf">times</span> <span class="p">{</span> <span class="no">Fabricate</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">}</span></code></pre></figure>
 
-<p>В итоге, мы смогли убрать достаточно приличный кусок cкрипта, избавшись от явного повтора кода.</p>
+<p>В итоге, мы смогли убрать достаточно приличный кусок cкрипта, избавшись от явного повтора кода. </p>
 
 <p>На этом, пожалуй, я закончу наши эксперименты. Как видите, простора для фантазии осталось еще много и также осталось много идей для рефакторинга. В любом случае, данный пример явно показывает, что к любой, сколь скучной она не была бы, задаче всегда можно применить творческий подход и неплохо развлечься :)</p>
 

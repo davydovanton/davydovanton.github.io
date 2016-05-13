@@ -115,9 +115,9 @@
         <div class="post">
   <h1 class="post-title">Simplest way to authenticate user in hanami app</h1>
   <span class="post-date">16 Mar 2016</span>
-  <p>If you need the simplest and easiest way to adding authentication logic in your <a href="http://hanamirb.org">hanami</a> app (to admin app for example) you always can use <a href="https://github.com/rack/rack/blob/master/lib/rack/auth/basic.rb"><code class="highlighter-rouge">Rack::Auth::Basic</code></a> class.</p>
+  <p>If you need the simplest and easiest way to adding authentication logic in your <a href="http://hanamirb.org">hanami</a> app (to admin app for example) you always can use <a href="https://github.com/rack/rack/blob/master/lib/rack/auth/basic.rb"><code>Rack::Auth::Basic</code></a> class.</p>
 
-<p>For this you need to add following lines of code to your <code class="highlighter-rouge">controller.prepare</code> configuration block:</p>
+<p>For this you need to add following lines of code to your <code>controller.prepare</code> configuration block:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># apps/admin/application.rb</span>
 
@@ -133,7 +133,6 @@
 <p>Happy authenticating!</p>
 
 <p><strong>P.S.:</strong> also if you need something more complicated you can reed <a href="https://discuss.hanamirb.org/t/authentication-for-lotus-app/178">this</a> thread on hanami forum.</p>
-
 
 
   <div class="tag-cloud post-tags">
