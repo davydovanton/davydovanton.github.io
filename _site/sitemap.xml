@@ -3,6 +3,21 @@
   
     
     <url>
+      <loc>http://blog.davydovanton.com/2016/05/14/middleman-add-title-anchors/</loc>
+      
+        <lastmod>2016-05-14T00:00:00+03:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
       <loc>http://blog.davydovanton.com/2016/03/16/simple-hanami-auth/</loc>
       
         <lastmod>2016-03-16T00:00:00+03:00</lastmod>
@@ -190,7 +205,7 @@
     <url>
       <loc>http://blog.davydovanton.com404.html</loc>
       
-        <lastmod>2016-05-14T12:33:54+03:00</lastmod>
+        <lastmod>2016-05-14T13:03:06+03:00</lastmod>
       
       
         <changefreq>monthly</changefreq>
@@ -218,7 +233,7 @@
     <url>
       <loc>http://blog.davydovanton.com</loc>
       
-        <lastmod>2016-05-14T12:33:54+03:00</lastmod>
+        <lastmod>2016-05-14T13:03:06+03:00</lastmod>
       
       
         <changefreq>monthly</changefreq>
@@ -241,7 +256,7 @@
     <url>
       <loc>http://blog.davydovanton.com</loc>
       
-        <lastmod>2016-05-14T12:33:54+03:00</lastmod>
+        <lastmod>2016-05-14T13:03:06+03:00</lastmod>
       
       
         <changefreq>monthly</changefreq>
@@ -259,7 +274,7 @@
     <url>
       <loc>http://blog.davydovanton.com</loc>
       
-        <lastmod>2016-05-14T12:33:54+03:00</lastmod>
+        <lastmod>2016-05-14T13:03:06+03:00</lastmod>
       
       
         <changefreq>monthly</changefreq>

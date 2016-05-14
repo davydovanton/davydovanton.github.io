@@ -1,11 +1,22 @@
-# Adding github anchors to your middleman or jekyll project
+---
+layout: post
+title: "Adding anchors to your middleman project"
+description: "In this post we'll add anchors authentication to your middleman project"
+tags:
+  - ruby
+  - blog
+  - middleman
+---
 
-## Middleman
+All people love anchors. It's helpful, cool and practical. If you
+want to add anchors to you middleman project you need to follow the
+following steps.
+
 First: we need to create a new renderer class. In this class we'll
 put `<a>` tag inside `<h>` tag. Also, we'll realize anchor svg in
 guthub style:
 
-```ruby
+{% highlight ruby %}
 require 'middleman-core/renderers/redcarpet'
 
 class GithubStyleTitles < Middleman::Renderers::MiddlemanRedcarpetHTML
@@ -34,17 +45,17 @@ private
      eos
   end
 end
-```
+{% endhighlight %}
 
 After that we need to call our renderer in `:markdown` configuration:
 
-``` ruby
+{% highlight ruby %}
 set :markdown, fenced_code_blocks: true, smartypants: true, renderer: GithubStyleTitles
-```
+{% endhighlight %}
 
 And the last step: we need to stylize our anchor with css:
 
-```css
+{% highlight css %}
 .docs-content .anchor {
   padding-right: 2px;
   margin-left: -18px;
@@ -58,7 +69,7 @@ And the last step: we need to stylize our anchor with css:
 .docs-content h6:hover .anchor {
   display: inline-block;
 }
-```
+{% endhighlight %}
 
 After all this steps we'll get something like this:
 

@@ -10,7 +10,9 @@ description:         "Simple blog where I'll write about ruby, my ideas and tech
 url:                 http://blog.davydovanton.com
 paginate:            10
 
-gems:                ['jekyll-paginate']
+gems:
+  - jemoji
+  - jekyll-paginate
 
 # About/contact
 author:

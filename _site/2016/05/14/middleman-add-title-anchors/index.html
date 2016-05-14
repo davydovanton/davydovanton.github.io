@@ -11,7 +11,7 @@
 
   <title>
     
-      Convert string to color hash &middot; Anton Davydov
+      Adding anchors to your middleman project &middot; Anton Davydov
     
   </title>
 
@@ -30,6 +30,8 @@
   <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
 
   <!-- SEO -->
+  
+    <meta name="description" content="In this post we'll add anchors authentication to your middleman project" />
   
 
   <link rel="author" href="https://plus.google.com/u/0/104253015484296728880"/>
@@ -111,35 +113,87 @@
 
       <div class="container content">
         <div class="post">
-  <h1 class="post-title">Convert string to color hash</h1>
-  <span class="post-date">29 Mar 2015</span>
-  <p>So it happens that sometimes you need to convert string to color hash. I think that
-<code class="highlighter-rouge">Digest::MD5</code> class is easiest way for this. For this you need call hexdigest method
-with necessary string.</p>
+  <h1 class="post-title">Adding anchors to your middleman project</h1>
+  <span class="post-date">14 May 2016</span>
+  <p>All people love anchors. It’s helpful, cool and practical. If you
+want to add anchors to you middleman project you need to follow the
+following steps.</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Digest</span><span class="o">::</span><span class="no">MD5</span><span class="p">.</span><span class="nf">hexdigest</span><span class="p">(</span><span class="s1">'My string'</span><span class="p">)[</span><span class="mi">0</span><span class="p">.</span><span class="nf">.</span><span class="mi">5</span><span class="p">]</span> <span class="c1"># =&gt; 'a537d0'</span></code></pre></figure>
+<p>First: we need to create a new renderer class. In this class we’ll
+put <code class="highlighter-rouge">&lt;a&gt;</code> tag inside <code class="highlighter-rouge">&lt;h&gt;</code> tag. Also, we’ll realize anchor svg in
+guthub style:</p>
 
-<p>And if you will create rgb color you need convert hex to decimal with <code class="highlighter-rouge">to_i(16)</code> method.</p>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">'middleman-core/renderers/redcarpet'</span>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Digest</span><span class="o">::</span><span class="no">MD5</span><span class="p">.</span><span class="nf">hexdigest</span><span class="p">(</span><span class="n">worker</span><span class="p">)[</span><span class="mi">0</span><span class="p">.</span><span class="nf">.</span><span class="mi">5</span><span class="p">]</span>
-  <span class="p">.</span><span class="nf">scan</span><span class="p">(</span><span class="sr">/../</span><span class="p">)</span>
-  <span class="p">.</span><span class="nf">map</span><span class="p">{</span> <span class="o">|</span><span class="n">color</span><span class="o">|</span> <span class="n">color</span><span class="p">.</span><span class="nf">to_i</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="p">}</span></code></pre></figure>
+<span class="k">class</span> <span class="nc">GithubStyleTitles</span> <span class="o">&lt;</span> <span class="no">Middleman</span><span class="o">::</span><span class="no">Renderers</span><span class="o">::</span><span class="no">MiddlemanRedcarpetHTML</span>
+  <span class="k">def</span> <span class="nf">header</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+    <span class="vi">@headers</span> <span class="o">||=</span> <span class="p">[]</span>
+    <span class="n">permalink</span> <span class="o">=</span> <span class="n">title</span><span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="sr">/\W+/</span><span class="p">,</span> <span class="s1">'-'</span><span class="p">)</span>
 
+    <span class="k">if</span> <span class="vi">@headers</span><span class="p">.</span><span class="nf">include?</span> <span class="n">permalink</span>
+      <span class="n">permalink</span> <span class="o">+=</span> <span class="s1">'_1'</span>
+      <span class="n">permalink</span> <span class="o">=</span> <span class="n">permalink</span><span class="p">.</span><span class="nf">succ</span> <span class="k">while</span> <span class="vi">@headers</span><span class="p">.</span><span class="nf">include?</span> <span class="n">permalink</span>
+    <span class="k">end</span>
+    <span class="vi">@headers</span> <span class="o">&lt;&lt;</span> <span class="n">permalink</span>
+
+    <span class="sx">%(
+      &lt;h#{level} id=\"#{permalink}\"&gt;&lt;a name="#{permalink}" class="anchor" href="##{permalink}"&gt;&lt;/a&gt;#{title}&lt;/h#{level}&gt;
+    )</span>
+  <span class="k">end</span>
+
+<span class="kp">private</span>
+
+  <span class="k">def</span> <span class="nf">anchor_svg</span>
+     <span class="o">&lt;&lt;-</span><span class="no">eos</span><span class="sh">
+       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
+       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
+       &lt;/svg&gt;
+</span><span class="no">     eos</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>After that we need to call our renderer in <code class="highlighter-rouge">:markdown</code> configuration:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">set</span> <span class="ss">:markdown</span><span class="p">,</span> <span class="ss">fenced_code_blocks: </span><span class="kp">true</span><span class="p">,</span> <span class="ss">smartypants: </span><span class="kp">true</span><span class="p">,</span> <span class="ss">renderer: </span><span class="no">GithubStyleTitles</span></code></pre></figure>
+
+<p>And the last step: we need to stylize our anchor with css:</p>
+
+<figure class="highlight"><pre><code class="language-css" data-lang="css"><span class="nc">.docs-content</span> <span class="nc">.anchor</span> <span class="p">{</span>
+  <span class="nl">padding-right</span><span class="p">:</span> <span class="m">2px</span><span class="p">;</span>
+  <span class="nl">margin-left</span><span class="p">:</span> <span class="m">-18px</span><span class="p">;</span>
+  <span class="nl">display</span><span class="p">:</span> <span class="nb">none</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.docs-content</span> <span class="nt">h1</span><span class="nd">:hover</span> <span class="nc">.anchor</span><span class="o">,</span>
+<span class="nc">.docs-content</span> <span class="nt">h2</span><span class="nd">:hover</span> <span class="nc">.anchor</span><span class="o">,</span>
+<span class="nc">.docs-content</span> <span class="nt">h3</span><span class="nd">:hover</span> <span class="nc">.anchor</span><span class="o">,</span>
+<span class="nc">.docs-content</span> <span class="nt">h4</span><span class="nd">:hover</span> <span class="nc">.anchor</span><span class="o">,</span>
+<span class="nc">.docs-content</span> <span class="nt">h5</span><span class="nd">:hover</span> <span class="nc">.anchor</span><span class="o">,</span>
+<span class="nc">.docs-content</span> <span class="nt">h6</span><span class="nd">:hover</span> <span class="nc">.anchor</span> <span class="p">{</span>
+  <span class="nl">display</span><span class="p">:</span> <span class="n">inline-block</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>After all this steps we’ll get something like this:</p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/1147484/15233483/08d207ae-18ba-11e6-92a4-ed5bad2ab816.gif" alt="gif" /></p>
+
+<p>I hope it will be useful to you  as well as for me at one time.</p>
+
+<p>Happy hacking! 💚</p>
 
 
   <div class="tag-cloud post-tags">
     <ul>
     
       <li>
-        <a href="/tags/#color hash"><span>color hash</span></a>
-      </li>
-    
-      <li>
         <a href="/tags/#ruby"><span>ruby</span></a>
       </li>
     
       <li>
-        <a href="/tags/#tips"><span>tips</span></a>
+        <a href="/tags/#blog"><span>blog</span></a>
+      </li>
+    
+      <li>
+        <a href="/tags/#middleman"><span>middleman</span></a>
       </li>
     
     </ul>
@@ -156,15 +210,6 @@ with necessary string.</p>
     
       <li>
         <h3>
-          <a href="/2016/05/14/middleman-add-title-anchors/">
-            Adding anchors to your middleman project
-            <small>14 May 2016</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
           <a href="/2016/03/16/simple-hanami-auth/">
             Simplest way to authenticate user in hanami app
             <small>16 Mar 2016</small>
@@ -177,6 +222,15 @@ with necessary string.</p>
           <a href="/2015/12/15/stackprof-with-minitest/">
             Profiling minitest examples with Stackprof
             <small>15 Dec 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2015/12/13/render-ruby-block-in-layout-file/">
+            Rendering ruby block result in layout file
+            <small>13 Dec 2015</small>
           </a>
         </h3>
       </li>
