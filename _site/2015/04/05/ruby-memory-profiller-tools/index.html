@@ -116,40 +116,37 @@
   <h1 class="post-title">Memory profiler tools for ruby</h1>
   <span class="post-date">05 Apr 2015</span>
   <p>Memory profiler tools for ruby It so happened that I was need know how much ruby objects created
-for each call sidekiq <code>perform_async</code> method
+for each call sidekiq <code class="highlighter-rouge">perform_async</code> method
 (<a href="https://github.com/mperham/sidekiq/pull/2288">mperham/sidekiq#2288</a>).
 That’s why I decided to create list with tools which helps you to know all required information.</p>
 
-<h2 id="1-ruby-gc">1. Ruby GC</h2>
-
+<h2 id="ruby-gc">1. Ruby GC</h2>
 <p>Sam Saffron has written great post, in which he talk about ruby garbage collector and wonderful
-<code>GC.start</code> method which returns data hash:</p>
+<code class="highlighter-rouge">GC.start</code> method which returns data hash:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="mo">001</span> <span class="o">&gt;</span> <span class="no">GC</span><span class="p">.</span><span class="nf">stat</span>
 <span class="c1"># =&gt; {:count=&gt;21, :heap_allocated_pages=&gt;236, :heap_sorted_length=&gt;237, :heap_allocatable_pages=&gt;0, :heap_available_slots=&gt;96193, :heap_live_slots=&gt;95354, … }</span></code></pre></figure>
 
-<p>Also author mentions a <code>ObjectSpace</code> module that lets you know information about object/memory management.
+<p>Also author mentions a <code class="highlighter-rouge">ObjectSpace</code> module that lets you know information about object/memory management.
 For example you can easily know general number of created objects. For this you need write this code:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="mo">002</span> <span class="o">&gt;</span> <span class="no">ObjectSpace</span><span class="p">.</span><span class="nf">count_objects</span><span class="p">[</span><span class="ss">:TOTAL</span><span class="p">]</span>
 <span class="c1"># =&gt; 96193</span></code></pre></figure>
 
-<h2 id="2-ruby-memory-profiler">2. Ruby Memory Profiler</h2>
-
+<h2 id="ruby-memory-profiler">2. Ruby Memory Profiler</h2>
 <p>Also Sam wrote great tool (<a href="https://github.com/SamSaffron/memory_profiler">ruby-memory-profiler</a>) which provide
 easily display all required information for any code in block. For this you will need call something like
 this (I called this code in my sidekiq reduce allocation PR):</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">MemoryProfiler</span><span class="p">.</span><span class="nf">report</span><span class="p">{</span> <span class="mi">100</span><span class="p">.</span><span class="nf">times</span><span class="p">{</span> <span class="no">HardWorker</span><span class="p">.</span><span class="nf">perform_async</span> <span class="p">}</span> <span class="p">}.</span><span class="nf">pretty_print</span></code></pre></figure>
 
-<h2 id="3-ruby-prof">3. ruby-prof</h2>
-
+<h2 id="ruby-prof">3. ruby-prof</h2>
 <p>General features:</p>
 
 <ul>
-<li>display <a href="https://github.com/ruby-prof/ruby-prof#reports">different</a> reports;</li>
-<li>fast;</li>
-<li>easily profiles rails apps;</li>
+  <li>display <a href="https://github.com/ruby-prof/ruby-prof#reports">different</a> reports;</li>
+  <li>fast;</li>
+  <li>easily profiles rails apps;</li>
 </ul>
 
 <p>How to use:</p>
@@ -166,7 +163,6 @@ this (I called this code in my sidekiq reduce allocation PR):</p>
 <span class="n">result</span> <span class="o">=</span> <span class="no">RubyProf</span><span class="p">.</span><span class="nf">stop</span></code></pre></figure>
 
 <h2 id="conclusions">Conclusions</h2>
-
 <p>Profiling Ruby isn’t as difficult as it seems at first glance. There are a lot of great
 libraries. The only thing I was missing — profiling the code from a file, but I’m sure it will soon add
 (maybe it will add myself ☺ ).</p>

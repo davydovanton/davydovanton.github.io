@@ -121,8 +121,8 @@
 <span class="nb">puts</span> <span class="vg">$&amp;</span>
 <span class="c1">#=&gt; "irb"</span></code></pre></figure>
 
-<p>Так как до этого я не часто встречался с подобными &quot;глобальными&quot; переменными, пример заинтересовал меня и захотелось выяснить, что же это за переменные.
-Первым делом, я решил узнать, как они называются и где их можно найти. Спустя несколько минут, стало ясно, что это так называемые &quot;special variables&quot;. Не долго думая и открыв google, просмотрев пару тройку результатов, стало ясно, что кроме списка этих переменных ничего особо нет. Это не сильно меня обрадовало и стало понятно, что пришло время открыть репозитарий ruby и начать искать в нем. Так же мне очень помогла одна небезизвестная <a href="http://patshaughnessy.net/ruby-under-a-microscope">книга</a>.
+<p>Так как до этого я не часто встречался с подобными “глобальными” переменными, пример заинтересовал меня и захотелось выяснить, что же это за переменные.
+Первым делом, я решил узнать, как они называются и где их можно найти. Спустя несколько минут, стало ясно, что это так называемые “special variables”. Не долго думая и открыв google, просмотрев пару тройку результатов, стало ясно, что кроме списка этих переменных ничего особо нет. Это не сильно меня обрадовало и стало понятно, что пришло время открыть репозитарий ruby и начать искать в нем. Так же мне очень помогла одна небезизвестная <a href="http://patshaughnessy.net/ruby-under-a-microscope">книга</a>.
 Как оказалось, ruby создает несколько специальных переменных, в зависимости от откружения, в котором запускаются программы, или в зависимости от действий, которые были выполены ранее. Кстати, это не совсем глобальные перменные, в чем легко можно убедиться, рассмотрев простой пример:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">test</span>
@@ -137,7 +137,7 @@
 <span class="nb">test</span>
 <span class="c1">#=&gt; "test"</span></code></pre></figure>
 
-<p>Как видно из примера, в каждом scope (main и метода), &quot;глобальная&quot; переменная отличается. Любой адекватный человек спросит: как такое, тысяча чертей, возможно? На самом деле все довольно просто, но, для полного понимания, начать придется с основ. Как многие знают, начиная с верисии 1.9 в ruby была добавлена виртуальная машина или YARV или же <a href="http://atdot.net/yarv/">yet another ruby virtual machine</a>, называйте как хотите, суть одна и та же. Смысл в том, что каждый раз, при запуске, YARV так же создает особый стек, для локальных переменных. В этом стеке указываются абсолютно все локальные переменные, свои для каждого scope. Разделение scope-ов происходит с помощью специальной точки или указателя - environment point (далее EP). Так же, в стеке, перед каждой EP, создается специальная переменная svar, которая как раз и указывает на таблицу специальных символов. Именно из-за этого для каждого scope могут быть свои значения специальных символов, что мы видели в примере выше.
+<p>Как видно из примера, в каждом scope (main и метода), “глобальная” переменная отличается. Любой адекватный человек спросит: как такое, тысяча чертей, возможно? На самом деле все довольно просто, но, для полного понимания, начать придется с основ. Как многие знают, начиная с верисии 1.9 в ruby была добавлена виртуальная машина или YARV или же <a href="http://atdot.net/yarv/">yet another ruby virtual machine</a>, называйте как хотите, суть одна и та же. Смысл в том, что каждый раз, при запуске, YARV так же создает особый стек, для локальных переменных. В этом стеке указываются абсолютно все локальные переменные, свои для каждого scope. Разделение scope-ов происходит с помощью специальной точки или указателя - environment point (далее EP). Так же, в стеке, перед каждой EP, создается специальная переменная svar, которая как раз и указывает на таблицу специальных символов. Именно из-за этого для каждого scope могут быть свои значения специальных символов, что мы видели в примере выше.
 Но самое интересное, что у обычного блока и у места, где он будет вызван, scope одинаковый, в чем можно легко убедиться благодаря такому примеру:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">"test string in irb"</span><span class="p">.</span><span class="nf">match</span> <span class="sr">/irb/</span>
@@ -157,22 +157,19 @@
 <p>На самом деле это логичное поведение, ибо замыкания никто не отменял.
 Как я уже говорил, таких переменных <a href="http://readruby.io/globals">много</a>, но расскажу я о самых интересных(естественно для себя):</p>
 
-<hr>
+<hr />
 
-<h5 id="amp">$&amp;</h5>
-
+<h5 id="section">$&amp;</h5>
 <p>Переменная, с которой начался наш рассказ. Хранит, как вы уже догадались, результат последнего совпадения регулярного выражения.</p>
 
-<h5 id="1-2-3">$1 $2 $3 ...</h5>
-
+<h5 id="section-1">$1 $2 $3 …</h5>
 <p>Думаю, многим знакомая похожая переменная из регулярных выражений. Хотя, кого я обманываю? Это та же самая перменная, которая хранит совпадения из скобок:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">"test string in irb"</span><span class="p">.</span><span class="nf">match</span> <span class="sr">/(irb)/</span>
 <span class="nb">puts</span> <span class="vg">$1</span>
 <span class="c1">#=&gt; "irb"</span></code></pre></figure>
 
-<h5 id=">$~</h5>
-
+<h5 id="section-2">$~</h5>
 <p>Содержит объект класса MatchData, соответствующий последнему совпадению.</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">"test string in irb"</span><span class="p">.</span><span class="nf">match</span> <span class="sr">/(irb)/</span>
@@ -183,8 +180,7 @@
 <span class="nb">puts</span> <span class="vg">$~</span><span class="p">.</span><span class="nf">to_a</span>
 <span class="c1">#=&gt; ["irb", 'irb']</span></code></pre></figure>
 
-<h5 id=">$+</h5>
-
+<h5 id="section-3">$+</h5>
 <p>Содержит значение последней круглой скобки из последнего совпадения:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">"test string in irb"</span><span class="p">.</span><span class="nf">match</span> <span class="sr">/irb/</span>
@@ -198,34 +194,29 @@
 <span class="nb">puts</span> <span class="vg">$+</span>
 <span class="c1">#=&gt; "irb"</span></code></pre></figure>
 
-<h5 id=">$`</h5>
-
+<h5 id="section-4">$`</h5>
 <p>Содержит все то, что не совпало в последнем регулярном выражении:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">"test string in irb"</span><span class="p">.</span><span class="nf">match</span> <span class="sr">/irb/</span>
 <span class="nb">puts</span> <span class="vg">$`</span>
 <span class="c1">#=&gt; "test string in"</span></code></pre></figure>
 
-<h5 id=">$!</h5>
-
+<h5 id="section-5">$!</h5>
 <p>Содержит последнее вызванное исключение:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">1</span> <span class="o">/</span> <span class="mi">0</span> <span class="k">rescue</span> <span class="vg">$!</span>
 <span class="c1">#=&gt; #&lt;ZeroDivisionError: divided by 0&gt;</span></code></pre></figure>
 
-<h5 id=">$@</h5>
-
+<h5 id="section-6">$@</h5>
 <p>Ну а эта переменная содержит массив со всеми trace stack-ами из последнего исключения:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">1</span> <span class="o">/</span> <span class="mi">0</span> <span class="k">rescue</span> <span class="vg">$@</span>
 <span class="c1">#=&gt; ["&lt;main&gt;:4:in `/'", "&lt;main&gt;:4:in `/'", "(irb):98:in `irb_binding'", ... ]</span></code></pre></figure>
 
-<h5 id=">$*</h5>
-
+<h5 id="section-7">$*</h5>
 <p>Эта переменная равносильна переменной ARGV, думаю этим все сказанно.</p>
 
-<h5 id=">$$</h5>
-
+<h5 id="section-8">$$</h5>
 <p>Переменная возвращает номер процесса, под которым выполняется скрипт.</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="vg">$$</span>
@@ -235,10 +226,10 @@
 
 <p>.</p>
 
-<hr>
+<hr />
 
 <p>Так где же определены эти переменные в исходном коде ruby? Как оказалось, все не так сложно, как кажется. Определенны эти переменные в файле <a href="https://github.com/ruby/ruby/blob/v2_1_0/parse.y#L7950">parse.y</a> примерно на 7950-той строке (да да, файл не очень большой, всего 11.5к строк кода). Для тех, кто не в курсе, parse.y - грамматический файл интерпритатора, благодаря которому происходит разбиение написанного вами кода на токены (лексемы/указатели), которые в последующем преобразуются в AST структуру, а затем в YARV структуру, ну а дальше в машинный код, который в последующем и будет выполняется.
-Как не трудно заметить, case функция ищет совпадение символа &quot;$&quot; и специальных символов (блок case), после чего передает их функции set<em>yylval</em>name:</p>
+Как не трудно заметить, case функция ищет совпадение символа “$” и специальных символов (блок case), после чего передает их функции set_yylval_name:</p>
 
 <figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="mi">7965</span><span class="o">:</span> <span class="k">case</span> <span class="sc">'~'</span><span class="p">:</span>                <span class="cm">/* $~: match-data */</span>
 <span class="mi">7966</span><span class="o">:</span> <span class="k">case</span> <span class="sc">'*'</span><span class="p">:</span>                <span class="cm">/* $*: argv */</span>
@@ -277,6 +268,7 @@
 
 <span class="s2">"waterbuffalo"</span> <span class="o">=~</span> <span class="sr">/buff/</span>
 <span class="nb">print</span> <span class="vg">$LOADED_FEATURES</span><span class="p">,</span> <span class="vg">$POSTMATCH</span><span class="p">,</span> <span class="vg">$PID</span><span class="p">,</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span></code></pre></figure>
+
 
 
   <div class="tag-cloud post-tags">

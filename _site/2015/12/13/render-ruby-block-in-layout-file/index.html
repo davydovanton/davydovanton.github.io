@@ -118,7 +118,7 @@
   <p>If you want to render some result of ruby block in your layout file, you may run into some problems.
 For example, your result may be repeated on page or you can get something worse.</p>
 
-<p>let&#39;s assume we have these methods:</p>
+<p>let’s assume we have these methods:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">add_to_head</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
   <span class="vi">@head_html</span> <span class="o">||=</span> <span class="p">[]</span>
@@ -130,17 +130,17 @@ For example, your result may be repeated on page or you can get something worse.
   <span class="vi">@head_html</span><span class="p">.</span><span class="nf">map</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:call</span><span class="p">).</span><span class="nf">join</span>
 <span class="k">end</span></code></pre></figure>
 
-<p>Of cource you can use <code>captire</code> method from <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-capture">rails</a> and <a href="https://github.com/sinatra/sinatra-contrib#common-extensions">sinatra-contrib</a> librares.
+<p>Of cource you can use <code class="highlighter-rouge">captire</code> method from <a href="http://api.rubyonrails.org/classes/ActionView/Helpers/CaptureHelper.html#method-i-capture">rails</a> and <a href="https://github.com/sinatra/sinatra-contrib#common-extensions">sinatra-contrib</a> librares.
 But what will you do if you can’t use these methods or you need something easier?</p>
 
-<p>I faced a similar problem (<a href="https://github.com/mperham/sidekiq/pull/2270">for example, in sidekiq</a>) and I used own <code>capture</code> method for layout files.</p>
+<p>I faced a similar problem (<a href="https://github.com/mperham/sidekiq/pull/2270">for example, in sidekiq</a>) and I used own <code class="highlighter-rouge">capture</code> method for layout files.</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">capture</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
   <span class="n">block</span><span class="p">.</span><span class="nf">call</span>
   <span class="nb">eval</span><span class="p">(</span><span class="s1">''</span><span class="p">,</span> <span class="n">block</span><span class="p">.</span><span class="nf">binding</span><span class="p">)</span>
 <span class="k">end</span></code></pre></figure>
 
-<p>And after that we can update our <code>display_custom_head</code> method:</p>
+<p>And after that we can update our <code class="highlighter-rouge">display_custom_head</code> method:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">display_custom_head</span>
   <span class="k">return</span> <span class="k">unless</span> <span class="vi">@head_html</span>
