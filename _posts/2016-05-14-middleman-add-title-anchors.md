@@ -31,7 +31,10 @@ class GithubStyleTitles < Middleman::Renderers::MiddlemanRedcarpetHTML
     @headers << permalink
 
     %(
-      <h#{level} id=\"#{permalink}\"><a name="#{permalink}" class="anchor" href="##{permalink}"></a>#{title}</h#{level}>
+      <h#{level} id=\"#{permalink}\" class="title">
+        <a name="#{permalink}" class="anchor" href="##{permalink}"></a>
+        #{title}
+      </h#{level}>
     )
   end
 
@@ -56,17 +59,12 @@ set :markdown, fenced_code_blocks: true, smartypants: true, renderer: GithubStyl
 And the last step: we need to stylize our anchor with css:
 
 {% highlight css %}
-.docs-content .anchor {
+.anchor {
   padding-right: 2px;
   margin-left: -18px;
   display: none;
 }
-.docs-content h1:hover .anchor,
-.docs-content h2:hover .anchor,
-.docs-content h3:hover .anchor,
-.docs-content h4:hover .anchor,
-.docs-content h5:hover .anchor,
-.docs-content h6:hover .anchor {
+.title .anchor {
   display: inline-block;
 }
 {% endhighlight %}

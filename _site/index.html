@@ -143,7 +143,10 @@ guthub style:</p>
     <span class="vi">@headers</span> <span class="o">&lt;&lt;</span> <span class="n">permalink</span>
 
     <span class="sx">%(
-      &lt;h#{level} id=\"#{permalink}\"&gt;&lt;a name="#{permalink}" class="anchor" href="##{permalink}"&gt;&lt;/a&gt;#{title}&lt;/h#{level}&gt;
+      &lt;h#{level} id=\"#{permalink}\" class="title"&gt;
+        &lt;a name="#{permalink}" class="anchor" href="##{permalink}"&gt;&lt;/a&gt;
+        #{title}
+      &lt;/h#{level}&gt;
     )</span>
   <span class="k">end</span>
 
@@ -164,17 +167,12 @@ guthub style:</p>
 
 <p>And the last step: we need to stylize our anchor with css:</p>
 
-<figure class="highlight"><pre><code class="language-css" data-lang="css"><span class="nc">.docs-content</span> <span class="nc">.anchor</span> <span class="p">{</span>
+<figure class="highlight"><pre><code class="language-css" data-lang="css"><span class="nc">.anchor</span> <span class="p">{</span>
   <span class="nl">padding-right</span><span class="p">:</span> <span class="m">2px</span><span class="p">;</span>
   <span class="nl">margin-left</span><span class="p">:</span> <span class="m">-18px</span><span class="p">;</span>
   <span class="nl">display</span><span class="p">:</span> <span class="nb">none</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="nc">.docs-content</span> <span class="nt">h1</span><span class="nd">:hover</span> <span class="nc">.anchor</span><span class="o">,</span>
-<span class="nc">.docs-content</span> <span class="nt">h2</span><span class="nd">:hover</span> <span class="nc">.anchor</span><span class="o">,</span>
-<span class="nc">.docs-content</span> <span class="nt">h3</span><span class="nd">:hover</span> <span class="nc">.anchor</span><span class="o">,</span>
-<span class="nc">.docs-content</span> <span class="nt">h4</span><span class="nd">:hover</span> <span class="nc">.anchor</span><span class="o">,</span>
-<span class="nc">.docs-content</span> <span class="nt">h5</span><span class="nd">:hover</span> <span class="nc">.anchor</span><span class="o">,</span>
-<span class="nc">.docs-content</span> <span class="nt">h6</span><span class="nd">:hover</span> <span class="nc">.anchor</span> <span class="p">{</span>
+<span class="nc">.title</span> <span class="nc">.anchor</span> <span class="p">{</span>
   <span class="nl">display</span><span class="p">:</span> <span class="n">inline-block</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
 
