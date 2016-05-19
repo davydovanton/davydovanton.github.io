@@ -13,20 +13,20 @@ tags:
 
 Sometimes you need to build API serveice in your rails application.
 Of course you can use popular solutions as grape or rails-api gems.
-And also you can see real examples in gitlab or rubygems projects. 
+And also you can find real examples in gitlab or rubygems projects.
 
-But today I want to talk about other framework. It's roda.
+But today I'm going to tell you about other framework. It's roda.
 Roda was created by jeremyevans and it's fast and simple ruby routing framework.
-Why you should a look on it?
+So why should you take a look on it?
 
-I have a list with advantages of this framework:
+There’s a list of advantages of this framework:
 1. Fast;
 2. Simple;
 3. This framework provide simple way to working with big count of different plugins;
 4. You can use any architecture with it;
 
-So I told that roda is fast. If you want to see this you can check this benchmark repository and you'll see that roda is really fast.
-For example, I run benchmarks on localy and get this result:
+So I mentioned that roda is fast. If you want to verify this, just check this benchmark repository and you'll see that roda is really fast.
+For example, I run benchmarks on locally and get this result:
 
 ```
 Framework            Requests/sec  % from best
@@ -41,7 +41,7 @@ grape                     2512.17       26.75%
 
 ## Integration
 
-Roda based on rack. That's why that integration with rails will be very simple.
+Roda based on rack. That's why this integration with rails will be very simple.
 Firstly you need to add roda gem to your gemfile:
 
 ```ruby
@@ -49,9 +49,9 @@ gem 'roda'
 ```
 
 Secondly you need to create simple roda application.
-I use `json` and `all_verbs` plugins.
-First needs to JSON responce and second provides all REST methods for your application (like `put`, `patch`, etc).
-I puted my roda application in to `lib/api/base.rb` path but you can use any place what you waht.
+Note that you need to use `json` and `all_verbs` plugins.
+The first one needs to JSON responce and the second one provides all REST methods for your application (like `put`, `patch`, etc).
+I puted my roda application in to `lib/api/base.rb` path but you can use whatever you waht.
 
 ```ruby
 # lib/api/base.rb
@@ -84,7 +84,7 @@ mount API::Base => '/api'
 ```
 
 And the last part, we need to split our application to different modules with different logic and routes.
-For this we need to create required module. In example I created `Users` module with all REST routes:
+For this we have to create required module. In an example I created `Users` module with all REST routes:
 
 ```ruby
 # lib/api/users.rb
@@ -152,14 +152,14 @@ That's all. Now we have a simple roda API application which integrated to our ra
 
 In the last part I want to list problems and ideas what I want to solve in future.
 
-1. Roda don't have a swagger integrating from the box. Now I'm thinking about using swagger-block gem for it.
-2. Also roda don't typecast your params. I know that grape use virtus gem for this. And this feature you need realize by self too.
+1. Roda doesn't have a swagger integrating from the box. Now I'm thinking about using swagger-block gem for it.
+2. Also roda doesn't typecast your params. I know that grape uses virtus gem for this. And this feature you should realize by youself too.
 
-## Conclusion 
+## Conclusion
 
-On this blog post I wanted to show that you're not limited only in popular API server gems.
-As you can see roda have amazing ideas and properties like modulatiry, simplicity, speed and stability.
-Also this framework have a simple way to integration in to your rails application.
+On this blog post I wanted to show you that you're not limited only to popular API server gems.
+As you can see roda have amazing ideas and properties such as modulatiry, simplicity, speed and stability.
+Also this framework has a simple way to integration in to your rails application.
 
 Happy hacking! emoji
 
