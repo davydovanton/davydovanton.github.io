@@ -4,13 +4,174 @@
  <title>Anton Davydov</title>
  <link href="http://blog.davydovanton.com/atom.xml" rel="self"/>
  <link href="http://blog.davydovanton.com/"/>
- <updated>2016-05-14T14:53:06+03:00</updated>
+ <updated>2016-05-20T15:39:39+03:00</updated>
  <id>http://blog.davydovanton.com</id>
  <author>
    <name>Anton Davydov</name>
    <email>antondavydov.o@gmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>Building your rails API with roda</title>
+   <link href="http://blog.davydovanton.com/2016/05/20/develop-api-with-roda/"/>
+   <updated>2016-05-20T00:00:00+03:00</updated>
+   <id>http://blog.davydovanton.com/2016/05/20/develop-api-with-roda</id>
+   <content type="html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;Sometimes you need to build API serveice in your rails application.
+Of course you can use popular solutions as &lt;a href=&quot;http://www.ruby-grape.org&quot;&gt;grape&lt;/a&gt; or &lt;a href=&quot;https://github.com/rails-api/rails-api&quot;&gt;rails-api&lt;/a&gt; gems.
+And also you can find real examples in &lt;a href=&quot;https://github.com/gitlabhq/gitlabhq/tree/master/lib/api&quot;&gt;gitlab&lt;/a&gt; or &lt;a href=&quot;https://github.com/rubygems/rubygems.org/tree/master/app/controllers/api&quot;&gt;rubygems&lt;/a&gt; projects.&lt;/p&gt;
+
+&lt;p&gt;But today I’m going to tell you about other framework. It’s &lt;a href=&quot;http://roda.jeremyevans.net&quot;&gt;roda&lt;/a&gt;.
+Roda was created by &lt;a href=&quot;https://github.com/jeremyevans&quot;&gt;Jeremy Evans&lt;/a&gt; and it’s fast and simple ruby routing framework.
+So why should you take a look on it?&lt;/p&gt;
+
+&lt;p&gt;There’s a list of advantages of this framework:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Fast;&lt;/li&gt;
+  &lt;li&gt;Simple;&lt;/li&gt;
+  &lt;li&gt;Roda provides simple way to working with big count of different plugins;&lt;/li&gt;
+  &lt;li&gt;You can use any architecture with it;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;So I mentioned that roda is fast. If you want to verify this, just check &lt;a href=&quot;https://github.com/luislavena/bench-micro&quot;&gt;this benchmark repository&lt;/a&gt; and you’ll see that roda is really fast.
+For example, I run benchmarks on locally and get this result:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-code&quot; data-lang=&quot;code&quot;&gt;Framework            Requests/sec  % from best
+----------------------------------------------
+mustermann                9389.60       100.0%
+roda                      9252.03       98.53%
+rack                      9246.16       98.47%
+hanami-router             6240.81       66.47%
+sinatra                   2935.63       31.26%
+grape                     2512.17       26.75%&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;integration&quot;&gt;Integration&lt;/h2&gt;
+
+&lt;p&gt;Roda based on rack. That’s why this integration with rails will be very simple.
+Firstly you need to add roda gem to your gemfile:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;roda&#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Secondly you need to create simple roda application.
+Note that you need to use &lt;code class=&quot;highlighter-rouge&quot;&gt;json&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;all_verbs&lt;/code&gt; plugins.
+The first one needs to JSON responce and the second one provides all REST methods for your application (like &lt;code class=&quot;highlighter-rouge&quot;&gt;put&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;patch&lt;/code&gt;, etc).
+I puted my roda application in to &lt;code class=&quot;highlighter-rouge&quot;&gt;lib/api/base.rb&lt;/code&gt; path but you can use whatever you waht.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# lib/api/base.rb&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;roda&#39;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;json&#39;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;API&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Base&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Roda&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;plugin&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;plugin&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:all_verbs&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;route&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;v1&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;hello&#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+          &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;hello: :world&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;After that you need to mount your application in &lt;code class=&quot;highlighter-rouge&quot;&gt;config/routes.rb&lt;/code&gt;.
+This is done as well as any other rack application:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# config/routes.rb&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;./lib/api/base&#39;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;mount&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;API&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;/api&#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;And the last part, we need to split our application to different modules with different logic and routes.
+For this we have to create required module. In an example I created &lt;code class=&quot;highlighter-rouge&quot;&gt;Users&lt;/code&gt; module with all REST routes:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# lib/api/users.rb&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;API&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Users&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Roda&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;plugin&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;plugin&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:all_verbs&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;route&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;users&#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+          &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;users: &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;last&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+          &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;user: &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+      &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;users/:id&#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+          &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;user: &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;patch&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+          &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;user: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;updated&#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+          &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;user: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;deleted&#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Finnaly you need to mount our module to roda application. It is very simple too.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# lib/api/base.rb&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;roda&#39;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;json&#39;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;users&#39;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;API&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Base&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Roda&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;plugin&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:json&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;plugin&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:all_verbs&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;route&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;v1&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;API&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Users&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;That’s all. Now we have a simple roda API application which integrated to our rails app.&lt;/p&gt;
+
+&lt;h2 id=&quot;problems--future&quot;&gt;Problems / future&lt;/h2&gt;
+
+&lt;p&gt;In the last part I want to list problems and ideas what I want to solve in future.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Roda doesn’t have a swagger integrating from the box. Now I’m thinking about using swagger-block gem for it.&lt;/li&gt;
+  &lt;li&gt;Also roda doesn’t typecast your params. I know that grape uses virtus gem for this. And this feature you should realize by youself too.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;On this blog post I wanted to show you that you’re not limited only to popular API server gems.
+As you can see roda have amazing ideas and properties such as modulatiry, simplicity, speed and stability.
+Also this framework has a simple way to integration in to your rails application.&lt;/p&gt;
+
+&lt;p&gt;Happy hacking! emoji&lt;/p&gt;
+
+&lt;h2 id=&quot;further-reading&quot;&gt;Further reading&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://roda.jeremyevans.net/why.html&quot;&gt;Why roda?&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://rodauth.jeremyevans.net&quot;&gt;Rodauth&lt;/a&gt;. Authentication framework based on roda.&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+ </entry>
  
  <entry>
    <title>Adding anchors to your middleman project</title>

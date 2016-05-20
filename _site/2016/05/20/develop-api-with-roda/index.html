@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Building your rails API with roda &middot; Anton Davydov
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/base.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- SEO -->
+  
+    <meta name="description" content="Building your rails API with roda" />
+  
+
+  <link rel="author" href="https://plus.google.com/u/0/104253015484296728880"/>
+</head>
+
+
+  <body>
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>Simple blog where I'll write about ruby, my ideas and technologies which I love<br><a href="https://twitter.com/anton_davydov" target="_blank">@anton_davydov</a></p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+    
+      
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/tags/">All tags</a>
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/davydovanton">GitHub</a>
+    <a class="sidebar-nav-item" href="https://twitter.com/anton_davydov">Twitter</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2016. All rights reserved.
+    </p>
+  </div>
+</div>
+
+    <div class="yandex_metrica">
+<!-- Yandex.Metrika counter --><script type="text/javascript">var yaParams = {/*Здесь параметры визита*/};</script><script type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter23652886 = new Ya.Metrika({id:23652886, webvisor:true, clickmap:true, trackLinks:true, accurateTrackBounce:true, trackHash:true,params:window.yaParams||{ }}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="//mc.yandex.ru/watch/23652886" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Anton Davydov</a>
+            <small>Blog</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Building your rails API with roda</h1>
+  <span class="post-date">20 May 2016</span>
+  <h2 id="introduction">Introduction</h2>
+
+<p>Sometimes you need to build API serveice in your rails application.
+Of course you can use popular solutions as <a href="http://www.ruby-grape.org">grape</a> or <a href="https://github.com/rails-api/rails-api">rails-api</a> gems.
+And also you can find real examples in <a href="https://github.com/gitlabhq/gitlabhq/tree/master/lib/api">gitlab</a> or <a href="https://github.com/rubygems/rubygems.org/tree/master/app/controllers/api">rubygems</a> projects.</p>
+
+<p>But today I’m going to tell you about other framework. It’s <a href="http://roda.jeremyevans.net">roda</a>.
+Roda was created by <a href="https://github.com/jeremyevans">Jeremy Evans</a> and it’s fast and simple ruby routing framework.
+So why should you take a look on it?</p>
+
+<p>There’s a list of advantages of this framework:</p>
+
+<ol>
+  <li>Fast;</li>
+  <li>Simple;</li>
+  <li>Roda provides simple way to working with big count of different plugins;</li>
+  <li>You can use any architecture with it;</li>
+</ol>
+
+<p>So I mentioned that roda is fast. If you want to verify this, just check <a href="https://github.com/luislavena/bench-micro">this benchmark repository</a> and you’ll see that roda is really fast.
+For example, I run benchmarks on locally and get this result:</p>
+
+<figure class="highlight"><pre><code class="language-code" data-lang="code">Framework            Requests/sec  % from best
+----------------------------------------------
+mustermann                9389.60       100.0%
+roda                      9252.03       98.53%
+rack                      9246.16       98.47%
+hanami-router             6240.81       66.47%
+sinatra                   2935.63       31.26%
+grape                     2512.17       26.75%</code></pre></figure>
+
+<h2 id="integration">Integration</h2>
+
+<p>Roda based on rack. That’s why this integration with rails will be very simple.
+Firstly you need to add roda gem to your gemfile:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">gem</span> <span class="s1">'roda'</span></code></pre></figure>
+
+<p>Secondly you need to create simple roda application.
+Note that you need to use <code class="highlighter-rouge">json</code> and <code class="highlighter-rouge">all_verbs</code> plugins.
+The first one needs to JSON responce and the second one provides all REST methods for your application (like <code class="highlighter-rouge">put</code>, <code class="highlighter-rouge">patch</code>, etc).
+I puted my roda application in to <code class="highlighter-rouge">lib/api/base.rb</code> path but you can use whatever you waht.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># lib/api/base.rb</span>
+<span class="nb">require</span> <span class="s1">'roda'</span>
+<span class="nb">require</span> <span class="s1">'json'</span>
+
+<span class="k">module</span> <span class="nn">API</span>
+  <span class="k">class</span> <span class="nc">Base</span> <span class="o">&lt;</span> <span class="no">Roda</span>
+    <span class="n">plugin</span> <span class="ss">:json</span>
+    <span class="n">plugin</span> <span class="ss">:all_verbs</span>
+
+    <span class="n">route</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
+      <span class="n">r</span><span class="p">.</span><span class="nf">on</span> <span class="s2">"v1"</span> <span class="k">do</span>
+        <span class="n">r</span><span class="p">.</span><span class="nf">get</span> <span class="s1">'hello'</span> <span class="k">do</span>
+          <span class="p">{</span> <span class="ss">hello: :world</span> <span class="p">}</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>After that you need to mount your application in <code class="highlighter-rouge">config/routes.rb</code>.
+This is done as well as any other rack application:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># config/routes.rb</span>
+<span class="nb">require</span> <span class="s1">'./lib/api/base'</span>
+<span class="n">mount</span> <span class="no">API</span><span class="o">::</span><span class="no">Base</span> <span class="o">=&gt;</span> <span class="s1">'/api'</span></code></pre></figure>
+
+<p>And the last part, we need to split our application to different modules with different logic and routes.
+For this we have to create required module. In an example I created <code class="highlighter-rouge">Users</code> module with all REST routes:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># lib/api/users.rb</span>
+<span class="k">module</span> <span class="nn">API</span>
+  <span class="k">class</span> <span class="nc">Users</span> <span class="o">&lt;</span> <span class="no">Roda</span>
+    <span class="n">plugin</span> <span class="ss">:json</span>
+    <span class="n">plugin</span> <span class="ss">:all_verbs</span>
+
+    <span class="n">route</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
+      <span class="n">r</span><span class="p">.</span><span class="nf">is</span> <span class="s1">'users'</span> <span class="k">do</span>
+        <span class="n">r</span><span class="p">.</span><span class="nf">get</span> <span class="k">do</span>
+          <span class="p">{</span> <span class="ss">users: </span><span class="no">User</span><span class="p">.</span><span class="nf">last</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="p">}</span>
+        <span class="k">end</span>
+
+        <span class="n">r</span><span class="p">.</span><span class="nf">post</span> <span class="k">do</span>
+          <span class="p">{</span> <span class="ss">user: </span><span class="no">User</span><span class="p">.</span><span class="nf">new</span> <span class="p">}</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+
+      <span class="n">r</span><span class="p">.</span><span class="nf">is</span> <span class="s1">'users/:id'</span> <span class="k">do</span> <span class="o">|</span><span class="nb">id</span><span class="o">|</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="no">User</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+
+        <span class="n">r</span><span class="p">.</span><span class="nf">get</span> <span class="k">do</span>
+          <span class="p">{</span> <span class="ss">user: </span><span class="n">user</span><span class="p">}</span>
+        <span class="k">end</span>
+
+        <span class="n">r</span><span class="p">.</span><span class="nf">patch</span> <span class="k">do</span>
+          <span class="p">{</span> <span class="ss">user: </span><span class="s1">'updated'</span> <span class="p">}</span>
+        <span class="k">end</span>
+
+        <span class="n">r</span><span class="p">.</span><span class="nf">delete</span> <span class="k">do</span>
+          <span class="p">{</span> <span class="ss">user: </span><span class="s1">'deleted'</span> <span class="p">}</span>
+        <span class="k">end</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Finnaly you need to mount our module to roda application. It is very simple too.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># lib/api/base.rb</span>
+<span class="nb">require</span> <span class="s1">'roda'</span>
+<span class="nb">require</span> <span class="s1">'json'</span>
+<span class="nb">require</span> <span class="s1">'users'</span>
+
+<span class="k">module</span> <span class="nn">API</span>
+  <span class="k">class</span> <span class="nc">Base</span> <span class="o">&lt;</span> <span class="no">Roda</span>
+    <span class="n">plugin</span> <span class="ss">:json</span>
+    <span class="n">plugin</span> <span class="ss">:all_verbs</span>
+
+    <span class="n">route</span> <span class="k">do</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span>
+      <span class="n">r</span><span class="p">.</span><span class="nf">on</span> <span class="s2">"v1"</span> <span class="k">do</span>
+        <span class="n">r</span><span class="p">.</span><span class="nf">run</span> <span class="no">API</span><span class="o">::</span><span class="no">Users</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>That’s all. Now we have a simple roda API application which integrated to our rails app.</p>
+
+<h2 id="problems--future">Problems / future</h2>
+
+<p>In the last part I want to list problems and ideas what I want to solve in future.</p>
+
+<ol>
+  <li>Roda doesn’t have a swagger integrating from the box. Now I’m thinking about using swagger-block gem for it.</li>
+  <li>Also roda doesn’t typecast your params. I know that grape uses virtus gem for this. And this feature you should realize by youself too.</li>
+</ol>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>On this blog post I wanted to show you that you’re not limited only to popular API server gems.
+As you can see roda have amazing ideas and properties such as modulatiry, simplicity, speed and stability.
+Also this framework has a simple way to integration in to your rails application.</p>
+
+<p>Happy hacking! emoji</p>
+
+<h2 id="further-reading">Further reading</h2>
+<ul>
+  <li><a href="http://roda.jeremyevans.net/why.html">Why roda?</a></li>
+  <li><a href="http://rodauth.jeremyevans.net">Rodauth</a>. Authentication framework based on roda.</li>
+</ul>
+
+
+
+  <div class="tag-cloud post-tags">
+    <ul>
+    
+      <li>
+        <a href="/tags/#ruby"><span>ruby</span></a>
+      </li>
+    
+      <li>
+        <a href="/tags/#rails"><span>rails</span></a>
+      </li>
+    
+      <li>
+        <a href="/tags/#roda"><span>roda</span></a>
+      </li>
+    
+      <li>
+        <a href="/tags/#api"><span>api</span></a>
+      </li>
+    
+    </ul>
+  </div>
+</div>
+
+<div class="share_buttons">
+  <div class='shareaholic-canvas' data-app='share_buttons' data-app-id='11548095'></div>
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/05/14/middleman-add-title-anchors/">
+            Adding anchors to your middleman project
+            <small>14 May 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/03/16/simple-hanami-auth/">
+            Simplest way to authenticate user in hanami app
+            <small>16 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2015/12/15/stackprof-with-minitest/">
+            Profiling minitest examples with Stackprof
+            <small>15 Dec 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'fikysmyblog'; // required: replace example with your forum shortname
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<script type="text/javascript">
+//<![CDATA[
+  (function() {
+    var shr = document.createElement('script');
+    shr.setAttribute('data-cfasync', 'false');
+    shr.src = '//dsms0mj1bbhn4.cloudfront.net/assets/pub/shareaholic.js';
+    shr.type = 'text/javascript'; shr.async = 'true';
+    shr.onload = shr.onreadystatechange = function() {
+      var rs = this.readyState;
+      if (rs && rs != 'complete' && rs != 'loaded') return;
+      var site_id = '9cc17325fe566a8d07d3ee25ce3fa991';
+      try { Shareaholic.init(site_id); } catch (e) {}
+    };
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(shr, s);
+  })();
+//]]>
+</script>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>
