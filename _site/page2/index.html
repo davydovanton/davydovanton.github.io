@@ -114,6 +114,48 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/2015/03/29/specific-color-hash/">
+        Convert string to color hash
+      </a>
+    </h1>
+
+    <span class="post-date">29 Mar 2015</span>
+
+    <p>So it happens that sometimes you need to convert string to color hash. I think that
+<code class="highlighter-rouge">Digest::MD5</code> class is easiest way for this. For this you need call hexdigest method
+with necessary string.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Digest</span><span class="o">::</span><span class="no">MD5</span><span class="p">.</span><span class="nf">hexdigest</span><span class="p">(</span><span class="s1">'My string'</span><span class="p">)[</span><span class="mi">0</span><span class="p">.</span><span class="nf">.</span><span class="mi">5</span><span class="p">]</span> <span class="c1"># =&gt; 'a537d0'</span></code></pre></figure>
+
+<p>And if you will create rgb color you need convert hex to decimal with <code class="highlighter-rouge">to_i(16)</code> method.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Digest</span><span class="o">::</span><span class="no">MD5</span><span class="p">.</span><span class="nf">hexdigest</span><span class="p">(</span><span class="n">worker</span><span class="p">)[</span><span class="mi">0</span><span class="p">.</span><span class="nf">.</span><span class="mi">5</span><span class="p">]</span>
+  <span class="p">.</span><span class="nf">scan</span><span class="p">(</span><span class="sr">/../</span><span class="p">)</span>
+  <span class="p">.</span><span class="nf">map</span><span class="p">{</span> <span class="o">|</span><span class="n">color</span><span class="o">|</span> <span class="n">color</span><span class="p">.</span><span class="nf">to_i</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="p">}</span></code></pre></figure>
+
+
+
+    <div class="tag-cloud">
+      <ul>
+      
+        <li>
+          <a href="/tags/#color hash"><span>color hash</span></a>
+        </li>
+      
+        <li>
+          <a href="/tags/#ruby"><span>ruby</span></a>
+        </li>
+      
+        <li>
+          <a href="/tags/#tips"><span>tips</span></a>
+        </li>
+      
+      </ul>
+    </div>
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/2014/03/16/vim-history/">
         История vim
       </a>

@@ -4,13 +4,39 @@
  <title>Anton Davydov</title>
  <link href="http://blog.davydovanton.com/atom.xml" rel="self"/>
  <link href="http://blog.davydovanton.com/"/>
- <updated>2016-05-20T15:39:39+03:00</updated>
+ <updated>2016-05-21T17:09:00+03:00</updated>
  <id>http://blog.davydovanton.com</id>
  <author>
    <name>Anton Davydov</name>
    <email>antondavydov.o@gmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>Preview hanami emails in browser</title>
+   <link href="http://blog.davydovanton.com/2016/05/21/preview-hanami-emails-in-browser/"/>
+   <updated>2016-05-21T00:00:00+03:00</updated>
+   <id>http://blog.davydovanton.com/2016/05/21/preview-hanami-emails-in-browser</id>
+   <content type="html">&lt;p&gt;Sometimes you need to preview your emails in development enviroment. 
+For this you can use use &lt;a href=&quot;https://github.com/ryanb/letter_opener&quot;&gt;letter_opener&lt;/a&gt; gem.
+Because hanami uses &lt;a href=&quot;https://github.com/mikel/mail&quot;&gt;mail&lt;/a&gt; gem, &lt;code class=&quot;highlighter-rouge&quot;&gt;letter_opener&lt;/code&gt; integration will be easy.
+Firstly you need add gem to your Gemfile:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;letter_opener&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;group: :development&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Secondly you need add new delivery method to your &lt;code class=&quot;highlighter-rouge&quot;&gt;lib/repository_name.rb&lt;/code&gt; file:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;letter_opener&quot;&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;Hanami&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Mailer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;configure&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;delivery&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;development&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;LetterOpener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;DeliveryMethod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;location: &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Hanami&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;tmp/letter_opener&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;load!&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;After that when you deliver your email, &lt;code class=&quot;highlighter-rouge&quot;&gt;letter_opener&lt;/code&gt; will generate html files that users will see in &lt;code class=&quot;highlighter-rouge&quot;&gt;tmp/letter_opener&lt;/code&gt; directory.&lt;/p&gt;
+
+</content>
+ </entry>
  
  <entry>
    <title>Building your rails API with roda</title>
