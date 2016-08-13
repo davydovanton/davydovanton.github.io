@@ -1,5 +1,3 @@
-servis object
-Form Objects
 write simple plugin for sidekiq
 
 build own state machine in ruby
