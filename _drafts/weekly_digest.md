@@ -9,6 +9,14 @@ https://www.elastic.co/blog/spotting-bad-actors-what-your-logs-can-tell-you-abou
 https://dnlserrano.github.io/2015/01/11/debugging-ruby/
 http://www.charlotteis.co.uk/open-open-source/
 http://icelab.com.au/articles/a-change-positive-ruby-web-application-architecture/
+https://www.cloudcity.io/blog/2016/08/09/testing-rails-applications/
+http://vakhov.me/blog/2016/08/15/deploy/index.html
+http://patshaughnessy.net/2012/4/3/exploring-rubys-regular-expression-algorithm
+http://chriskottom.com/freebies/cheatsheets_free.pdf
+https://medium.com/@rubinius/rubinius-takes-the-fun-out-of-ruby-21db64ce87a6#.x0ovtahip
+https://github.com/search?l=&p=2&q=language%3ARuby+stars%3A%3E500&ref=advsearch&type=Repositories&utf8=✓
+https://www.sitepoint.com/unbundling-bundler-a-thorough-look-at-bundlers-utilities/
+http://www.norydev.com/writing/journey-of-a-trailblazer-part-1
 
 
 ## gems
