@@ -17,6 +17,7 @@ https://medium.com/@rubinius/rubinius-takes-the-fun-out-of-ruby-21db64ce87a6#.x0
 https://github.com/search?l=&p=2&q=language%3ARuby+stars%3A%3E500&ref=advsearch&type=Repositories&utf8=✓
 https://www.sitepoint.com/unbundling-bundler-a-thorough-look-at-bundlers-utilities/
 http://www.norydev.com/writing/journey-of-a-trailblazer-part-1
+https://www.juanitofatas.com/blog/2016/08/29/jolly_good_old_days
 
 
 ## gems
