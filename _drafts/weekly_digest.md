@@ -18,6 +18,7 @@ https://github.com/search?l=&p=2&q=language%3ARuby+stars%3A%3E500&ref=advsearch&
 https://www.sitepoint.com/unbundling-bundler-a-thorough-look-at-bundlers-utilities/
 http://www.norydev.com/writing/journey-of-a-trailblazer-part-1
 https://www.juanitofatas.com/blog/2016/08/29/jolly_good_old_days
+http://cucumbersome.net/2016/09/06/rails-form-objects-with-dry-rb.html
 
 
 ## gems

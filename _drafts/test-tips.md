@@ -10,4 +10,5 @@ allow(Time).to receive(:now).and_return(Time.parse("2015-10-31"))
 ```
 
 ## how to test cuncurency problem
+see sidekiq-stat plugin
 
