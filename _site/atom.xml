@@ -4,13 +4,43 @@
  <title>Anton Davydov</title>
  <link href="http://blog.davydovanton.com/atom.xml" rel="self"/>
  <link href="http://blog.davydovanton.com/"/>
- <updated>2016-08-14T16:27:39+03:00</updated>
+ <updated>2016-09-20T23:23:43+03:00</updated>
  <id>http://blog.davydovanton.com</id>
  <author>
    <name>Anton Davydov</name>
    <email>antondavydov.o@gmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>Adding domain for your github project</title>
+   <link href="http://blog.davydovanton.com/2016/09/20/adding-domain-for-your-github-project/"/>
+   <updated>2016-09-20T00:00:00+03:00</updated>
+   <id>http://blog.davydovanton.com/2016/09/20/adding-domain-for-your-github-project</id>
+   <content type="html">&lt;p&gt;I have a problem. Each time I want add domain to my custom github project
+I forgot what I should do exactly. That’s why I want to post this SO answer in my blog.
+I hope it would helpful not only for me.&lt;/p&gt;
+
+&lt;p&gt;To Setup a custom domain for your &lt;code class=&quot;highlighter-rouge&quot;&gt;gh-pages&lt;/code&gt; project repo that handles
+&lt;code class=&quot;highlighter-rouge&quot;&gt;www.yourdomain.com&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;yourdomain.com&lt;/code&gt; (assumes you already have a &lt;code class=&quot;highlighter-rouge&quot;&gt;gh-pages&lt;/code&gt;
+branch on your repo) you need this:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;From your project repo, &lt;code class=&quot;highlighter-rouge&quot;&gt;gh-pages&lt;/code&gt; branch. Create a &lt;code class=&quot;highlighter-rouge&quot;&gt;CNAME&lt;/code&gt; file with the contents &lt;code class=&quot;highlighter-rouge&quot;&gt;yourdomain.com&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;In your DNS manager, setup two &lt;code class=&quot;highlighter-rouge&quot;&gt;CNAME&lt;/code&gt; records. One for the root apex (&lt;code class=&quot;highlighter-rouge&quot;&gt;@&lt;/code&gt;) and one for &lt;code class=&quot;highlighter-rouge&quot;&gt;www&lt;/code&gt;. Both point to &lt;code class=&quot;highlighter-rouge&quot;&gt;YOURusername.github.io&lt;/code&gt;. If your DNS provider does &lt;strong&gt;NOT&lt;/strong&gt; support &lt;code class=&quot;highlighter-rouge&quot;&gt;ALIAS&lt;/code&gt; records on the root apex (&lt;code class=&quot;highlighter-rouge&quot;&gt;@&lt;/code&gt;), simply create &lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt; records that point to &lt;code class=&quot;highlighter-rouge&quot;&gt;192.30.252.153&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;192.30.252.154&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;After that wait til your name servers update:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
+dig yourdomain.com +nostats +nocomments +nocmd
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Original link: &lt;a href=&quot;http://stackoverflow.com/a/9123911&quot;&gt;stackoverflow.com/a/9123911&lt;/a&gt;&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Preview hanami emails in browser</title>

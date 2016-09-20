@@ -11,7 +11,7 @@
 
   <title>
     
-      Get request with custom locale in your tests &middot; Anton Davydov
+      Adding domain for your github project &middot; Anton Davydov
     
   </title>
 
@@ -31,7 +31,7 @@
 
   <!-- SEO -->
   
-    <meta name="description" content="Send specifiy locale in rspec or minitest get request" />
+    <meta name="description" content="Simple tip for adding domain for your github project" />
   
 
   <link rel="author" href="https://plus.google.com/u/0/104253015484296728880"/>
@@ -113,30 +113,41 @@
 
       <div class="container content">
         <div class="post">
-  <h1 class="post-title">Get request with custom locale in your tests</h1>
-  <span class="post-date">26 Oct 2015</span>
-  <p>Sometimes in tests you have to set special locale for <code class="highlighter-rouge">get</code> request.
-For example you want to <a href="https://github.com/mperham/sidekiq/blob/master/test/test_web.rb#L33-L50">test selecting locale language</a>.
-For this you have to set locale in <code class="highlighter-rouge">'HTTP_ACCEPT_LANGUAGE'</code> variable in params hash.</p>
+  <h1 class="post-title">Adding domain for your github project</h1>
+  <span class="post-date">20 Sep 2016</span>
+  <p>I have a problem. Each time I want add domain to my custom github project
+I forgot what I should do exactly. That’s why I want to post this SO answer in my blog.
+I hope it would helpful not only for me.</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">it</span> <span class="s1">'your test description'</span> <span class="k">do</span>
-  <span class="n">rackenv</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'HTTP_ACCEPT_LANGUAGE'</span> <span class="o">=&gt;</span> <span class="s1">'ru,en'</span><span class="p">}</span>
-  <span class="n">get</span> <span class="s1">'/'</span><span class="p">,</span> <span class="p">{},</span> <span class="n">rackenv</span>
+<p>To Setup a custom domain for your <code class="highlighter-rouge">gh-pages</code> project repo that handles
+<code class="highlighter-rouge">www.yourdomain.com</code> and <code class="highlighter-rouge">yourdomain.com</code> (assumes you already have a <code class="highlighter-rouge">gh-pages</code>
+branch on your repo) you need this:</p>
 
-  <span class="p">.</span><span class="nf">.</span><span class="p">.</span>
-<span class="nf">end</span></code></pre></figure>
+<ol>
+  <li>From your project repo, <code class="highlighter-rouge">gh-pages</code> branch. Create a <code class="highlighter-rouge">CNAME</code> file with the contents <code class="highlighter-rouge">yourdomain.com</code>.</li>
+  <li>In your DNS manager, setup two <code class="highlighter-rouge">CNAME</code> records. One for the root apex (<code class="highlighter-rouge">@</code>) and one for <code class="highlighter-rouge">www</code>. Both point to <code class="highlighter-rouge">YOURusername.github.io</code>. If your DNS provider does <strong>NOT</strong> support <code class="highlighter-rouge">ALIAS</code> records on the root apex (<code class="highlighter-rouge">@</code>), simply create <code class="highlighter-rouge">A</code> records that point to <code class="highlighter-rouge">192.30.252.153</code> and <code class="highlighter-rouge">192.30.252.154</code>.</li>
+</ol>
 
+<p>After that wait til your name servers update:</p>
+
+<p><code class="highlighter-rouge">
+dig yourdomain.com +nostats +nocomments +nocmd
+</code></p>
+
+<p><br /></p>
+
+<p>Original link: <a href="http://stackoverflow.com/a/9123911">stackoverflow.com/a/9123911</a></p>
 
 
   <div class="tag-cloud post-tags">
     <ul>
     
       <li>
-        <a href="/tags/#test"><span>test</span></a>
+        <a href="/tags/#github"><span>github</span></a>
       </li>
     
       <li>
-        <a href="/tags/#ruby"><span>ruby</span></a>
+        <a href="/tags/#domain"><span>domain</span></a>
       </li>
     
       <li>
@@ -157,15 +168,6 @@ For this you have to set locale in <code class="highlighter-rouge">'HTTP_ACCEPT_
     
       <li>
         <h3>
-          <a href="/2016/09/20/adding-domain-for-your-github-project/">
-            Adding domain for your github project
-            <small>20 Sep 2016</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
           <a href="/2016/05/21/preview-hanami-emails-in-browser/">
             Preview hanami emails in browser
             <small>21 May 2016</small>
@@ -178,6 +180,15 @@ For this you have to set locale in <code class="highlighter-rouge">'HTTP_ACCEPT_
           <a href="/2016/05/20/develop-api-with-roda/">
             Building your rails API with roda
             <small>20 May 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/05/14/middleman-add-title-anchors/">
+            Adding anchors to your middleman project
+            <small>14 May 2016</small>
           </a>
         </h3>
       </li>
