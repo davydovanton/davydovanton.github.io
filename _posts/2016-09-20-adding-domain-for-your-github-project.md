@@ -9,7 +9,7 @@ tags:
 ---
 
 I have a problem. Each time I want add domain to my custom github project
-I forgot what I should do exactly. That's why I want to post this SO answer in my blog.
+I forget what I should do exactly. That's why I want to post this SO answer in my blog.
 I hope it would helpful not only for me.
 
 To Setup a custom domain for your `gh-pages` project repo that handles
