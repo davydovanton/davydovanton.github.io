@@ -9,3 +9,7 @@ hanami modules in rails
 rodauth and hanami
 simple API with hanami (validation, 2 actions, model and redditMQ)
 
+rodauth wuthout rails midleware + rails 
+https://github.com/saberespoder/inboundsms/pull/1070
+
+https://github.com/saberespoder/inboundsms/pull/1151

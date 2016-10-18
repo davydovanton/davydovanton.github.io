@@ -19,8 +19,13 @@ https://www.sitepoint.com/unbundling-bundler-a-thorough-look-at-bundlers-utiliti
 http://www.norydev.com/writing/journey-of-a-trailblazer-part-1
 https://www.juanitofatas.com/blog/2016/08/29/jolly_good_old_days
 http://cucumbersome.net/2016/09/06/rails-form-objects-with-dry-rb.html
+http://www.rubypigeon.com/posts/minitest-cheat-sheet/
+https://www.sitepoint.com/ddd-for-rails-developers-part-1-layered-architecture/
+http://blog.arkency.com/2015/06/thanks-to-repositories/
+https://medium.com/@openfcsonline/be-125-more-efficient-with-git-60556a1ce971#.h1ft1qukg
 
 
 ## gems
 https://github.com/camertron/scuttle-rb
 https://github.com/ryanb/letter_opener
+https://github.com/kwatch/rack-jet_router/
