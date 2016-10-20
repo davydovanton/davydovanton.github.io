@@ -23,6 +23,7 @@ http://www.rubypigeon.com/posts/minitest-cheat-sheet/
 https://www.sitepoint.com/ddd-for-rails-developers-part-1-layered-architecture/
 http://blog.arkency.com/2015/06/thanks-to-repositories/
 https://medium.com/@openfcsonline/be-125-more-efficient-with-git-60556a1ce971#.h1ft1qukg
+http://www.techoalien.com/2016/10/ruby-memoization-using-singleton-method.html
 
 
 ## gems
