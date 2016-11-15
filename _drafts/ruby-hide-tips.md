@@ -1,2 +1,0 @@
-
-`URI::MailTo::EMAIL_REGEXP`
