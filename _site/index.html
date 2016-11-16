@@ -114,6 +114,258 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/2016/11/16/ruby-tips-part-one/">
+        Ruby tips #1
+      </a>
+    </h1>
+
+    <span class="post-date">16 Nov 2016</span>
+
+    <p>I’ve been collecting the ruby tips for a long time. And now I’m ready to share them all. Hope you’ll find some interesting solutions, tips and sugars for ruby.</p>
+
+<p>And today we’re talking about:</p>
+
+<ul>
+  <li>Kernel</li>
+  <li>Class</li>
+  <li>Object</li>
+  <li>Proc (lambda)</li>
+  <li>Method</li>
+</ul>
+
+<p><strong>CAUTION:</strong> These tips are not equally feat to production. Lots of them are just interesting solutions which you’ll not find anywhere else. Use them at your own risk.</p>
+
+<h1 id="kernel">Kernel</h1>
+
+<h2 id="char">Char</h2>
+
+<p>If you want to get string with only one char you can use <code class="highlighter-rouge">?*</code> syntax.
+Also you can use this hack in various methods like ‘join’</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="sc">?a</span> <span class="o">==</span> <span class="s1">'a'</span> <span class="c1"># =&gt; true</span>
+
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">].</span><span class="nf">join</span><span class="p">(</span><span class="sc">?:</span><span class="p">)</span> <span class="c1"># =&gt; "1:2:3"</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="sc">?:</span> <span class="c1"># =&gt; "1:2:3"</span></code></pre></figure>
+
+<h2 id="callcc">callcc</h2>
+
+<p>You can find <code class="highlighter-rouge">callcc</code> method in any language.
+<a href="http://blog.ontoillogical.com/blog/2014/07/12/delimited-continuations-in-ruby/">Ruby is no exception.</a></p>
+
+<h2 id="caller">caller</h2>
+
+<p><a href="https://ruby-doc.org/core-2.3.1/Kernel.html#method-i-caller">Documentation</a></p>
+
+<p>If you want to return the current execution stack you could use <code class="highlighter-rouge">Kernel#caller</code> method.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">a</span><span class="p">(</span><span class="n">skip</span><span class="p">)</span>
+  <span class="nb">caller</span><span class="p">(</span><span class="n">skip</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">b</span><span class="p">(</span><span class="n">skip</span><span class="p">)</span>
+  <span class="n">a</span><span class="p">(</span><span class="n">skip</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">c</span><span class="p">(</span><span class="n">skip</span><span class="p">)</span>
+  <span class="n">b</span><span class="p">(</span><span class="n">skip</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="n">c</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>   <span class="c1">#=&gt; ["prog:2:in `a'", "prog:5:in `b'", "prog:8:in `c'", "prog:10:in `&lt;main&gt;'"]</span>
+<span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>   <span class="c1">#=&gt; ["prog:5:in `b'", "prog:8:in `c'", "prog:11:in `&lt;main&gt;'"]</span>
+<span class="n">c</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>   <span class="c1">#=&gt; ["prog:8:in `c'", "prog:12:in `&lt;main&gt;'"]</span>
+<span class="n">c</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>   <span class="c1">#=&gt; ["prog:13:in `&lt;main&gt;'"]</span>
+<span class="n">c</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>   <span class="c1">#=&gt; []</span>
+<span class="n">c</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>   <span class="c1">#=&gt; nil</span></code></pre></figure>
+
+<h2 id="itself">itself</h2>
+
+<p>Ruby went out and got itself an identity method.
+For those not familiar, an identity method returns the object it’s called on:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">1</span><span class="p">.</span><span class="nf">itself</span> <span class="c1"># =&gt; 1</span></code></pre></figure>
+
+<h2 id="j-and-jj"><code class="highlighter-rouge">j</code> and <code class="highlighter-rouge">jj</code></h2>
+
+<p>When you require <code class="highlighter-rouge">json</code> library you get two interesting methods.
+First is <code class="highlighter-rouge">Kernel#j</code>.
+This method outputs object to <code class="highlighter-rouge">STDOUT</code> as JSON strings in the shortest form, that is in one line.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">'json'</span>
+
+<span class="n">h</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">a: </span><span class="mi">1</span><span class="p">,</span> <span class="ss">b: </span><span class="mi">2</span> <span class="p">}</span>
+<span class="n">j</span><span class="p">(</span><span class="n">h</span><span class="p">)</span></code></pre></figure>
+
+<p>And second is <code class="highlighter-rouge">Kernel#jj</code>
+This method outputs object to <code class="highlighter-rouge">STDOUT</code> as JSON strings in a pretty format, with indentation, and over many lines.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">'json'</span>
+
+<span class="n">h</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">a: </span><span class="mi">1</span><span class="p">,</span> <span class="ss">b: </span><span class="mi">2</span> <span class="p">}</span>
+<span class="n">jj</span><span class="p">(</span><span class="n">h</span><span class="p">)</span></code></pre></figure>
+
+<h1 id="class">Class</h1>
+
+<h2 id="allocate">allocate</h2>
+
+<p><a href="https://ruby-doc.org/core-1.9.3/Class.html#method-i-allocate">Documentation</a></p>
+
+<p>Allocates space for a new object of class’s class and does not call initialize on the new instance.
+The returned object must be an instance of a class.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Test</span>
+  <span class="k">def</span> <span class="nf">initialize</span>
+    <span class="vi">@var</span> <span class="o">=</span> <span class="s2">"new"</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="no">Test</span><span class="p">.</span><span class="nf">new</span>      <span class="c1"># =&gt; #&lt;Test:0x007ff2a34965b8 @var="new"&gt;</span>
+<span class="no">Test</span><span class="p">.</span><span class="nf">allocate</span> <span class="c1"># =&gt; #&lt;Test:0x007ff2a34965b8&gt;</span></code></pre></figure>
+
+<h2 id="refinements">Refinements</h2>
+
+<p><a href="http://ruby-doc.org/core-2.1.1/doc/syntax/refinements_rdoc.html">Documentation</a></p>
+
+<p><a href="http://timelessrepo.com/refinements-in-ruby">Usful blog post about refinements</a></p>
+
+<p>Refinements are designed to reduce the impact of monkey patching on other users of the monkey-patched class.
+Refinements provide a way to extend a class locally.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">module</span> <span class="nn">TimeExtensions</span>
+  <span class="n">refine</span> <span class="no">Fixnum</span> <span class="k">do</span>
+    <span class="k">def</span> <span class="nf">minutes</span><span class="p">;</span> <span class="nb">self</span> <span class="o">*</span> <span class="mi">60</span><span class="p">;</span> <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="nc">MyApp</span>
+  <span class="n">using</span> <span class="no">TimeExtensions</span>
+
+  <span class="k">def</span> <span class="nf">initialize</span>
+    <span class="nb">p</span> <span class="mi">2</span><span class="p">.</span><span class="nf">minutes</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="no">MyApp</span><span class="p">.</span><span class="nf">new</span>    <span class="c1"># =&gt; 120</span>
+<span class="nb">p</span> <span class="mi">2</span><span class="p">.</span><span class="nf">minutes</span>  <span class="c1"># =&gt; NoMethodError</span></code></pre></figure>
+
+<h1 id="object">Object</h1>
+
+<h2 id="tap">tap</h2>
+
+<p><a href="http://www.ruby-doc.org/core-2.1.5/Object.html#method-i-tap">Documentation</a></p>
+
+<p>Yields x to the block, and than returns x.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="mi">10</span><span class="p">)</span>              <span class="p">.</span><span class="nf">tap</span><span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="s2">"original: </span><span class="si">#{</span><span class="n">x</span><span class="p">.</span><span class="nf">inspect</span><span class="si">}</span><span class="s2">"</span> <span class="p">}</span>
+  <span class="p">.</span><span class="nf">to_a</span>              <span class="p">.</span><span class="nf">tap</span><span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="s2">"array:    </span><span class="si">#{</span><span class="n">x</span><span class="p">.</span><span class="nf">inspect</span><span class="si">}</span><span class="s2">"</span> <span class="p">}</span>
+  <span class="p">.</span><span class="nf">select</span><span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">%</span><span class="mi">2</span><span class="o">==</span><span class="mi">0</span><span class="p">}.</span><span class="nf">tap</span><span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="s2">"evens:    </span><span class="si">#{</span><span class="n">x</span><span class="p">.</span><span class="nf">inspect</span><span class="si">}</span><span class="s2">"</span> <span class="p">}</span>
+  <span class="p">.</span><span class="nf">map</span><span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="p">}</span>  <span class="p">.</span><span class="nf">tap</span><span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="s2">"squares:  </span><span class="si">#{</span><span class="n">x</span><span class="p">.</span><span class="nf">inspect</span><span class="si">}</span><span class="s2">"</span> <span class="p">}</span></code></pre></figure>
+
+<h1 id="proc-lambda">Proc (lambda)</h1>
+
+<h2 id="curry">curry</h2>
+
+<p><a href="https://ruby-doc.org/core-2.1.1/Proc.html#method-i-curry">Documentation</a></p>
+
+<p>Ruby defines <code class="highlighter-rouge">curry</code> for <code class="highlighter-rouge">Method</code> and <code class="highlighter-rouge">Proc</code>, allowing procs to return partially applied procs when they get called with fewer than the required number of arguments.</p>
+
+<p>For example:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">multiply</span> <span class="o">=</span> <span class="o">-&gt;</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="p">{</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="p">}.</span><span class="nf">curry</span>
+<span class="c1">#=&gt; #&lt;Proc:0x007fed33851510 (lambda)&gt;</span>
+<span class="n">multiply</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="c1">#=&gt; 6</span>
+<span class="n">double</span> <span class="o">=</span> <span class="n">multiply</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="c1">#=&gt; #&lt;Proc:0x007fed35892888 (lambda)&gt;</span>
+<span class="n">double</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="c1">#=&gt; 6</span></code></pre></figure>
+
+<p><em><strong>Note:</strong> While <code class="highlighter-rouge">Proc#curry</code> has been around since Ruby 1.9, <code class="highlighter-rouge">Method#curry</code> was only added in Ruby 2.2.0. For versions before 2.2.0, you will first need to convert your method object to a proc via <code class="highlighter-rouge">Method#to_proc</code>.</em></p>
+
+<h2 id="toproc-and-method">#to_proc and #method</h2>
+
+<p><a href="https://ruby-doc.org/core-2.1.1/Proc.html#method-i-to_proc">Documentation</a></p>
+
+<p>If you need call method with args in <code class="highlighter-rouge">to_proc</code> you can use <code class="highlighter-rouge">method</code> method:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="p">[</span><span class="ss">:asd</span><span class="p">,</span> <span class="ss">:bsd</span><span class="p">].</span><span class="nf">map</span><span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">i</span> <span class="p">}</span>
+<span class="c1"># it's like as</span>
+<span class="p">[</span><span class="ss">:asd</span><span class="p">,</span> <span class="ss">:bsd</span><span class="p">].</span><span class="nf">map</span><span class="p">(</span><span class="o">&amp;</span><span class="nb">method</span><span class="p">(</span><span class="ss">:puts</span><span class="p">))</span></code></pre></figure>
+
+<h2 id="all-ways-to-call-proc-lambda">All ways to call proc (lambda)</h2>
+
+<p>You can use 7 different ways to call lambda:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">p</span> <span class="o">=</span> <span class="o">-&gt;</span> <span class="p">{</span> <span class="s2">"hello"</span> <span class="p">}</span>
+
+<span class="nb">p</span><span class="p">.</span><span class="nf">call</span><span class="p">()</span>
+<span class="nb">p</span><span class="o">::</span><span class="p">()</span>
+<span class="nb">p</span><span class="o">.</span><span class="p">()</span>
+<span class="nb">p</span><span class="p">[]</span>
+<span class="nb">p</span><span class="p">.</span><span class="nf">yield</span>
+<span class="nb">p</span><span class="p">.</span><span class="nf">=</span><span class="o">==</span>
+<span class="nb">p</span><span class="p">.</span><span class="nf">send</span><span class="p">(</span><span class="ss">:call</span><span class="p">)</span></code></pre></figure>
+
+<h1 id="method">Method</h1>
+
+<h2 id="method-1">method</h2>
+
+<p>You can call some methods with <code class="highlighter-rouge">method</code> method.
+This method <a href="http://ruby-doc.org/core-2.1.4/Method.html">returns</a> <code class="highlighter-rouge">Method</code> class.
+And after that you’re just calling this object like simple proc object:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># 'method' method</span>
+<span class="n">sin_method</span> <span class="o">=</span> <span class="no">Math</span><span class="p">.</span><span class="nf">method</span><span class="p">(</span><span class="ss">:sin</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="mi">10</span><span class="p">).</span><span class="nf">map</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sin_method</span><span class="p">)</span>
+
+<span class="c1"># lambda style</span>
+<span class="n">sin_method</span> <span class="o">=</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span> <span class="no">Math</span><span class="p">.</span><span class="nf">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">}</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="mi">10</span><span class="p">).</span><span class="nf">map</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sin_method</span><span class="p">)</span></code></pre></figure>
+
+<h1 id="block">Block</h1>
+
+<h2 id="empty-block">Empty block</h2>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="o">&gt;&gt;</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">].</span><span class="nf">map</span>
+<span class="c1"># =&gt; #&lt;Enumerator: [1, 2, 3]:map&gt;</span>
+
+<span class="c1"># or</span>
+<span class="o">&gt;&gt;</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">].</span><span class="nf">map</span><span class="p">(</span><span class="o">&amp;</span><span class="kp">nil</span><span class="p">)</span>
+<span class="c1"># =&gt; #&lt;Enumerator: [1, 2, 3]:map&gt;</span></code></pre></figure>
+
+<p>You can send <code class="highlighter-rouge">&amp;nil</code> as an empty block.</p>
+
+<h1 id="conclusions">Conclusions</h1>
+
+<p>That’s all. I hope it’ll be useful for you. In next part we’re gonna talking about:</p>
+
+<ul>
+  <li>Special values in ruby world</li>
+  <li>Symbol</li>
+  <li>Array</li>
+  <li>Hash</li>
+  <li>Range</li>
+</ul>
+
+<p>Happy hacking! 🚀</p>
+
+
+    <div class="tag-cloud">
+      <ul>
+      
+        <li>
+          <a href="/tags/#ruby"><span>ruby</span></a>
+        </li>
+      
+        <li>
+          <a href="/tags/#tips"><span>tips</span></a>
+        </li>
+      
+      </ul>
+    </div>
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/2016/09/20/adding-domain-for-your-github-project/">
         Adding domain for your github project
       </a>
@@ -122,7 +374,7 @@
     <span class="post-date">20 Sep 2016</span>
 
     <p>I have a problem. Each time I want add domain to my custom github project
-I forgot what I should do exactly. That’s why I want to post this SO answer in my blog.
+I forget what I should do exactly. That’s why I want to post this SO answer in my blog.
 I hope it would helpful not only for me.</p>
 
 <p>To Setup a custom domain for your <code class="highlighter-rouge">gh-pages</code> project repo that handles
@@ -136,9 +388,9 @@ branch on your repo) you need this:</p>
 
 <p>After that wait til your name servers update:</p>
 
-<p><code class="highlighter-rouge">
-dig yourdomain.com +nostats +nocomments +nocmd
-</code></p>
+<div class="highlighter-rouge"><pre class="highlight"><code>dig yourdomain.com +nostats +nocomments +nocmd
+</code></pre>
+</div>
 
 <p><br /></p>
 
@@ -1010,47 +1262,6 @@ These concepts will be discussed in future articles.</p>
       
         <li>
           <a href="/tags/#interpreters"><span>interpreters</span></a>
-        </li>
-      
-      </ul>
-    </div>
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2015/10/26/get-requiest-with-custom-locale-in-your-tests/">
-        Get request with custom locale in your tests
-      </a>
-    </h1>
-
-    <span class="post-date">26 Oct 2015</span>
-
-    <p>Sometimes in tests you have to set special locale for <code class="highlighter-rouge">get</code> request.
-For example you want to <a href="https://github.com/mperham/sidekiq/blob/master/test/test_web.rb#L33-L50">test selecting locale language</a>.
-For this you have to set locale in <code class="highlighter-rouge">'HTTP_ACCEPT_LANGUAGE'</code> variable in params hash.</p>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">it</span> <span class="s1">'your test description'</span> <span class="k">do</span>
-  <span class="n">rackenv</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'HTTP_ACCEPT_LANGUAGE'</span> <span class="o">=&gt;</span> <span class="s1">'ru,en'</span><span class="p">}</span>
-  <span class="n">get</span> <span class="s1">'/'</span><span class="p">,</span> <span class="p">{},</span> <span class="n">rackenv</span>
-
-  <span class="p">.</span><span class="nf">.</span><span class="p">.</span>
-<span class="nf">end</span></code></pre></figure>
-
-
-
-    <div class="tag-cloud">
-      <ul>
-      
-        <li>
-          <a href="/tags/#test"><span>test</span></a>
-        </li>
-      
-        <li>
-          <a href="/tags/#ruby"><span>ruby</span></a>
-        </li>
-      
-        <li>
-          <a href="/tags/#tips"><span>tips</span></a>
         </li>
       
       </ul>

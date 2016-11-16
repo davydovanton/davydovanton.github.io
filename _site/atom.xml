@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
  <title>Anton Davydov</title>
- <link href="http://blog.davydovanton.com/atom.xml" rel="self"/>
- <link href="http://blog.davydovanton.com/"/>
- <updated>2016-09-20T23:23:43+03:00</updated>
- <id>http://blog.davydovanton.com</id>
+ <link href="http://localhost:4000/atom.xml" rel="self"/>
+ <link href="http://localhost:4000/"/>
+ <updated>2016-11-16T16:29:00+03:00</updated>
+ <id>http://localhost:4000</id>
  <author>
    <name>Anton Davydov</name>
    <email>antondavydov.o@gmail.com</email>
@@ -13,12 +13,246 @@
 
  
  <entry>
+   <title>Ruby tips #1</title>
+   <link href="http://localhost:4000/2016/11/16/ruby-tips-part-one/"/>
+   <updated>2016-11-16T00:00:00+03:00</updated>
+   <id>http://localhost:4000/2016/11/16/ruby-tips-part-one</id>
+   <content type="html">&lt;p&gt;I’ve been collecting the ruby tips for a long time. And now I’m ready to share them all. Hope you’ll find some interesting solutions, tips and sugars for ruby.&lt;/p&gt;
+
+&lt;p&gt;And today we’re talking about:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Kernel&lt;/li&gt;
+  &lt;li&gt;Class&lt;/li&gt;
+  &lt;li&gt;Object&lt;/li&gt;
+  &lt;li&gt;Proc (lambda)&lt;/li&gt;
+  &lt;li&gt;Method&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;CAUTION:&lt;/strong&gt; These tips are not equally feat to production. Lots of them are just interesting solutions which you’ll not find anywhere else. Use them at your own risk.&lt;/p&gt;
+
+&lt;h1 id=&quot;kernel&quot;&gt;Kernel&lt;/h1&gt;
+
+&lt;h2 id=&quot;char&quot;&gt;Char&lt;/h2&gt;
+
+&lt;p&gt;If you want to get string with only one char you can use &lt;code class=&quot;highlighter-rouge&quot;&gt;?*&lt;/code&gt; syntax.
+Also you can use this hack in various methods like ‘join’&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;sc&quot;&gt;?a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'a'&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; true&lt;/span&gt;
+
+&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;?:&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; &quot;1:2:3&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;?:&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; &quot;1:2:3&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;callcc&quot;&gt;callcc&lt;/h2&gt;
+
+&lt;p&gt;You can find &lt;code class=&quot;highlighter-rouge&quot;&gt;callcc&lt;/code&gt; method in any language.
+&lt;a href=&quot;http://blog.ontoillogical.com/blog/2014/07/12/delimited-continuations-in-ruby/&quot;&gt;Ruby is no exception.&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;caller&quot;&gt;caller&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://ruby-doc.org/core-2.3.1/Kernel.html#method-i-caller&quot;&gt;Documentation&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;If you want to return the current execution stack you could use &lt;code class=&quot;highlighter-rouge&quot;&gt;Kernel#caller&lt;/code&gt; method.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;skip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;caller&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;skip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;skip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;skip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;skip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;skip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;#=&amp;gt; [&quot;prog:2:in `a'&quot;, &quot;prog:5:in `b'&quot;, &quot;prog:8:in `c'&quot;, &quot;prog:10:in `&amp;lt;main&amp;gt;'&quot;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;#=&amp;gt; [&quot;prog:5:in `b'&quot;, &quot;prog:8:in `c'&quot;, &quot;prog:11:in `&amp;lt;main&amp;gt;'&quot;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;#=&amp;gt; [&quot;prog:8:in `c'&quot;, &quot;prog:12:in `&amp;lt;main&amp;gt;'&quot;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;#=&amp;gt; [&quot;prog:13:in `&amp;lt;main&amp;gt;'&quot;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;#=&amp;gt; []&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;#=&amp;gt; nil&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;itself&quot;&gt;itself&lt;/h2&gt;
+
+&lt;p&gt;Ruby went out and got itself an identity method.
+For those not familiar, an identity method returns the object it’s called on:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;itself&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; 1&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;j-and-jj&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;j&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;jj&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;When you require &lt;code class=&quot;highlighter-rouge&quot;&gt;json&lt;/code&gt; library you get two interesting methods.
+First is &lt;code class=&quot;highlighter-rouge&quot;&gt;Kernel#j&lt;/code&gt;.
+This method outputs object to &lt;code class=&quot;highlighter-rouge&quot;&gt;STDOUT&lt;/code&gt; as JSON strings in the shortest form, that is in one line.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'json'&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;a: &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;b: &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;And second is &lt;code class=&quot;highlighter-rouge&quot;&gt;Kernel#jj&lt;/code&gt;
+This method outputs object to &lt;code class=&quot;highlighter-rouge&quot;&gt;STDOUT&lt;/code&gt; as JSON strings in a pretty format, with indentation, and over many lines.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'json'&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;a: &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;b: &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;jj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h1 id=&quot;class&quot;&gt;Class&lt;/h1&gt;
+
+&lt;h2 id=&quot;allocate&quot;&gt;allocate&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://ruby-doc.org/core-1.9.3/Class.html#method-i-allocate&quot;&gt;Documentation&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Allocates space for a new object of class’s class and does not call initialize on the new instance.
+The returned object must be an instance of a class.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Test&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;
+    &lt;span class=&quot;vi&quot;&gt;@var&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;new&quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;no&quot;&gt;Test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; #&amp;lt;Test:0x007ff2a34965b8 @var=&quot;new&quot;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;no&quot;&gt;Test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;allocate&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; #&amp;lt;Test:0x007ff2a34965b8&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;refinements&quot;&gt;Refinements&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://ruby-doc.org/core-2.1.1/doc/syntax/refinements_rdoc.html&quot;&gt;Documentation&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://timelessrepo.com/refinements-in-ruby&quot;&gt;Usful blog post about refinements&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Refinements are designed to reduce the impact of monkey patching on other users of the monkey-patched class.
+Refinements provide a way to extend a class locally.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;TimeExtensions&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;refine&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Fixnum&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;minutes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;self&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;60&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyApp&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;TimeExtensions&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialize&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;minutes&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+
+&lt;span class=&quot;no&quot;&gt;MyApp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; 120&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;minutes&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; NoMethodError&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h1 id=&quot;object&quot;&gt;Object&lt;/h1&gt;
+
+&lt;h2 id=&quot;tap&quot;&gt;tap&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.ruby-doc.org/core-2.1.5/Object.html#method-i-tap&quot;&gt;Documentation&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Yields x to the block, and than returns x.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;              &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;tap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;original: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;inspect&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to_a&lt;/span&gt;              &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;tap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;array:    &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;inspect&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;select&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;tap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;evens:    &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;inspect&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;tap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;squares:  &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;inspect&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h1 id=&quot;proc-lambda&quot;&gt;Proc (lambda)&lt;/h1&gt;
+
+&lt;h2 id=&quot;curry&quot;&gt;curry&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://ruby-doc.org/core-2.1.1/Proc.html#method-i-curry&quot;&gt;Documentation&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Ruby defines &lt;code class=&quot;highlighter-rouge&quot;&gt;curry&lt;/code&gt; for &lt;code class=&quot;highlighter-rouge&quot;&gt;Method&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Proc&lt;/code&gt;, allowing procs to return partially applied procs when they get called with fewer than the required number of arguments.&lt;/p&gt;
+
+&lt;p&gt;For example:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;multiply&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;curry&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; #&amp;lt;Proc:0x007fed33851510 (lambda)&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;multiply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; 6&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;double&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;multiply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; #&amp;lt;Proc:0x007fed35892888 (lambda)&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;double&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; 6&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;Note:&lt;/strong&gt; While &lt;code class=&quot;highlighter-rouge&quot;&gt;Proc#curry&lt;/code&gt; has been around since Ruby 1.9, &lt;code class=&quot;highlighter-rouge&quot;&gt;Method#curry&lt;/code&gt; was only added in Ruby 2.2.0. For versions before 2.2.0, you will first need to convert your method object to a proc via &lt;code class=&quot;highlighter-rouge&quot;&gt;Method#to_proc&lt;/code&gt;.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;toproc-and-method&quot;&gt;#to_proc and #method&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://ruby-doc.org/core-2.1.1/Proc.html#method-i-to_proc&quot;&gt;Documentation&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;If you need call method with args in &lt;code class=&quot;highlighter-rouge&quot;&gt;to_proc&lt;/code&gt; you can use &lt;code class=&quot;highlighter-rouge&quot;&gt;method&lt;/code&gt; method:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:asd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:bsd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# it's like as&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:asd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:bsd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:puts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;all-ways-to-call-proc-lambda&quot;&gt;All ways to call proc (lambda)&lt;/h2&gt;
+
+&lt;p&gt;You can use 7 different ways to call lambda:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;hello&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;yield&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h1 id=&quot;method&quot;&gt;Method&lt;/h1&gt;
+
+&lt;h2 id=&quot;method-1&quot;&gt;method&lt;/h2&gt;
+
+&lt;p&gt;You can call some methods with &lt;code class=&quot;highlighter-rouge&quot;&gt;method&lt;/code&gt; method.
+This method &lt;a href=&quot;http://ruby-doc.org/core-2.1.4/Method.html&quot;&gt;returns&lt;/a&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;Method&lt;/code&gt; class.
+And after that you’re just calling this object like simple proc object:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# 'method' method&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;sin_method&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:sin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sin_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# lambda style&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;sin_method&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;sin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sin_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h1 id=&quot;block&quot;&gt;Block&lt;/h1&gt;
+
+&lt;h2 id=&quot;empty-block&quot;&gt;Empty block&lt;/h2&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;map&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# =&amp;gt; #&amp;lt;Enumerator: [1, 2, 3]:map&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# or&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;kp&quot;&gt;nil&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# =&amp;gt; #&amp;lt;Enumerator: [1, 2, 3]:map&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;You can send &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;nil&lt;/code&gt; as an empty block.&lt;/p&gt;
+
+&lt;h1 id=&quot;conclusions&quot;&gt;Conclusions&lt;/h1&gt;
+
+&lt;p&gt;That’s all. I hope it’ll be useful for you. In next part we’re gonna talking about:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Special values in ruby world&lt;/li&gt;
+  &lt;li&gt;Symbol&lt;/li&gt;
+  &lt;li&gt;Array&lt;/li&gt;
+  &lt;li&gt;Hash&lt;/li&gt;
+  &lt;li&gt;Range&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Happy hacking! 🚀&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
    <title>Adding domain for your github project</title>
-   <link href="http://blog.davydovanton.com/2016/09/20/adding-domain-for-your-github-project/"/>
+   <link href="http://localhost:4000/2016/09/20/adding-domain-for-your-github-project/"/>
    <updated>2016-09-20T00:00:00+03:00</updated>
-   <id>http://blog.davydovanton.com/2016/09/20/adding-domain-for-your-github-project</id>
+   <id>http://localhost:4000/2016/09/20/adding-domain-for-your-github-project</id>
    <content type="html">&lt;p&gt;I have a problem. Each time I want add domain to my custom github project
-I forgot what I should do exactly. That’s why I want to post this SO answer in my blog.
+I forget what I should do exactly. That’s why I want to post this SO answer in my blog.
 I hope it would helpful not only for me.&lt;/p&gt;
 
 &lt;p&gt;To Setup a custom domain for your &lt;code class=&quot;highlighter-rouge&quot;&gt;gh-pages&lt;/code&gt; project repo that handles
@@ -32,9 +266,9 @@ branch on your repo) you need this:&lt;/p&gt;
 
 &lt;p&gt;After that wait til your name servers update:&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;
-dig yourdomain.com +nostats +nocomments +nocmd
-&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;dig yourdomain.com +nostats +nocomments +nocmd
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -44,9 +278,9 @@ dig yourdomain.com +nostats +nocomments +nocmd
  
  <entry>
    <title>Preview hanami emails in browser</title>
-   <link href="http://blog.davydovanton.com/2016/05/21/preview-hanami-emails-in-browser/"/>
+   <link href="http://localhost:4000/2016/05/21/preview-hanami-emails-in-browser/"/>
    <updated>2016-05-21T00:00:00+03:00</updated>
-   <id>http://blog.davydovanton.com/2016/05/21/preview-hanami-emails-in-browser</id>
+   <id>http://localhost:4000/2016/05/21/preview-hanami-emails-in-browser</id>
    <content type="html">&lt;p&gt;Sometimes you need to preview your emails in development enviroment. 
 For this you can use use &lt;a href=&quot;https://github.com/ryanb/letter_opener&quot;&gt;letter_opener&lt;/a&gt; gem.
 Because hanami uses &lt;a href=&quot;https://github.com/mikel/mail&quot;&gt;mail&lt;/a&gt; gem, &lt;code class=&quot;highlighter-rouge&quot;&gt;letter_opener&lt;/code&gt; integration will be easy.
@@ -59,7 +293,7 @@ Firstly you need add gem to your Gemfile:&lt;/p&gt;
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;letter_opener&quot;&lt;/span&gt;
 &lt;span class=&quot;no&quot;&gt;Hanami&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Mailer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;configure&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;delivery&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;development&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;LetterOpener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;DeliveryMethod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;location: &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Hanami&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;tmp/letter_opener&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;development&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;LetterOpener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;DeliveryMethod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;location: &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Hanami&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'tmp/letter_opener'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;load!&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
@@ -70,9 +304,9 @@ Firstly you need add gem to your Gemfile:&lt;/p&gt;
  
  <entry>
    <title>Building your rails API with roda</title>
-   <link href="http://blog.davydovanton.com/2016/05/20/develop-api-with-roda/"/>
+   <link href="http://localhost:4000/2016/05/20/develop-api-with-roda/"/>
    <updated>2016-05-20T00:00:00+03:00</updated>
-   <id>http://blog.davydovanton.com/2016/05/20/develop-api-with-roda</id>
+   <id>http://localhost:4000/2016/05/20/develop-api-with-roda</id>
    <content type="html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 
 &lt;p&gt;Sometimes you need to build API serveice in your rails application.
@@ -109,7 +343,7 @@ grape                     2512.17       26.75%&lt;/code&gt;&lt;/pre&gt;&lt;/figu
 &lt;p&gt;Roda based on rack. That’s why this integration with rails will be very simple.
 Firstly you need to add roda gem to your gemfile:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;roda&#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;gem&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'roda'&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;Secondly you need to create simple roda application.
 Note that you need to use &lt;code class=&quot;highlighter-rouge&quot;&gt;json&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;all_verbs&lt;/code&gt; plugins.
@@ -117,8 +351,8 @@ The first one needs to JSON responce and the second one provides all REST method
 I puted my roda application in to &lt;code class=&quot;highlighter-rouge&quot;&gt;lib/api/base.rb&lt;/code&gt; path but you can use whatever you waht.&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# lib/api/base.rb&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;roda&#39;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;json&#39;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'roda'&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'json'&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;API&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Base&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Roda&lt;/span&gt;
@@ -127,7 +361,7 @@ I puted my roda application in to &lt;code class=&quot;highlighter-rouge&quot;&g
 
     &lt;span class=&quot;n&quot;&gt;route&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;v1&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;hello&#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'hello'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
           &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;hello: :world&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
       &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
@@ -139,8 +373,8 @@ I puted my roda application in to &lt;code class=&quot;highlighter-rouge&quot;&g
 This is done as well as any other rack application:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# config/routes.rb&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;./lib/api/base&#39;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;mount&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;API&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;/api&#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'./lib/api/base'&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;mount&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;API&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Base&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/api'&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;And the last part, we need to split our application to different modules with different logic and routes.
 For this we have to create required module. In an example I created &lt;code class=&quot;highlighter-rouge&quot;&gt;Users&lt;/code&gt; module with all REST routes:&lt;/p&gt;
@@ -152,7 +386,7 @@ For this we have to create required module. In an example I created &lt;code cla
     &lt;span class=&quot;n&quot;&gt;plugin&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:all_verbs&lt;/span&gt;
 
     &lt;span class=&quot;n&quot;&gt;route&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;users&#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'users'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
           &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;users: &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;last&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
@@ -162,7 +396,7 @@ For this we have to create required module. In an example I created &lt;code cla
         &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
       &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 
-      &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;users/:id&#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'users/:id'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
         &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
@@ -170,11 +404,11 @@ For this we have to create required module. In an example I created &lt;code cla
         &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 
         &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;patch&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-          &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;user: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;updated&#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;user: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'updated'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 
         &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-          &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;user: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;deleted&#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;user: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'deleted'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
       &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
@@ -184,9 +418,9 @@ For this we have to create required module. In an example I created &lt;code cla
 &lt;p&gt;Finnaly you need to mount our module to roda application. It is very simple too.&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# lib/api/base.rb&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;roda&#39;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;json&#39;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;users&#39;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'roda'&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'json'&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'users'&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;module&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;API&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Base&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Roda&lt;/span&gt;
@@ -231,9 +465,9 @@ Also this framework has a simple way to integration in to your rails application
  
  <entry>
    <title>Adding anchors to your middleman project</title>
-   <link href="http://blog.davydovanton.com/2016/05/14/middleman-add-title-anchors/"/>
+   <link href="http://localhost:4000/2016/05/14/middleman-add-title-anchors/"/>
    <updated>2016-05-14T00:00:00+03:00</updated>
-   <id>http://blog.davydovanton.com/2016/05/14/middleman-add-title-anchors</id>
+   <id>http://localhost:4000/2016/05/14/middleman-add-title-anchors</id>
    <content type="html">&lt;p&gt;All people love anchors. It’s helpful, cool and practical. If you
 want to add anchors to you middleman project you need to follow the
 following steps.&lt;/p&gt;
@@ -242,15 +476,15 @@ following steps.&lt;/p&gt;
 put &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;a&amp;gt;&lt;/code&gt; tag inside &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;h&amp;gt;&lt;/code&gt; tag. Also, we’ll realize anchor svg in
 guthub style:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;middleman-core/renderers/redcarpet&#39;&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'middleman-core/renderers/redcarpet'&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GithubStyleTitles&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Middleman&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Renderers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;MiddlemanRedcarpetHTML&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;level&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;vi&quot;&gt;@headers&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;permalink&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/\W+/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;-&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;permalink&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/\W+/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'-'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
     &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;include?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;permalink&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;permalink&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;_1&#39;&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;permalink&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'_1'&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;permalink&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;permalink&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;succ&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;vi&quot;&gt;@headers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;include?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;permalink&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
     &lt;span class=&quot;vi&quot;&gt;@headers&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;permalink&lt;/span&gt;
@@ -301,9 +535,9 @@ guthub style:&lt;/p&gt;
  
  <entry>
    <title>Simplest way to authenticate user in hanami app</title>
-   <link href="http://blog.davydovanton.com/2016/03/16/simple-hanami-auth/"/>
+   <link href="http://localhost:4000/2016/03/16/simple-hanami-auth/"/>
    <updated>2016-03-16T00:00:00+03:00</updated>
-   <id>http://blog.davydovanton.com/2016/03/16/simple-hanami-auth</id>
+   <id>http://localhost:4000/2016/03/16/simple-hanami-auth</id>
    <content type="html">&lt;p&gt;If you need the simplest and easiest way to adding authentication logic in your &lt;a href=&quot;http://hanamirb.org&quot;&gt;hanami&lt;/a&gt; app (to admin app for example) you always can use &lt;a href=&quot;https://github.com/rack/rack/blob/master/lib/rack/auth/basic.rb&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Rack::Auth::Basic&lt;/code&gt;&lt;/a&gt; class.&lt;/p&gt;
 
 &lt;p&gt;For this you need to add following lines of code to your &lt;code class=&quot;highlighter-rouge&quot;&gt;controller.prepare&lt;/code&gt; configuration block:&lt;/p&gt;
@@ -314,8 +548,8 @@ guthub style:&lt;/p&gt;
   &lt;span class=&quot;c1&quot;&gt;# ...&lt;/span&gt;
   &lt;span class=&quot;c1&quot;&gt;# some code&lt;/span&gt;
 
-  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Auth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Basic&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;Message&#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;username&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;admin&#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;password&#39;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;use&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Rack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Auth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Basic&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Message'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;username&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'admin'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'password'&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
@@ -328,9 +562,9 @@ guthub style:&lt;/p&gt;
  
  <entry>
    <title>Profiling minitest examples with Stackprof</title>
-   <link href="http://blog.davydovanton.com/2015/12/15/stackprof-with-minitest/"/>
+   <link href="http://localhost:4000/2015/12/15/stackprof-with-minitest/"/>
    <updated>2015-12-15T00:00:00+03:00</updated>
-   <id>http://blog.davydovanton.com/2015/12/15/stackprof-with-minitest</id>
+   <id>http://localhost:4000/2015/12/15/stackprof-with-minitest</id>
    <content type="html">&lt;p&gt;Today I read a nice blog post by Kir Shatrov about &lt;a href=&quot;http://blog.iempire.ru/2015/10/13/profiling-specs&quot;&gt;Profiling RSpec examples with Stackprof&lt;/a&gt;
 and I wondered if I could repeat this trick with minitest? This question is very important for me
 because I ofen use minitest for my job and OSS projects. Also a lot of cool projects use minitest
@@ -345,8 +579,8 @@ to install a separate gem.&lt;/p&gt;
 &lt;/ol&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;# test/test_helper.rb&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;stackprof&#39;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;minitest/around/spec&#39;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'stackprof'&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'minitest/around/spec'&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Minitest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Test&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;around&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;example&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
@@ -364,9 +598,9 @@ to install a separate gem.&lt;/p&gt;
  
  <entry>
    <title>Rendering ruby block result in layout file</title>
-   <link href="http://blog.davydovanton.com/2015/12/13/render-ruby-block-in-layout-file/"/>
+   <link href="http://localhost:4000/2015/12/13/render-ruby-block-in-layout-file/"/>
    <updated>2015-12-13T00:00:00+03:00</updated>
-   <id>http://blog.davydovanton.com/2015/12/13/render-ruby-block-in-layout-file</id>
+   <id>http://localhost:4000/2015/12/13/render-ruby-block-in-layout-file</id>
    <content type="html">&lt;p&gt;If you want to render some result of ruby block in your layout file, you may run into some problems.
 For example, your result may be repeated on page or you can get something worse.&lt;/p&gt;
 
@@ -389,7 +623,7 @@ But what will you do if you can’t use these methods or you need something easi
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;capture&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;call&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;binding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;''&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;binding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;And after that we can update our &lt;code class=&quot;highlighter-rouge&quot;&gt;display_custom_head&lt;/code&gt; method:&lt;/p&gt;
@@ -407,9 +641,9 @@ But what will you do if you can’t use these methods or you need something easi
  
  <entry>
    <title>Ignore file lines in git</title>
-   <link href="http://blog.davydovanton.com/2015/11/14/ignore-file-lines-in-git/"/>
+   <link href="http://localhost:4000/2015/11/14/ignore-file-lines-in-git/"/>
    <updated>2015-11-14T00:00:00+03:00</updated>
-   <id>http://blog.davydovanton.com/2015/11/14/ignore-file-lines-in-git</id>
+   <id>http://localhost:4000/2015/11/14/ignore-file-lines-in-git</id>
    <content type="html">&lt;p&gt;For example, you have this code and you want to ignore in git lines which contain &lt;code class=&quot;highlighter-rouge&quot;&gt;username&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;password&lt;/code&gt; values:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ssh_connect&lt;/span&gt;
@@ -425,7 +659,7 @@ But what will you do if you can’t use these methods or you need something easi
   &lt;li&gt;Create a &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitattributes&lt;/code&gt; in your repository (remember that &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitattributes&lt;/code&gt; will be committed into the repository, if you don’t want that, add it to &lt;code class=&quot;highlighter-rouge&quot;&gt;.git/info/attributes&lt;/code&gt;)&lt;/li&gt;
   &lt;li&gt;Add &lt;code class=&quot;highlighter-rouge&quot;&gt;*.rb filter=ignoreline&lt;/code&gt; (run filter named ignoreline on all &lt;code class=&quot;highlighter-rouge&quot;&gt;*.rb&lt;/code&gt; files)&lt;/li&gt;
   &lt;li&gt;Now, we need to define ignoreline filter in &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitconfig&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git config --global filter.ignoreline.clean &quot;sed &#39;/#ignoreline$/&#39;d&quot;&lt;/code&gt; (delete theses lines)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git config --global filter.ignoreline.clean &quot;sed '/#ignoreline$/'d&quot;&lt;/code&gt; (delete theses lines)&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git config --global filter.ignoreline.smudge cat&lt;/code&gt; (do nothing when pulling file from the repository)&lt;/li&gt;
 &lt;/ol&gt;
 
@@ -444,9 +678,9 @@ But what will you do if you can’t use these methods or you need something easi
  
  <entry>
    <title>Write simple scheme interpreter on ruby</title>
-   <link href="http://blog.davydovanton.com/2015/11/01/write-simple-scheme-interpreter-on-ruby/"/>
+   <link href="http://localhost:4000/2015/11/01/write-simple-scheme-interpreter-on-ruby/"/>
    <updated>2015-11-01T00:00:00+03:00</updated>
-   <id>http://blog.davydovanton.com/2015/11/01/write-simple-scheme-interpreter-on-ruby</id>
+   <id>http://localhost:4000/2015/11/01/write-simple-scheme-interpreter-on-ruby</id>
    <content type="html">&lt;p&gt;&lt;strong&gt;TL;DR:&lt;/strong&gt; &lt;a href=&quot;https://github.com/davydovanton/rlisp&quot;&gt;github repo&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Every developer has a moment in his life where he wants to write his own programming language.
@@ -473,12 +707,12 @@ This function will take the &lt;a href=&quot;http://www.wikiwand.com/en/Abstract
 
 &lt;h2 id=&quot;first-step-parser&quot;&gt;First step. Parser.&lt;/h2&gt;
 &lt;p&gt;To begin, let’s define what we want to get.
-For example, we have a string &lt;code class=&quot;highlighter-rouge&quot;&gt;&#39;(+ 1 1 1)&#39;&lt;/code&gt;.
+For example, we have a string &lt;code class=&quot;highlighter-rouge&quot;&gt;'(+ 1 1 1)'&lt;/code&gt;.
 What should our parser return? What kind of data structure should we receive? I think, that an array would be correct.&lt;/p&gt;
 
 &lt;p&gt;Let write simple test code:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;program&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;(+ 1 1 1)&#39;&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;program&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'(+ 1 1 1)'&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;lisp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Lisp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;lisp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;parse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;program&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
@@ -491,10 +725,10 @@ What should our parser return? What kind of data structure should we receive? I 
 
   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;tokenize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chars&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;chars&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/\s\s+/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39; &#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;(&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39; ( &#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;)&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39; ) &#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39; &#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/\s\s+/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;' '&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'('&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;' ( '&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;')'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;' ) '&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;' '&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
       &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;atom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
       &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;compact&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
@@ -502,7 +736,7 @@ What should our parser return? What kind of data structure should we receive? I 
   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;atom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/\.\d+/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to_f&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;elsif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;(&#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;)&#39;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;elsif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'('&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;')'&lt;/span&gt;
       &lt;span class=&quot;kp&quot;&gt;nil&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;elsif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/\d+/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to_i&lt;/span&gt;
@@ -517,11 +751,11 @@ And this code will return 6.&lt;/p&gt;
 
 &lt;p&gt;When we use our parser for this code, the result is not quite what we need, so let’s update our test code:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;program&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;(+ (* (1 2) 3) 4)&#39;&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;program&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'(+ (* (1 2) 3) 4)'&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;lisp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Lisp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;lisp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;parse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;program&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;As you might guess, the most obvious way to fix our code is to call &lt;code class=&quot;highlighter-rouge&quot;&gt;parse&lt;/code&gt; method in recursion and all array elements from &lt;code class=&quot;highlighter-rouge&quot;&gt;&#39;(&#39;&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;&#39;)&#39;&lt;/code&gt;.
+&lt;p&gt;As you might guess, the most obvious way to fix our code is to call &lt;code class=&quot;highlighter-rouge&quot;&gt;parse&lt;/code&gt; method in recursion and all array elements from &lt;code class=&quot;highlighter-rouge&quot;&gt;'('&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;')'&lt;/code&gt;.
 We will move to a nested array.
 The code will be look loke this:&lt;/p&gt;
 
@@ -532,10 +766,10 @@ The code will be look loke this:&lt;/p&gt;
 
   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;tokenize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chars&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;chars&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/\s\s+/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39; &#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;(&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39; ( &#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;)&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39; ) &#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39; &#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/\s\s+/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;' '&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'('&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;' ( '&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;gsub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;')'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;' ) '&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;' '&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 
   &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;read_from_tokens&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tokens&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
@@ -543,17 +777,17 @@ The code will be look loke this:&lt;/p&gt;
 
     &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tokens&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;shift&lt;/span&gt;
 
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;(&#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'('&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
 
-      &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tokens&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;first&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;)&#39;&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tokens&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;first&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;')'&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;read_from_tokens&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tokens&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
       &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;tokens&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;shift&lt;/span&gt;
 
       &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;elsif&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;)&#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;unexpected )&#39;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;elsif&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;')'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'unexpected )'&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;atom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;token&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
@@ -684,7 +918,7 @@ I will leave learning how to do the implement the arithmetic methods and other m
 &lt;p&gt;In main REPL have really simple idea repl takes single user inputs, evaluates them, and returns the result to the user.
 And all this is happens in an infinite loop:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;repl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prompt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;lisp &amp;gt;&amp;gt; &#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;repl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prompt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'lisp &amp;gt;&amp;gt; '&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;
     &lt;span class=&quot;nb&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prompt&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;program&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;gets&lt;/span&gt;
@@ -720,16 +954,16 @@ These concepts will be discussed in future articles.&lt;/p&gt;
  
  <entry>
    <title>Get request with custom locale in your tests</title>
-   <link href="http://blog.davydovanton.com/2015/10/26/get-requiest-with-custom-locale-in-your-tests/"/>
+   <link href="http://localhost:4000/2015/10/26/get-requiest-with-custom-locale-in-your-tests/"/>
    <updated>2015-10-26T00:00:00+03:00</updated>
-   <id>http://blog.davydovanton.com/2015/10/26/get-requiest-with-custom-locale-in-your-tests</id>
+   <id>http://localhost:4000/2015/10/26/get-requiest-with-custom-locale-in-your-tests</id>
    <content type="html">&lt;p&gt;Sometimes in tests you have to set special locale for &lt;code class=&quot;highlighter-rouge&quot;&gt;get&lt;/code&gt; request.
 For example you want to &lt;a href=&quot;https://github.com/mperham/sidekiq/blob/master/test/test_web.rb#L33-L50&quot;&gt;test selecting locale language&lt;/a&gt;.
-For this you have to set locale in &lt;code class=&quot;highlighter-rouge&quot;&gt;&#39;HTTP_ACCEPT_LANGUAGE&#39;&lt;/code&gt; variable in params hash.&lt;/p&gt;
+For this you have to set locale in &lt;code class=&quot;highlighter-rouge&quot;&gt;'HTTP_ACCEPT_LANGUAGE'&lt;/code&gt; variable in params hash.&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;your test description&#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;rackenv&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;HTTP_ACCEPT_LANGUAGE&#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;ru,en&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;/&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{},&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rackenv&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'your test description'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;rackenv&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'HTTP_ACCEPT_LANGUAGE'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'ru,en'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'/'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{},&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rackenv&lt;/span&gt;
 
   &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;
 &lt;span class=&quot;nf&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
@@ -739,9 +973,9 @@ For this you have to set locale in &lt;code class=&quot;highlighter-rouge&quot;&
  
  <entry>
    <title>Memory profiler tools for ruby</title>
-   <link href="http://blog.davydovanton.com/2015/04/05/ruby-memory-profiller-tools/"/>
+   <link href="http://localhost:4000/2015/04/05/ruby-memory-profiller-tools/"/>
    <updated>2015-04-05T00:00:00+03:00</updated>
-   <id>http://blog.davydovanton.com/2015/04/05/ruby-memory-profiller-tools</id>
+   <id>http://localhost:4000/2015/04/05/ruby-memory-profiller-tools</id>
    <content type="html">&lt;p&gt;Memory profiler tools for ruby It so happened that I was need know how much ruby objects created
 for each call sidekiq &lt;code class=&quot;highlighter-rouge&quot;&gt;perform_async&lt;/code&gt; method
 (&lt;a href=&quot;https://github.com/mperham/sidekiq/pull/2288&quot;&gt;mperham/sidekiq#2288&lt;/a&gt;).
@@ -778,7 +1012,7 @@ this (I called this code in my sidekiq reduce allocation PR):&lt;/p&gt;
 
 &lt;p&gt;How to use:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;ruby-prof&#39;&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'ruby-prof'&lt;/span&gt;
 
 &lt;span class=&quot;c1&quot;&gt;# Profile the code&lt;/span&gt;
 &lt;span class=&quot;no&quot;&gt;RubyProf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;start&lt;/span&gt;
@@ -798,14 +1032,14 @@ libraries. The only thing I was missing — profiling the code from a file, 
  
  <entry>
    <title>Convert string to color hash</title>
-   <link href="http://blog.davydovanton.com/2015/03/29/specific-color-hash/"/>
+   <link href="http://localhost:4000/2015/03/29/specific-color-hash/"/>
    <updated>2015-03-29T00:00:00+03:00</updated>
-   <id>http://blog.davydovanton.com/2015/03/29/specific-color-hash</id>
+   <id>http://localhost:4000/2015/03/29/specific-color-hash</id>
    <content type="html">&lt;p&gt;So it happens that sometimes you need to convert string to color hash. I think that
 &lt;code class=&quot;highlighter-rouge&quot;&gt;Digest::MD5&lt;/code&gt; class is easiest way for this. For this you need call hexdigest method
 with necessary string.&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;Digest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;MD5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;hexdigest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;My string&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; &#39;a537d0&#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;Digest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;MD5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;hexdigest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'My string'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# =&amp;gt; 'a537d0'&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;And if you will create rgb color you need convert hex to decimal with &lt;code class=&quot;highlighter-rouge&quot;&gt;to_i(16)&lt;/code&gt; method.&lt;/p&gt;
 
@@ -818,9 +1052,9 @@ with necessary string.&lt;/p&gt;
  
  <entry>
    <title>История vim</title>
-   <link href="http://blog.davydovanton.com/2014/03/16/vim-history/"/>
+   <link href="http://localhost:4000/2014/03/16/vim-history/"/>
    <updated>2014-03-16T00:00:00+04:00</updated>
-   <id>http://blog.davydovanton.com/2014/03/16/vim-history</id>
+   <id>http://localhost:4000/2014/03/16/vim-history</id>
    <content type="html">&lt;p&gt;Я свято верю, что перед тем, как изучать новую технологию, необходимо узнать, зачем и в каких условиях она была создана. Думаю, данные знания позволяют в будущем не только не забивать гвозди микроскопом, но и не спрашивать, почему они так плохо забиваются. Поэтому первую запись из цикла статей, связанных с vim-ом, я бы хотел начать с истории его становления и небольшого описания его функционала.&lt;/p&gt;
 
 &lt;p&gt;Представьте себе: 70тые годы, расцвет unix машин, на данный момент существует только текстовый редактор &lt;a href=&quot;http://en.wikipedia.org/wiki/Ed_(text_editor)&quot;&gt;ed&lt;/a&gt;, который является командно-ориентированным, а за ним появляется редактор &lt;a href=&quot;http://en.wikipedia.org/wiki/Ex_(text_editor)&quot;&gt;ex&lt;/a&gt;. Во времена первого никто не слышал о мониторах, поэтому использовали для ввода телетайпы, из-за чего ed имеет командно-ориентированный интерфейс. А ex, в свою очередь, являлся улучшеным ed. Поэтому в нем появились такие штуки как экранное редактирование и работа с несколькими файлами, что для тех времен является прорывом. В это время многие программисты начинают писать свои редакторы, и один из них, &lt;a href=&quot;http://en.wikipedia.org/wiki/Bill_Joy&quot;&gt;Билл Джой&lt;/a&gt;, придумывает логичную и простую концепцию поверх редактора ex. Во первых, было бы логично воспринимать текст как объект, к которому применяются команды редактирования. Во вторых, использование unix идеологии о простоте и взаимности комманд. Так, в 1976 году, появляется первая версия текстового редактора vi, сокращено от (visual). Давайте рассмотрим каждую из концепций отдельно.&lt;/p&gt;
@@ -860,26 +1094,26 @@ with necessary string.&lt;/p&gt;
  
  <entry>
    <title>Seed файл и вы</title>
-   <link href="http://blog.davydovanton.com/2014/03/10/seed-and-you/"/>
+   <link href="http://localhost:4000/2014/03/10/seed-and-you/"/>
    <updated>2014-03-10T00:00:00+04:00</updated>
-   <id>http://blog.davydovanton.com/2014/03/10/seed-and-you</id>
+   <id>http://localhost:4000/2014/03/10/seed-and-you</id>
    <content type="html">&lt;p&gt;Совсем недавно, на работе, потребовалось мне заполнить новый проект данными для дальнейшего тестирования и разработки. Конечно же, данные должны быть в любом виде, и первое, о чем я подумал, был seed файл, поэтому сегодня мы поговорим именно о нем. Как всем известно, данный файл служит для генерации данных в рельсовых приложениях. Вы пишите скрипт, выполняете &lt;code class=&quot;highlighter-rouge&quot;&gt;rake db:seed&lt;/code&gt; и радуетесь жизни. В моем случае данные были типовыми, а именно, нужно было сгенерировать пользователей, посты и комментарии к этим постам. Я думаю все прекрасно понимают, как все взаимосвязанно, поэтому на этом останавливаться не вижу особого смысла.&lt;/p&gt;
 
 &lt;p&gt;Обычная практика многих людей - задать одинаковые данные для всех типов данных и наплодить их с десяток. Смотрится это обычно как-то так:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;ss&quot;&gt;name:  &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Jon&#39;&lt;/span&gt;
-  &lt;span class=&quot;ss&quot;&gt;email: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;my@email.org&#39;&lt;/span&gt;
-  &lt;span class=&quot;ss&quot;&gt;password: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;12345678&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;ss&quot;&gt;password_confirmation: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;12345678&#39;&lt;/span&gt;  
+  &lt;span class=&quot;ss&quot;&gt;name:  &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Jon'&lt;/span&gt;
+  &lt;span class=&quot;ss&quot;&gt;email: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'my@email.org'&lt;/span&gt;
+  &lt;span class=&quot;ss&quot;&gt;password: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'12345678'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;ss&quot;&gt;password_confirmation: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'12345678'&lt;/span&gt;  
   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
 &lt;span class=&quot;n&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;ss&quot;&gt;title:  &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;My Post&#39;&lt;/span&gt;
-  &lt;span class=&quot;ss&quot;&gt;body:   &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;My body&#39;&lt;/span&gt;
+  &lt;span class=&quot;ss&quot;&gt;title:  &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'My Post'&lt;/span&gt;
+  &lt;span class=&quot;ss&quot;&gt;body:   &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'My body'&lt;/span&gt;
   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
-&lt;span class=&quot;n&quot;&gt;comment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;body: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;comment&#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;comment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;body: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'comment'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
 &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;times&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;my_user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
@@ -896,8 +1130,8 @@ with necessary string.&lt;/p&gt;
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
   &lt;span class=&quot;ss&quot;&gt;name:  &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;admin&lt;/span&gt;
   &lt;span class=&quot;ss&quot;&gt;email: &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;admin&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@my_app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;com&lt;/span&gt;
-  &lt;span class=&quot;ss&quot;&gt;password: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;12345678&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;ss&quot;&gt;password_confirmation: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;12345678&#39;&lt;/span&gt;  
+  &lt;span class=&quot;ss&quot;&gt;password: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'12345678'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;ss&quot;&gt;password_confirmation: &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'12345678'&lt;/span&gt;  
   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
 &lt;span class=&quot;n&quot;&gt;rnd&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Random&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;new&lt;/span&gt;
@@ -916,12 +1150,12 @@ with necessary string.&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;posts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
   &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;ss&quot;&gt;title:  &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;My first Post&#39;&lt;/span&gt;
-    &lt;span class=&quot;ss&quot;&gt;body:   &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;My body&#39;&lt;/span&gt;
+    &lt;span class=&quot;ss&quot;&gt;title:  &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'My first Post'&lt;/span&gt;
+    &lt;span class=&quot;ss&quot;&gt;body:   &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'My body'&lt;/span&gt;
   &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
   &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;ss&quot;&gt;title:  &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;My second Post&#39;&lt;/span&gt;
-    &lt;span class=&quot;ss&quot;&gt;body:   &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;My body&#39;&lt;/span&gt;    
+    &lt;span class=&quot;ss&quot;&gt;title:  &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'My second Post'&lt;/span&gt;
+    &lt;span class=&quot;ss&quot;&gt;body:   &lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'My body'&lt;/span&gt;    
   &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
   &lt;span class=&quot;c1&quot;&gt;# Еще какое-то количество данных для постов ...&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
@@ -957,19 +1191,19 @@ with necessary string.&lt;/p&gt;
 
   &lt;span class=&quot;n&quot;&gt;rnd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;rand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;21&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;times&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;rand_user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rnd_user&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rnd&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;comment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;created_post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;build_comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rand_user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;Comment body&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;comment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;created_post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;build_comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rand_user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Comment body'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;save!&lt;/span&gt;
 
     &lt;span class=&quot;n&quot;&gt;rnd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;rand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;times&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;rand_user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rnd_user&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rnd&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;child_comment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;created_post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;build_comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rand_user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;Comment body&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;child_comment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;created_post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;build_comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rand_user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Comment body'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;child_comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;save!&lt;/span&gt;
       &lt;span class=&quot;n&quot;&gt;child_comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;move_to_child_of&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;comment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;Хм, рандомное количество комментариев мы сделали, пользователей тоже разных назначили, но вот незадача, у нас body каждого комментария одно и тоже, а именно &lt;code class=&quot;highlighter-rouge&quot;&gt;&#39;Comment body&#39;&lt;/code&gt;.Что же делать и как нам быть? Раз уж мы договорились создать подобие “живого” приложения, то и комментарии у нас должны быть разные и тоже живые. Первое, что приходит в голову, - опять использовать массив данных, но я слишков ленив (да и не путь самурая это), чтобы все это набирать, пусть даже копипастить и тем более придумывать. Второе, что приходит на ум, генерировать рандомную строчку текста. Да, идея не плохая, как минимум, нам придется писать меньше кода, и он по-любому будет всегда разный. Но есть одно но: мы пытаемся достигнуть абсолютной правдоподобности, а строки вида &lt;code class=&quot;highlighter-rouge&quot;&gt;&#39;skjafnskdjn ksajdnf&#39;&lt;/code&gt; нам точно не подойдут как комментарии. Поэтому нам на помощь приходит отличное решение - гем &lt;a href=&quot;https://github.com/postmodern/raingrams&quot;&gt;raingrams&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Хм, рандомное количество комментариев мы сделали, пользователей тоже разных назначили, но вот незадача, у нас body каждого комментария одно и тоже, а именно &lt;code class=&quot;highlighter-rouge&quot;&gt;'Comment body'&lt;/code&gt;.Что же делать и как нам быть? Раз уж мы договорились создать подобие “живого” приложения, то и комментарии у нас должны быть разные и тоже живые. Первое, что приходит в голову, - опять использовать массив данных, но я слишков ленив (да и не путь самурая это), чтобы все это набирать, пусть даже копипастить и тем более придумывать. Второе, что приходит на ум, генерировать рандомную строчку текста. Да, идея не плохая, как минимум, нам придется писать меньше кода, и он по-любому будет всегда разный. Но есть одно но: мы пытаемся достигнуть абсолютной правдоподобности, а строки вида &lt;code class=&quot;highlighter-rouge&quot;&gt;'skjafnskdjn ksajdnf'&lt;/code&gt; нам точно не подойдут как комментарии. Поэтому нам на помощь приходит отличное решение - гем &lt;a href=&quot;https://github.com/postmodern/raingrams&quot;&gt;raingrams&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Что же такого может этот гем, спросите Вы? На самом деле, ничего особенного, Вы просто скармливаете ему текст, а он, в свою очередь, разбивает его на куски и рандомно выдает обратно. В чем плюсы? Да, они не отличаются от банальной генерации строки, единственное и очевидное отличие - генерируемый текст будет логичен в пределах строки.&lt;/p&gt;
 
@@ -987,8 +1221,8 @@ with necessary string.&lt;/p&gt;
 &lt;p&gt;А теперь, используя полученные знания, перепишем наш метод. В качестве текста для raingrams мы будем использовать комментарии из пикабу, которые предварительно распарсим:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;model&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;QuadgramModel&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;build&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;doc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Nokogiri&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;HTML&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;http://pikabu.ru/story/v_den_programmista_pro_logiku_pikabu_685289&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;doc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;search&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;div.comment_desc&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;doc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Nokogiri&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;HTML&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'http://pikabu.ru/story/v_den_programmista_pro_logiku_pikabu_685289'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;doc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;search&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'div.comment_desc'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;each&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;train_with_text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;inner_text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;refresh&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
@@ -1027,15 +1261,15 @@ with necessary string.&lt;/p&gt;
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;Fabricator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
   &lt;span class=&quot;n&quot;&gt;email&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Faker&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Internet&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;email&lt;/span&gt;
   &lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Faker&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;name&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;12345678&#39;&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;password_confirmation&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;12345678&#39;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'12345678'&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;password_confirmation&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'12345678'&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
 
 &lt;span class=&quot;no&quot;&gt;Fabricator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:admin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;email&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;admin@my_app.org&#39;&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;admin&#39;&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;12345678&#39;&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;password_confirmation&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;12345678&#39;&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;email&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'admin@my_app.org'&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'admin'&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'12345678'&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;password_confirmation&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'12345678'&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;Ну а теперь, воспользуемся нашей новосозданной фабрикой для избавления от лишнего кода в seed файле:&lt;/p&gt;
@@ -1053,16 +1287,16 @@ with necessary string.&lt;/p&gt;
  
  <entry>
    <title>IRB и все все все</title>
-   <link href="http://blog.davydovanton.com/2014/02/09/irb-and-all-all-all/"/>
+   <link href="http://localhost:4000/2014/02/09/irb-and-all-all-all/"/>
    <updated>2014-02-09T00:00:00+04:00</updated>
-   <id>http://blog.davydovanton.com/2014/02/09/irb-and-all-all-all</id>
+   <id>http://localhost:4000/2014/02/09/irb-and-all-all-all</id>
    <content type="html">&lt;p&gt;Думаю, каждый, кто так или иначе связан с Ruby и тем более с Rails, хоть раз в жизни использовал irb. Возможности интерактивного ruby шела безграничны, поэтому сегодня я бы хотел поговорить об улучшении или кастомизации, если вам так угодно, вашего irb.&lt;/p&gt;
 
 &lt;p&gt;Но для начала давайте посмотрим документацию, а именно откроем модуль &lt;a href=&quot;http://www.ruby-doc.org/stdlib-2.0/libdoc/irb/rdoc/IRB.html&quot;&gt;IRB&lt;/a&gt; в стандартной библиотеке ruby.
 “Что интересного тут есть?”, спросите вы? Думаю стоит начать с самого начала, с запуска. Если вы просто наберете в консоли &lt;code class=&quot;highlighter-rouge&quot;&gt;irb&lt;/code&gt;, то запустите шел с вашей текущей версией руби. Но  если у вас RVM(хотя, сказать по правде я не уверен, что это работает только с RVM), то вы можете выбрать среду для запуска из всех тех, что у вас установлены. Например вот так, я, при активном MRI 2.0, могу запустить у себя jruby:&lt;/p&gt;
 
-&lt;p&gt;&lt;a class=&quot;lightbox&quot; href=&quot;http://blog.davydovanton.com/images/2014/02/irb-and-all-all-all/jruby-irb.png&quot;&gt;
-&lt;img src=&quot;http://blog.davydovanton.com/images/2014/02/irb-and-all-all-all/jruby-irb.png&quot; alt=&quot;jruby in irb&quot; /&gt;
+&lt;p&gt;&lt;a class=&quot;lightbox&quot; href=&quot;http://localhost:4000/images/2014/02/irb-and-all-all-all/jruby-irb.png&quot;&gt;
+&lt;img src=&quot;http://localhost:4000/images/2014/02/irb-and-all-all-all/jruby-irb.png&quot; alt=&quot;jruby in irb&quot; /&gt;
 &lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Дальше, думаю, следует обсудить ключи. Их много, они разные. В документации они все &lt;a href=&quot;http://www.ruby-doc.org/stdlib-2.0/libdoc/irb/rdoc/IRB.html#module-IRB-label-Command+line+options&quot;&gt;есть&lt;/a&gt;. Самые интересные, на мой взляд, - &lt;code class=&quot;highlighter-rouge&quot;&gt;-d&lt;/code&gt; включающий дебаг мод(аналогично &lt;code class=&quot;highlighter-rouge&quot;&gt;ruby -d&lt;/code&gt;) и ключ &lt;code class=&quot;highlighter-rouge&quot;&gt;-I path&lt;/code&gt;, загружающий указанную директорию.&lt;/p&gt;
@@ -1072,7 +1306,7 @@ with necessary string.&lt;/p&gt;
 &lt;p&gt;Думаю, для начала, следует указать конфигурационные значения, например, увеличить количество сохраняемых команд и записывать их в отдельный файл:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;IRB&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:SAVE_HISTORY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;
-&lt;span class=&quot;no&quot;&gt;IRB&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:HISTORY_FILE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;ENV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;HOME&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/.irb_history&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;no&quot;&gt;IRB&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;:HISTORY_FILE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;ENV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'HOME'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/.irb_history&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;Так же можно указать кучу других настроек, но я бы не стал писать эту статью, если бы хотел рассказать только это. Все веселье начинается тогда, когда приходит понимание того, что данный файл является обычным &lt;code class=&quot;highlighter-rouge&quot;&gt;*.rb&lt;/code&gt; файлом, который загружается при старте вашего irb.&lt;/p&gt;
 
@@ -1089,16 +1323,16 @@ with necessary string.&lt;/p&gt;
 
 &lt;p&gt;Как он будет работать, спросите вы? Да все просто, берете объект и вызываете на нем данный метод:&lt;/p&gt;
 
-&lt;p&gt;&lt;a class=&quot;lightbox&quot; href=&quot;http://blog.davydovanton.com/images/2014/02/irb-and-all-all-all/irb_local_methods.png&quot;&gt;
-&lt;img src=&quot;http://blog.davydovanton.com/images/2014/02/irb-and-all-all-all/irb_local_methods.png&quot; alt=&quot;Using local_mathods method in irb&quot; /&gt;
+&lt;p&gt;&lt;a class=&quot;lightbox&quot; href=&quot;http://localhost:4000/images/2014/02/irb-and-all-all-all/irb_local_methods.png&quot;&gt;
+&lt;img src=&quot;http://localhost:4000/images/2014/02/irb-and-all-all-all/irb_local_methods.png&quot; alt=&quot;Using local_mathods method in irb&quot; /&gt;
 &lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Думаю, вы заметили цвета, которых не хватает в дефолтном irb?&lt;/p&gt;
 
 &lt;p&gt;Да, все верно, так же можно подключать гемы, и да, есть гемы, которые добавляют ярких цветов в ваш irb, например, &lt;a href=&quot;https://github.com/blackwinter/wirble&quot;&gt;wirble&lt;/a&gt;. Достаточно написать такой код:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;rubygems&#39;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;wirble&#39;&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'rubygems'&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'wirble'&lt;/span&gt;
 
 &lt;span class=&quot;no&quot;&gt;Wirble&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;init&lt;/span&gt;
 &lt;span class=&quot;no&quot;&gt;Wirble&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;colorize&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
@@ -1108,23 +1342,23 @@ with necessary string.&lt;/p&gt;
 &lt;p&gt;А если вам нравится &lt;a href=&quot;http://pryrepl.org/&quot;&gt;pry&lt;/a&gt;, то вам никто не запрещает его добавить, в последующем вызывая его, просто набрав &lt;code class=&quot;highlighter-rouge&quot;&gt;pry&lt;/code&gt; во время irb сессии:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;c1&quot;&gt;#.irbrc&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;pry&#39;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'pry'&lt;/span&gt;
 
 &lt;span class=&quot;c1&quot;&gt;# irb&lt;/span&gt;
 &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p247&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mo&quot;&gt;015&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pry&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pry&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;Ну а выглядеть это будет как-то так:
-&lt;a class=&quot;lightbox&quot; href=&quot;http://blog.davydovanton.com/images/2014/02/irb-and-all-all-all/pry.gif&quot;&gt;
-&lt;img src=&quot;http://blog.davydovanton.com/images/2014/02/irb-and-all-all-all/pry.gif&quot; alt=&quot;Using pry in irb&quot; /&gt;
+&lt;a class=&quot;lightbox&quot; href=&quot;http://localhost:4000/images/2014/02/irb-and-all-all-all/pry.gif&quot;&gt;
+&lt;img src=&quot;http://localhost:4000/images/2014/02/irb-and-all-all-all/pry.gif&quot; alt=&quot;Using pry in irb&quot; /&gt;
 &lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Но самое полезное, что можно сделать, это забыть построчный ввод кода. “Как?”, спросите вы? Начну издалека: мне очень нравится vim :) Поэтому, смотря vimcasts-ы, я узнал то, что перевернуло мой мир, а именно: любой текстовый редактор можно &lt;a href=&quot;http://vimcasts.org/episodes/running-vim-within-irb/&quot;&gt;вызывать&lt;/a&gt; прямо из irb.&lt;/p&gt;
 
 &lt;p&gt;Делается это очень просто: нужно добавить гем &lt;code class=&quot;highlighter-rouge&quot;&gt;interactive_editor&lt;/code&gt;. Данный гем позволяет вызывать любой текстовый редактор из вашего irb, например, набрав &lt;code class=&quot;highlighter-rouge&quot;&gt;vim&lt;/code&gt; - откроется vim, где вы сможете набрать любой код, который выполнится после сохранения файла и закрытия редактора.&lt;/p&gt;
 
-&lt;p&gt;&lt;a class=&quot;lightbox&quot; href=&quot;http://blog.davydovanton.com/images/2014/02/irb-and-all-all-all/vim-in-irb.gif&quot;&gt;
-&lt;img src=&quot;http://blog.davydovanton.com/images/2014/02/irb-and-all-all-all/vim-in-irb.gif&quot; alt=&quot;Using vim in irb&quot; /&gt;
+&lt;p&gt;&lt;a class=&quot;lightbox&quot; href=&quot;http://localhost:4000/images/2014/02/irb-and-all-all-all/vim-in-irb.gif&quot;&gt;
+&lt;img src=&quot;http://localhost:4000/images/2014/02/irb-and-all-all-all/vim-in-irb.gif&quot; alt=&quot;Using vim in irb&quot; /&gt;
 &lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Собственно то же самое будет работать с sublime, textmate, emacs и &lt;a href=&quot;https://github.com/jberkel/interactive_editor/blob/master/lib/interactive_editor.rb#L92&quot;&gt;дургими&lt;/a&gt; текстовыми редакторами.&lt;/p&gt;
@@ -1168,9 +1402,9 @@ with necessary string.&lt;/p&gt;
  
  <entry>
    <title>Ruby и special/predefined variables</title>
-   <link href="http://blog.davydovanton.com/2014/01/15/ruby-and-predefined-global-variables/"/>
+   <link href="http://localhost:4000/2014/01/15/ruby-and-predefined-global-variables/"/>
    <updated>2014-01-15T00:00:00+04:00</updated>
-   <id>http://blog.davydovanton.com/2014/01/15/ruby-and-predefined-global-variables</id>
+   <id>http://localhost:4000/2014/01/15/ruby-and-predefined-global-variables</id>
    <content type="html">&lt;p&gt;Не так давно я обнаружил интересный пример в одной замечательной книге. С этого примера, я бы и хотел начать наш разговор.&lt;/p&gt;
 
 &lt;p&gt;Выглядел примерно так:&lt;/p&gt;
@@ -1236,7 +1470,7 @@ with necessary string.&lt;/p&gt;
 &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$~&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to_s&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;#=&amp;gt; &quot;irb&quot;&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$~&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to_a&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; [&quot;irb&quot;, &#39;irb&#39;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; [&quot;irb&quot;, 'irb']&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h5 id=&quot;section-3&quot;&gt;$+&lt;/h5&gt;
 &lt;p&gt;Содержит значение последней круглой скобки из последнего совпадения:&lt;/p&gt;
@@ -1269,7 +1503,7 @@ with necessary string.&lt;/p&gt;
 &lt;p&gt;Ну а эта переменная содержит массив со всеми trace stack-ами из последнего исключения:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;rescue&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$@&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; [&quot;&amp;lt;main&amp;gt;:4:in `/&#39;&quot;, &quot;&amp;lt;main&amp;gt;:4:in `/&#39;&quot;, &quot;(irb):98:in `irb_binding&#39;&quot;, ... ]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; [&quot;&amp;lt;main&amp;gt;:4:in `/'&quot;, &quot;&amp;lt;main&amp;gt;:4:in `/'&quot;, &quot;(irb):98:in `irb_binding'&quot;, ... ]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h5 id=&quot;section-7&quot;&gt;$*&lt;/h5&gt;
 &lt;p&gt;Эта переменная равносильна переменной ARGV, думаю этим все сказанно.&lt;/p&gt;
@@ -1289,23 +1523,23 @@ with necessary string.&lt;/p&gt;
 &lt;p&gt;Так где же определены эти переменные в исходном коде ruby? Как оказалось, все не так сложно, как кажется. Определенны эти переменные в файле &lt;a href=&quot;https://github.com/ruby/ruby/blob/v2_1_0/parse.y#L7950&quot;&gt;parse.y&lt;/a&gt; примерно на 7950-той строке (да да, файл не очень большой, всего 11.5к строк кода). Для тех, кто не в курсе, parse.y - грамматический файл интерпритатора, благодаря которому происходит разбиение написанного вами кода на токены (лексемы/указатели), которые в последующем преобразуются в AST структуру, а затем в YARV структуру, ну а дальше в машинный код, который в последующем и будет выполняется.
 Как не трудно заметить, case функция ищет совпадение символа “$” и специальных символов (блок case), после чего передает их функции set_yylval_name:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span class=&quot;mi&quot;&gt;7965&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39;~&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $~: match-data */&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;7966&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39;*&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $*: argv */&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;7967&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39;$&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $$: pid */&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;7968&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39;?&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $?: last status */&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;7969&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39;!&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $!: error string */&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;7970&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39;@&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $@: error position */&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;7971&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39;/&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $/: input record separator */&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;7972&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39;\\&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;               &lt;span class=&quot;cm&quot;&gt;/* $\: output record separator */&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;7973&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39;;&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $;: field separator */&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;7974&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39;,&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $,: output field separator */&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;7975&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39;.&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $.: last read line number */&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;7976&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39;=&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $=: ignorecase */&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;7977&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39;:&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $:: load path */&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;7978&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39;&amp;lt;&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $&amp;lt;: reading filename */&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;7979&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39;&amp;gt;&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $&amp;gt;: default output handle */&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;7980&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39;\&quot;&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $&quot;: already loaded files */&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;7981&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;tokadd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&#39;$&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span class=&quot;mi&quot;&gt;7965&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;'~'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $~: match-data */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7966&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;'*'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $*: argv */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7967&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;'$'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $$: pid */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7968&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;'?'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $?: last status */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7969&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;'!'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $!: error string */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7970&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;'@'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $@: error position */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7971&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;'/'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $/: input record separator */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7972&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;'\\'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;               &lt;span class=&quot;cm&quot;&gt;/* $\: output record separator */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7973&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;';'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $;: field separator */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7974&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;','&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $,: output field separator */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7975&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;'.'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $.: last read line number */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7976&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;'='&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $=: ignorecase */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7977&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;':'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $:: load path */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7978&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;'&amp;lt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $&amp;lt;: reading filename */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7979&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;'&amp;gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $&amp;gt;: default output handle */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7980&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;'\&quot;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;                &lt;span class=&quot;cm&quot;&gt;/* $&quot;: already loaded files */&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;7981&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;tokadd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;'$'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;mi&quot;&gt;7982&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;tokadd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;mi&quot;&gt;7983&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;k&quot;&gt;goto&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gvar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
@@ -1318,7 +1552,7 @@ with necessary string.&lt;/p&gt;
 &lt;p&gt;И в завершение, следует упомянуть особый файл - &lt;a href=&quot;https://github.com/ruby/ruby/blob/v2_1_0/lib/English.rb&quot;&gt;English.rb&lt;/a&gt;, в котором прописаны алиасы для специальных переменных, благодаря чему можно использовать данные переменные намного понятнее, нежели чем использование $$, $&amp;amp; и так далее:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;s2&quot;&gt;&quot;waterbuffalo&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=~&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;/buff/&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
 
 &lt;span class=&quot;c1&quot;&gt;# With English:&lt;/span&gt;
 

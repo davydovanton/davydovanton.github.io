@@ -21,7 +21,7 @@ author:
   email:             antondavydov.o@gmail.com
 
 # Conversion
-markdown: kramdown
+markdown:            kramdown
 
 # Custom vars
 version:             3.0.0
