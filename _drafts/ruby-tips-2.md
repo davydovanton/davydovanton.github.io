@@ -1,4 +1,4 @@
-It's second part in my series of posts about ruby tips. Today we’re talking about:
+It's a second part of my post series about ruby tips. Today you’ll learn more about:
 
 * Special values
 * Symbol
@@ -25,12 +25,13 @@ https://ruby-hacking-guide.github.io/security.html
 | >= 4  | Ruby effectively partitions the running program in two. Nontainted objects may not be modified. Typically, this will be used to create a sandbox: the program sets up an environment using a lower$SAFE level, then resets $SAFE to 4 to prevent subsequent changes to that environment. |
 
 ### Email Regexp
-In ruby you can find regexp for emails. If you want to use it you need to require `uri` library and call `URI::MailTo::EMAIL_REGEXP` constant.
+In ruby you can find regexp for emails. If you want to use it, you have to require `uri`
+library and call `URI::MailTo::EMAIL_REGEXP` constant.
 
 ### DATA object
-The global `DATA` variable in Ruby allows us to access the text at the end of
-our file listed after the `__END__` block. This can be surprisingly useful, for
-instance if we need to extract information from a rather large data blob.
+The global `DATA` variable in ruby allows us to access the text at the end of our file
+listed after the `__END__` block. This can be surprisingly useful, for instance if we
+need to extract information from a rather large data blob.
 
 ```ruby
 # in one file
@@ -69,7 +70,7 @@ Symbol.all_symbols.size # => 5675
 ### id2name
 https://ruby-doc.org/core-2.2.0/Symbol.html#method-i-id2name
 
-Alias for `#to_s` (I don't know why you need to use it but it's funny method I think).
+Alias for `#to_s` (I don't know why you need to use this but it's a funny method I think).
 ```ruby
 :test.id2name   #=> "test"
 ```
@@ -106,7 +107,7 @@ range.to_a == [*range] # => true
 
 ## Hash
 ### `**` method
-Everyone know how to use `*` in method defenition argument list. But for some reason fewer people know about `**`.
+You probably know already how to use `*` in method definition argument list. But `**` is less known.
 
 ```ruby
 def method_name(value, *attr, **options)
@@ -165,3 +166,16 @@ when 18..50 then "Adult"
 when 50..99 then "Old"
 end
 ```
+
+# Conclusions
+
+That's all. I hope it'll be useful for you. In next part we’re gonna talking about:
+
+* Tracing Ruby Code
+* memory usage
+* Enumerable
+* Compiler
+* Rspec
+* Rails
+
+Happy hacking! 🚀
