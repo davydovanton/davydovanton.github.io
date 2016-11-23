@@ -114,6 +114,237 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/2016/11/23/ruby-tips-part-two/">
+        Ruby tips #2
+      </a>
+    </h1>
+
+    <span class="post-date">23 Nov 2016</span>
+
+    <p>It’s a second part of my post series about ruby tips. Today you’ll learn more about:</p>
+
+<ul>
+  <li>Special values</li>
+  <li>Symbol</li>
+  <li>Array</li>
+  <li>Hash</li>
+  <li>Range</li>
+</ul>
+
+<p><strong>CAUTION:</strong> These tips are not equally feat to production. Lots of them are just interesting solutions which you’ll not find anywhere else. Use them at your own risk.</p>
+
+<h2 id="special-values">Special values</h2>
+
+<h3 id="safe-levels">Safe Levels</h3>
+
+<p><a href="https://ruby-hacking-guide.github.io/security.html">Full description</a></p>
+
+<p>In ruby you can find security levels for your code.
+The Ruby security level is represented by the <code class="highlighter-rouge">$SAFE</code> global variable.
+The value ranges from minimum value 0 to maximum value 4.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>$SAFE</th>
+      <th>Constraints</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>No checking of the use of externally supplied (tainted) data is performed. This is Ruby’s default mode.</td>
+    </tr>
+    <tr>
+      <td>&gt;= 1</td>
+      <td>Ruby disallows the use of tainted data by potentially dangerous operations.</td>
+    </tr>
+    <tr>
+      <td>&gt;= 2</td>
+      <td>Ruby prohibits the loading of program files from globally writable locations.</td>
+    </tr>
+    <tr>
+      <td>&gt;= 3</td>
+      <td>All newly created objects are considered tainted.</td>
+    </tr>
+    <tr>
+      <td>&gt;= 4</td>
+      <td>Ruby effectively partitions the running program in two. Nontainted objects may not be modified. Typically, this will be used to create a sandbox: the program sets up an environment using a lower$SAFE level, then resets $SAFE to 4 to prevent subsequent changes to that environment.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="email-regexp">Email Regexp</h3>
+
+<p>In ruby you can find regexp for emails. If you want to use it, you have to require <code class="highlighter-rouge">uri</code>
+library and call <code class="highlighter-rouge">URI::MailTo::EMAIL_REGEXP</code> constant.</p>
+
+<h3 id="data-object">DATA object</h3>
+
+<p>The global <code class="highlighter-rouge">DATA</code> variable in ruby allows us to access the text at the end of our file
+listed after the <code class="highlighter-rouge">__END__</code> block. This can be surprisingly useful, for instance if we
+need to extract information from a rather large data blob.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># in one file</span>
+<span class="nb">require</span> <span class="s2">"json"</span>
+
+<span class="nb">puts</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="no">DATA</span><span class="p">)</span> <span class="c1"># this DATA required text bellow __END__</span>
+
+<span class="cp">__END__
+{
+  "records": [
+    {
+      "artist":"Iggy Pop",
+      "title":"Lust for Life"
+    },
+    {
+      "artist":"Television",
+      "title":"Marquee Moon"
+    },
+    {
+      "artist":"Talking Heads",
+      "title":"Talking Heads: 77"
+    }
+  ]
+}</span></code></pre></figure>
+
+<h2 id="symbol">Symbol</h2>
+
+<h3 id="allsymbols">#all_symbols</h3>
+
+<p><a href="https://ruby-doc.org/core-2.2.0/Symbol.html#method-c-all_symbols">Documentation</a></p>
+
+<p>Return array with all symbols in env.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Symbol</span><span class="p">.</span><span class="nf">all_symbols</span><span class="p">.</span><span class="nf">size</span> <span class="c1"># =&gt; 5675</span></code></pre></figure>
+
+<h3 id="id2name">id2name</h3>
+
+<p><a href="https://ruby-doc.org/core-2.2.0/Symbol.html#method-i-id2name">Documentation</a></p>
+
+<p>Alias for <code class="highlighter-rouge">#to_s</code> (I don’t know why you need to use this but it’s a funny method I think).</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="ss">:test</span><span class="p">.</span><span class="nf">id2name</span>   <span class="c1">#=&gt; "test"</span></code></pre></figure>
+
+<h3 id="slice">slice</h3>
+
+<p><a href="https://ruby-doc.org/core-2.2.0/Symbol.html#method-i-slice">Documentation</a></p>
+
+<p>Alias for <code class="highlighter-rouge">sym.to_s[]</code>.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="ss">:hello_world</span><span class="p">.</span><span class="nf">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="nf">.</span><span class="mi">4</span><span class="p">)</span> <span class="c1">#=&gt; "hello"</span>
+<span class="ss">:hello_world</span><span class="p">.</span><span class="nf">[</span><span class="mi">0</span><span class="p">.</span><span class="nf">.</span><span class="mi">4</span><span class="p">]</span>      <span class="c1">#=&gt; "hello"</span></code></pre></figure>
+
+<h2 id="array">Array</h2>
+
+<h3 id="bsearch">#bsearch</h3>
+
+<p><a href="http://www.ruby-doc.org/core-2.1.5/Array.html#method-i-bsearch">Documentation</a></p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">ary</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">]</span>
+<span class="n">ary</span><span class="p">.</span><span class="nf">bsearch</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">&gt;=</span>   <span class="mi">4</span> <span class="p">}</span> <span class="c1">#=&gt; 4</span>
+<span class="n">ary</span><span class="p">.</span><span class="nf">bsearch</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">&gt;=</span>   <span class="mi">6</span> <span class="p">}</span> <span class="c1">#=&gt; 7</span>
+<span class="n">ary</span><span class="p">.</span><span class="nf">bsearch</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">&gt;=</span>  <span class="o">-</span><span class="mi">1</span> <span class="p">}</span> <span class="c1">#=&gt; 0</span>
+<span class="n">ary</span><span class="p">.</span><span class="nf">bsearch</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">100</span> <span class="p">}</span> <span class="c1">#=&gt; nil</span></code></pre></figure>
+
+<h3 id="range-to-array">Range to array</h3>
+
+<p>You can use <code class="highlighter-rouge">*</code> operator for converting range to array.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">range</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">range</span><span class="p">.</span><span class="nf">to_a</span> <span class="o">==</span> <span class="p">[</span><span class="o">*</span><span class="n">range</span><span class="p">]</span> <span class="c1"># =&gt; true</span></code></pre></figure>
+
+<h2 id="hash">Hash</h2>
+
+<h3 id="method"><code class="highlighter-rouge">**</code> method</h3>
+
+<p>You probably know already how to use <code class="highlighter-rouge">*</code> in method definition argument list. But <code class="highlighter-rouge">**</code> is less known.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">method_name</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="o">*</span><span class="kp">attr</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
+  <span class="nb">p</span> <span class="kp">attr</span>
+  <span class="nb">p</span> <span class="n">options</span>
+<span class="k">end</span>
+
+<span class="n">method_name</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">,</span> <span class="s1">'cruel'</span><span class="p">,</span> <span class="s1">'world'</span><span class="p">,</span> <span class="ss">collor: :red</span><span class="p">)</span>
+<span class="c1"># =&gt; ['cruel', 'world']</span>
+<span class="c1"># =&gt; { collor: :red }</span></code></pre></figure>
+
+<p>Also you can call this method like <code class="highlighter-rouge">[*attr]</code></p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">hash</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">a: :b</span><span class="p">,</span> <span class="ss">c: :d</span> <span class="p">}</span>
+
+<span class="p">{</span> <span class="o">**</span><span class="nb">hash</span><span class="p">,</span> <span class="ss">e: :f</span> <span class="p">}</span> <span class="c1"># =&gt; {:a=&gt;:b, :c=&gt;:d, :e=&gt;:f}</span></code></pre></figure>
+
+<h3 id="gsub-with-hash-args">#gsub with hash args</h3>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">str</span> <span class="o">=</span> <span class="s2">"Help! All parentheses have been flipped )and I am sad(!"</span>
+<span class="n">str</span><span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="sr">/[\(\)]/</span><span class="p">,</span> <span class="p">{</span><span class="s2">"("</span><span class="o">=&gt;</span><span class="s2">")"</span><span class="p">,</span> <span class="s2">")"</span><span class="o">=&gt;</span><span class="s2">"("</span><span class="p">})</span>
+<span class="c1"># =&gt; "Help! All parentheses have been flipped (and I am sad)!"</span></code></pre></figure>
+
+<h3 id="non-string-and-symbol-keys">Non string and symbol keys</h3>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">array</span> <span class="o">=</span> <span class="p">{</span> <span class="kp">false</span> <span class="o">=&gt;</span> <span class="s1">'No'</span><span class="p">,</span> <span class="ss">:to_s</span><span class="p">.</span><span class="nf">to_proc</span> <span class="o">=&gt;</span> <span class="s1">'proc'</span> <span class="p">}</span>
+
+<span class="n">array</span><span class="p">[</span><span class="mi">10</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">]</span>        <span class="c1"># =&gt; "No"</span>
+<span class="n">array</span><span class="p">[</span><span class="ss">:to_s</span><span class="p">.</span><span class="nf">to_proc</span><span class="p">]</span> <span class="c1"># =&gt; "No"</span></code></pre></figure>
+
+<h3 id="hashassoc">Hash#assoc</h3>
+
+<p>This method returns a two element array <code class="highlighter-rouge">[key, hash[key]]</code></p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="p">{</span><span class="ss">a: </span><span class="mi">1</span><span class="p">,</span> <span class="ss">b: </span><span class="mi">2</span><span class="p">}.</span><span class="nf">assoc</span><span class="p">(</span><span class="ss">:b</span><span class="p">)</span> <span class="c1"># =&gt; [:b, 2]</span></code></pre></figure>
+
+<h2 id="range">Range</h2>
+
+<h3 id="cover-and-time">#cover? and time</h3>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="p">((</span><span class="no">Time</span><span class="p">.</span><span class="nf">now</span> <span class="o">-</span> <span class="mi">1</span><span class="p">.</span><span class="nf">hour</span><span class="p">).</span><span class="nf">.</span><span class="p">(</span><span class="no">Time</span><span class="p">.</span><span class="nf">now</span> <span class="o">+</span> <span class="mi">1</span><span class="p">.</span><span class="nf">hour</span><span class="p">)).</span><span class="nf">cover?</span> <span class="p">(</span><span class="no">Time</span><span class="p">.</span><span class="nf">now</span> <span class="o">-</span> <span class="mi">1</span><span class="p">.</span><span class="nf">day</span><span class="p">)</span> <span class="c1"># =&gt; false</span>
+<span class="p">((</span><span class="no">Time</span><span class="p">.</span><span class="nf">now</span> <span class="o">-</span> <span class="mi">1</span><span class="p">.</span><span class="nf">hour</span><span class="p">).</span><span class="nf">.</span><span class="p">(</span><span class="no">Time</span><span class="p">.</span><span class="nf">now</span> <span class="o">+</span> <span class="mi">1</span><span class="p">.</span><span class="nf">hour</span><span class="p">)).</span><span class="nf">cover?</span> <span class="no">Time</span><span class="p">.</span><span class="nf">now</span>           <span class="c1"># =&gt; true</span></code></pre></figure>
+
+<h3 id="ranges-in-case-statements">Ranges in case statements</h3>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">age</span> <span class="o">=</span> <span class="mi">28</span>
+
+<span class="k">case</span> <span class="n">age</span>
+<span class="k">when</span> <span class="mo">01</span><span class="p">.</span><span class="nf">.</span><span class="mi">17</span> <span class="k">then</span> <span class="s2">"Young"</span>
+<span class="k">when</span> <span class="mi">18</span><span class="p">.</span><span class="nf">.</span><span class="mi">50</span> <span class="k">then</span> <span class="s2">"Adult"</span>
+<span class="k">when</span> <span class="mi">50</span><span class="p">.</span><span class="nf">.</span><span class="mi">99</span> <span class="k">then</span> <span class="s2">"Old"</span>
+<span class="k">end</span></code></pre></figure>
+
+<h1 id="conclusions">Conclusions</h1>
+
+<p>That’s all. I hope it’ll be useful for you. In next part we’re gonna talking about:</p>
+
+<ul>
+  <li>Tracing Ruby Code</li>
+  <li>memory usage</li>
+  <li>Enumerable</li>
+  <li>Compiler</li>
+  <li>Rspec</li>
+  <li>Rails</li>
+</ul>
+
+<p>Happy hacking! 🚀</p>
+
+
+    <div class="tag-cloud">
+      <ul>
+      
+        <li>
+          <a href="/tags/#ruby"><span>ruby</span></a>
+        </li>
+      
+        <li>
+          <a href="/tags/#tips"><span>tips</span></a>
+        </li>
+      
+      </ul>
+    </div>
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/2016/11/16/ruby-tips-part-one/">
         Ruby tips #1
       </a>
@@ -964,304 +1195,6 @@ But what will you do if you can’t use these methods or you need something easi
       
         <li>
           <a href="/tags/#git"><span>git</span></a>
-        </li>
-      
-      </ul>
-    </div>
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2015/11/01/write-simple-scheme-interpreter-on-ruby/">
-        Write simple scheme interpreter on ruby
-      </a>
-    </h1>
-
-    <span class="post-date">01 Nov 2015</span>
-
-    <p><strong>TL;DR:</strong> <a href="https://github.com/davydovanton/rlisp">github repo</a></p>
-
-<p>Every developer has a moment in his life where he wants to write his own programming language.
-In this article, I want to show you how to do this for a simple lisp compiler.</p>
-
-<h2 id="why-scheme-and-lisp">Why scheme and lisp?</h2>
-<p>Firstly, lisp is very simple for create and for understanding.
-Lisp (<em>LISt Processor</em>) is a family of languages which is based on the idea of <a href="http://www.wikiwand.com/en/S-expression">S-expressions</a>.
-<a href="http://www.wikiwand.com/en/S-expression">S-Expression</a> are needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or are the expression of the form <code class="highlighter-rouge">(x . y)</code> where <code class="highlighter-rouge">x</code> and <code class="highlighter-rouge">y</code> are <a href="http://www.wikiwand.com/en/S-expression">s-expressions</a>.
-This expression may be formed as lists (<code class="highlighter-rouge">(1 . ( 2 . 3))</code> this equals <code class="highlighter-rouge">(1 2 3)</code>) and trees (<code class="highlighter-rouge">((1 . (2 . 3)) . (4 . 5))</code>).</p>
-
-<p>Secondly, after creating interpreter you can better understand the language (the author fully understood the environment idea).
-Also you can understand the main idea of compilers and interpreters.</p>
-
-<p>Now let’s begin our journey into the world of compilers and interpreters so that we can write a simple scheme interpreter.</p>
-
-<h2 id="main-idea">Main idea</h2>
-<p>Our language will contain two parts: a parser which translates the string to <a href="http://www.wikiwand.com/en/Abstract_syntax_tree">AST</a> and <code class="highlighter-rouge">eval</code> function.
-This function will take the <a href="http://www.wikiwand.com/en/Abstract_syntax_tree">AST</a> with envariement value and will return the result of the code.</p>
-
-<p>Schematically, it looks like this:</p>
-
-<figure class="highlight"><pre><code class="language-text" data-lang="text">code(string) =&gt; parse function =&gt; AST =&gt; eval function =&gt; result</code></pre></figure>
-
-<h2 id="first-step-parser">First step. Parser.</h2>
-<p>To begin, let’s define what we want to get.
-For example, we have a string <code class="highlighter-rouge">'(+ 1 1 1)'</code>.
-What should our parser return? What kind of data structure should we receive? I think, that an array would be correct.</p>
-
-<p>Let write simple test code:</p>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">program</span> <span class="o">=</span> <span class="s1">'(+ 1 1 1)'</span>
-<span class="n">lisp</span> <span class="o">=</span> <span class="no">Lisp</span><span class="p">.</span><span class="nf">new</span>
-<span class="n">lisp</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span> <span class="o">==</span> <span class="p">[:</span><span class="o">+</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span></code></pre></figure>
-
-<p>As you can see, this is a simple code, so I just displayed <code class="highlighter-rouge">parse</code> method code:</p>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
-  <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
-    <span class="n">tokenize</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="n">chars</span><span class="p">)</span>
-    <span class="n">chars</span>
-      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="sr">/\s\s+/</span><span class="p">,</span> <span class="s1">' '</span><span class="p">)</span>
-      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="s1">'('</span><span class="p">,</span> <span class="s1">' ( '</span><span class="p">)</span>
-      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="s1">')'</span><span class="p">,</span> <span class="s1">' ) '</span><span class="p">)</span>
-      <span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="s1">' '</span><span class="p">)</span>
-      <span class="p">.</span><span class="nf">map</span><span class="p">{</span> <span class="o">|</span><span class="n">token</span><span class="o">|</span> <span class="n">atom</span><span class="p">(</span><span class="n">token</span><span class="p">)</span> <span class="p">}</span>
-      <span class="p">.</span><span class="nf">compact</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">atom</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">token</span><span class="p">[</span><span class="sr">/\.\d+/</span><span class="p">]</span>
-      <span class="n">token</span><span class="p">.</span><span class="nf">to_f</span>
-    <span class="k">elsif</span> <span class="n">token</span> <span class="o">==</span> <span class="s1">'('</span> <span class="o">||</span> <span class="n">token</span> <span class="o">==</span> <span class="s1">')'</span>
-      <span class="kp">nil</span>
-    <span class="k">elsif</span> <span class="n">token</span><span class="p">[</span><span class="sr">/\d+/</span><span class="p">]</span>
-      <span class="n">token</span><span class="p">.</span><span class="nf">to_i</span>
-    <span class="k">else</span>
-      <span class="n">token</span><span class="p">.</span><span class="nf">to_sym</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span></code></pre></figure>
-
-<p>As you know, in lisp you can write your code with nested operators, for example - <code class="highlighter-rouge">(+ (* 2 2) (- 5 3))</code>.
-And this code will return 6.</p>
-
-<p>When we use our parser for this code, the result is not quite what we need, so let’s update our test code:</p>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">program</span> <span class="o">=</span> <span class="s1">'(+ (* (1 2) 3) 4)'</span>
-<span class="n">lisp</span> <span class="o">=</span> <span class="no">Lisp</span><span class="p">.</span><span class="nf">new</span>
-<span class="n">lisp</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span> <span class="o">==</span> <span class="p">[:</span><span class="o">+</span><span class="p">,</span> <span class="p">[:</span><span class="o">*</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="mi">3</span><span class="p">],</span> <span class="mi">4</span><span class="p">]</span></code></pre></figure>
-
-<p>As you might guess, the most obvious way to fix our code is to call <code class="highlighter-rouge">parse</code> method in recursion and all array elements from <code class="highlighter-rouge">'('</code> to <code class="highlighter-rouge">')'</code>.
-We will move to a nested array.
-The code will be look loke this:</p>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
-  <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
-    <span class="n">read_from_tokens</span><span class="p">(</span><span class="n">tokenize</span><span class="p">(</span><span class="n">program</span><span class="p">))</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="n">chars</span><span class="p">)</span>
-    <span class="n">chars</span>
-      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="sr">/\s\s+/</span><span class="p">,</span> <span class="s1">' '</span><span class="p">)</span>
-      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="s1">'('</span><span class="p">,</span> <span class="s1">' ( '</span><span class="p">)</span>
-      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="s1">')'</span><span class="p">,</span> <span class="s1">' ) '</span><span class="p">)</span>
-      <span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="s1">' '</span><span class="p">)</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">read_from_tokens</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
-    <span class="k">return</span> <span class="k">if</span> <span class="n">tokens</span><span class="p">.</span><span class="nf">empty?</span>
-
-    <span class="n">token</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">.</span><span class="nf">shift</span>
-
-    <span class="k">if</span> <span class="s1">'('</span> <span class="o">==</span> <span class="n">token</span>
-      <span class="n">list</span> <span class="o">=</span> <span class="p">[]</span>
-
-      <span class="k">while</span> <span class="n">tokens</span><span class="p">.</span><span class="nf">first</span> <span class="o">!=</span> <span class="s1">')'</span>
-        <span class="n">list</span> <span class="o">&lt;&lt;</span> <span class="n">read_from_tokens</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
-      <span class="k">end</span>
-      <span class="n">tokens</span><span class="p">.</span><span class="nf">shift</span>
-
-      <span class="n">list</span>
-    <span class="k">elsif</span> <span class="s1">')'</span> <span class="o">==</span> <span class="n">token</span>
-      <span class="k">raise</span> <span class="s1">'unexpected )'</span>
-    <span class="k">else</span>
-      <span class="n">atom</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">atom</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">token</span><span class="p">[</span><span class="sr">/\.\d+/</span><span class="p">]</span>
-      <span class="n">token</span><span class="p">.</span><span class="nf">to_f</span>
-    <span class="k">elsif</span> <span class="n">token</span><span class="p">[</span><span class="sr">/\d+/</span><span class="p">]</span>
-      <span class="n">token</span><span class="p">.</span><span class="nf">to_i</span>
-    <span class="k">else</span>
-      <span class="n">token</span><span class="p">.</span><span class="nf">to_sym</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-<span class="k">end</span></code></pre></figure>
-
-<p>We did it! Let’s start to make <code class="highlighter-rouge">eval</code> method.</p>
-
-<h2 id="eval-method">Eval method</h2>
-<p>As I said earlier, our interpreter consists of two parts: a parser and <code class="highlighter-rouge">eval</code> function.</p>
-
-<p>The <code class="highlighter-rouge">eval</code> function will take two arguments: an expression, <code class="highlighter-rouge">exp</code>, that we want to evaluate, and an environment, <code class="highlighter-rouge">env</code>, in which to evaluate it. An environment is a mapping from variable names to their values.
-By default, eval will use a instance value that includes the names for a bunch of standard things.</p>
-
-<p>let’s implement <code class="highlighter-rouge">@env</code> variable with <code class="highlighter-rouge">car</code>, <code class="highlighter-rouge">cdr</code> and <code class="highlighter-rouge">cons</code> functions:</p>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">env</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="ss">:car</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">},</span>
-  <span class="ss">:cdr</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="p">.</span><span class="nf">drop</span> <span class="mi">1</span> <span class="p">},</span>
-  <span class="ss">:cons</span> <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">cell</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="o">+</span> <span class="n">cell</span> <span class="p">},</span>
-<span class="p">}</span></code></pre></figure>
-
-<p>The next step is to make <code class="highlighter-rouge">eval</code> function which will look for a match on the first element of the input array</p>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
-  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">ext</span> <span class="o">=</span> <span class="p">{})</span>
-    <span class="vi">@env</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="ss">:car</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">},</span>
-      <span class="ss">:cdr</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="p">.</span><span class="nf">drop</span> <span class="mi">1</span> <span class="p">},</span>
-      <span class="ss">:cons</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">cell</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="o">+</span> <span class="n">cell</span> <span class="p">},</span>
-    <span class="p">}.</span><span class="nf">merge</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span> <span class="o">=</span> <span class="vi">@env</span><span class="p">)</span>
-    <span class="n">env</span><span class="p">[</span><span class="n">exp</span><span class="p">.</span><span class="nf">first</span><span class="p">]</span><span class="o">.</span><span class="p">(</span><span class="n">exp</span><span class="p">[</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-  <span class="k">end</span>
-
-  <span class="c1"># ...</span>
-<span class="k">end</span></code></pre></figure>
-
-<p>Now we have a problem: what will happen when the first element of the array will be not be a symbol (integer for example) and what will be happen when we have nested functions?
-I think we can add a check to the element type like this:</p>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
-  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">ext</span> <span class="o">=</span> <span class="p">{})</span>
-    <span class="vi">@env</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="ss">:car</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">},</span>
-      <span class="ss">:cdr</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="p">.</span><span class="nf">drop</span> <span class="mi">1</span> <span class="p">},</span>
-      <span class="ss">:cons</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">cell</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="o">+</span> <span class="n">cell</span> <span class="p">},</span>
-    <span class="p">}.</span><span class="nf">merge</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-  <span class="k">end</span>
-
-  <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span> <span class="o">=</span> <span class="vi">@env</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">exp</span><span class="p">.</span><span class="nf">is_a?</span> <span class="no">Numeric</span>
-      <span class="n">exp</span>
-    <span class="k">elsif</span> <span class="n">exp</span><span class="p">.</span><span class="nf">is_a?</span> <span class="no">Symbol</span>
-      <span class="n">env</span><span class="p">[</span><span class="n">exp</span><span class="p">]</span>
-    <span class="k">else</span>
-      <span class="n">code</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">env</span><span class="p">)</span>
-      <span class="n">args</span> <span class="o">=</span> <span class="n">exp</span><span class="p">[</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nf">map</span><span class="p">{</span> <span class="o">|</span><span class="n">arg</span><span class="o">|</span> <span class="nb">eval</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="p">}</span>
-      <span class="n">code</span><span class="o">.</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
-    <span class="k">end</span>
-  <span class="k">end</span>
-
-  <span class="c1"># ...</span>
-<span class="k">end</span></code></pre></figure>
-
-<p>Some (eg arithmetic), we can easily add to <code class="highlighter-rouge">env</code> variable, and some do not.
-Therefore, we need to extend the checking in <code class="highlighter-rouge">eval</code> function. We will add a check for function name.
-For example, the code below will demonstrate <code class="highlighter-rouge">quote</code> and <code class="highlighter-rouge">if</code> functions:</p>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
-  <span class="c1"># ...</span>
-  <span class="k">elsif</span> <span class="n">exp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="ss">:quote</span>
-    <span class="n">exp</span><span class="p">[</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-  <span class="k">elsif</span> <span class="n">exp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="ss">:if</span>
-    <span class="n">_</span><span class="p">,</span> <span class="nb">test</span><span class="p">,</span> <span class="n">conseq</span><span class="p">,</span> <span class="n">alt</span> <span class="o">=</span> <span class="n">exp</span>
-    <span class="n">exp</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="nb">test</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="p">?</span> <span class="n">conseq</span> <span class="p">:</span> <span class="n">alt</span>
-    <span class="nb">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
-  <span class="c1"># ...</span>
-<span class="k">end</span></code></pre></figure>
-
-<p>The next step is to initialize <code class="highlighter-rouge">define</code> and <code class="highlighter-rouge">lambda</code> functions.
-In scheme <code class="highlighter-rouge">define</code> function syntax is as follows:</p>
-
-<figure class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">define</span> <span class="nv">name</span>
-  <span class="p">(</span><span class="nf">expression</span><span class="p">))</span></code></pre></figure>
-
-<p>And our code must create a new key-value pair in the <code class="highlighter-rouge">env</code> hash:</p>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
-  <span class="c1"># ...</span>
-  <span class="k">elsif</span> <span class="n">exp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="ss">:define</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">e</span> <span class="o">=</span> <span class="n">exp</span>
-    <span class="n">env</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
-  <span class="c1"># ...</span>
-<span class="k">end</span></code></pre></figure>
-
-<p>The last function, <code class="highlighter-rouge">lambda</code> in scheme will have this syntax:</p>
-
-<figure class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">lambda</span> <span class="p">(</span><span class="nf">arg1,</span> <span class="nv">arg2,</span> <span class="o">...</span><span class="p">)</span>
-  <span class="p">(</span><span class="nf">block</span> <span class="nv">of</span> <span class="nv">code</span><span class="p">))</span></code></pre></figure>
-
-<p>The first thing that comes to mind is to return the new <code class="highlighter-rouge">lambda</code> object with a new value inside <code class="highlighter-rouge">env</code> that will serve our code:</p>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
-  <span class="c1"># ...</span>
-  <span class="k">elsif</span> <span class="n">exp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="ss">:lambda</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">e</span> <span class="o">=</span> <span class="n">exp</span>
-    <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">args</span><span class="o">|</span> <span class="nb">self</span><span class="p">.</span><span class="nf">eval</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">env</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span><span class="no">Hash</span><span class="p">[</span><span class="n">params</span><span class="p">.</span><span class="nf">zip</span><span class="p">(</span><span class="n">args</span><span class="p">)]))</span> <span class="p">}</span>
-  <span class="c1"># ...</span>
-<span class="k">end</span></code></pre></figure>
-
-<p>As you can see, we made basic functionality of the our interpreter.
-I will leave learning how to do the implement the arithmetic methods and other methods such as <code class="highlighter-rouge">true</code>, <code class="highlighter-rouge">false</code>, <code class="highlighter-rouge">list</code>, etc up to the reader.</p>
-
-<h2 id="repl">REPL</h2>
-<p>In main REPL have really simple idea repl takes single user inputs, evaluates them, and returns the result to the user.
-And all this is happens in an infinite loop:</p>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">repl</span><span class="p">(</span><span class="n">prompt</span> <span class="o">=</span> <span class="s1">'lisp &gt;&gt; '</span><span class="p">)</span>
-  <span class="k">while</span> <span class="kp">true</span>
-    <span class="nb">print</span> <span class="n">prompt</span>
-    <span class="n">program</span> <span class="o">=</span> <span class="nb">gets</span>
-
-    <span class="nb">p</span> <span class="nb">eval</span><span class="p">(</span><span class="n">parse</span><span class="p">(</span><span class="n">program</span><span class="p">))</span>
-  <span class="k">end</span>
-<span class="k">end</span></code></pre></figure>
-
-<p>As a result, you should get something like this:</p>
-
-<figure class="highlight"><pre><code class="language-text" data-lang="text">lisp &gt;&gt; (define pi 3.14)
-3.14
-lisp &gt;&gt; (define circle-area (lambda (r) (* pi (* r r))))
-#&lt;Proc:0x007fa6140c6cc0@lib/rlisp.rb:86 (lambda)&gt;
-lisp &gt;&gt; (circle-area 11)
-379.94</code></pre></figure>
-
-<h2 id="conclusions">Conclusions</h2>
-<p>Right now, we have a simple scheme interpreter.
-It is easy to expand since we wrote a simple repl, and considered the basic idea of the interpreter.
-In this article, we did not consider such important concepts as macros, multithreading, code optimization, work with the system, and much more.
-These concepts will be discussed in future articles.</p>
-
-<h2 id="further-reading">Further reading</h2>
-<ul>
-  <li>Lisp interpreter written on python (<a href="http://norvig.com/lispy.html">http://norvig.com/lispy.html</a>)</li>
-  <li>Lisp interpreter written on C lang (<a href="http://www.buildyourownlisp.com">http://www.buildyourownlisp.com</a>)</li>
-  <li><a href="http://www.wikiwand.com/en/Scheme_(programming_language)">http://www.wikiwand.com/en/Scheme_(programming_language)</a></li>
-  <li><a href="http://www.wikiwand.com/en/S-expression">http://www.wikiwand.com/en/S-expression</a></li>
-</ul>
-
-
-    <div class="tag-cloud">
-      <ul>
-      
-        <li>
-          <a href="/tags/#lisp"><span>lisp</span></a>
-        </li>
-      
-        <li>
-          <a href="/tags/#ruby"><span>ruby</span></a>
-        </li>
-      
-        <li>
-          <a href="/tags/#interpreters"><span>interpreters</span></a>
         </li>
       
       </ul>

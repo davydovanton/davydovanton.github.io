@@ -114,6 +114,304 @@
   
   <div class="post">
     <h1 class="post-title">
+      <a href="/2015/11/01/write-simple-scheme-interpreter-on-ruby/">
+        Write simple scheme interpreter on ruby
+      </a>
+    </h1>
+
+    <span class="post-date">01 Nov 2015</span>
+
+    <p><strong>TL;DR:</strong> <a href="https://github.com/davydovanton/rlisp">github repo</a></p>
+
+<p>Every developer has a moment in his life where he wants to write his own programming language.
+In this article, I want to show you how to do this for a simple lisp compiler.</p>
+
+<h2 id="why-scheme-and-lisp">Why scheme and lisp?</h2>
+<p>Firstly, lisp is very simple for create and for understanding.
+Lisp (<em>LISt Processor</em>) is a family of languages which is based on the idea of <a href="http://www.wikiwand.com/en/S-expression">S-expressions</a>.
+<a href="http://www.wikiwand.com/en/S-expression">S-Expression</a> are needed for data representation and may consist of atoms (numbers, symbols, boolean expressions) or are the expression of the form <code class="highlighter-rouge">(x . y)</code> where <code class="highlighter-rouge">x</code> and <code class="highlighter-rouge">y</code> are <a href="http://www.wikiwand.com/en/S-expression">s-expressions</a>.
+This expression may be formed as lists (<code class="highlighter-rouge">(1 . ( 2 . 3))</code> this equals <code class="highlighter-rouge">(1 2 3)</code>) and trees (<code class="highlighter-rouge">((1 . (2 . 3)) . (4 . 5))</code>).</p>
+
+<p>Secondly, after creating interpreter you can better understand the language (the author fully understood the environment idea).
+Also you can understand the main idea of compilers and interpreters.</p>
+
+<p>Now let’s begin our journey into the world of compilers and interpreters so that we can write a simple scheme interpreter.</p>
+
+<h2 id="main-idea">Main idea</h2>
+<p>Our language will contain two parts: a parser which translates the string to <a href="http://www.wikiwand.com/en/Abstract_syntax_tree">AST</a> and <code class="highlighter-rouge">eval</code> function.
+This function will take the <a href="http://www.wikiwand.com/en/Abstract_syntax_tree">AST</a> with envariement value and will return the result of the code.</p>
+
+<p>Schematically, it looks like this:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">code(string) =&gt; parse function =&gt; AST =&gt; eval function =&gt; result</code></pre></figure>
+
+<h2 id="first-step-parser">First step. Parser.</h2>
+<p>To begin, let’s define what we want to get.
+For example, we have a string <code class="highlighter-rouge">'(+ 1 1 1)'</code>.
+What should our parser return? What kind of data structure should we receive? I think, that an array would be correct.</p>
+
+<p>Let write simple test code:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">program</span> <span class="o">=</span> <span class="s1">'(+ 1 1 1)'</span>
+<span class="n">lisp</span> <span class="o">=</span> <span class="no">Lisp</span><span class="p">.</span><span class="nf">new</span>
+<span class="n">lisp</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span> <span class="o">==</span> <span class="p">[:</span><span class="o">+</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span></code></pre></figure>
+
+<p>As you can see, this is a simple code, so I just displayed <code class="highlighter-rouge">parse</code> method code:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
+  <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
+    <span class="n">tokenize</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="n">chars</span><span class="p">)</span>
+    <span class="n">chars</span>
+      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="sr">/\s\s+/</span><span class="p">,</span> <span class="s1">' '</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="s1">'('</span><span class="p">,</span> <span class="s1">' ( '</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="s1">')'</span><span class="p">,</span> <span class="s1">' ) '</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="s1">' '</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">map</span><span class="p">{</span> <span class="o">|</span><span class="n">token</span><span class="o">|</span> <span class="n">atom</span><span class="p">(</span><span class="n">token</span><span class="p">)</span> <span class="p">}</span>
+      <span class="p">.</span><span class="nf">compact</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">atom</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">token</span><span class="p">[</span><span class="sr">/\.\d+/</span><span class="p">]</span>
+      <span class="n">token</span><span class="p">.</span><span class="nf">to_f</span>
+    <span class="k">elsif</span> <span class="n">token</span> <span class="o">==</span> <span class="s1">'('</span> <span class="o">||</span> <span class="n">token</span> <span class="o">==</span> <span class="s1">')'</span>
+      <span class="kp">nil</span>
+    <span class="k">elsif</span> <span class="n">token</span><span class="p">[</span><span class="sr">/\d+/</span><span class="p">]</span>
+      <span class="n">token</span><span class="p">.</span><span class="nf">to_i</span>
+    <span class="k">else</span>
+      <span class="n">token</span><span class="p">.</span><span class="nf">to_sym</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>As you know, in lisp you can write your code with nested operators, for example - <code class="highlighter-rouge">(+ (* 2 2) (- 5 3))</code>.
+And this code will return 6.</p>
+
+<p>When we use our parser for this code, the result is not quite what we need, so let’s update our test code:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">program</span> <span class="o">=</span> <span class="s1">'(+ (* (1 2) 3) 4)'</span>
+<span class="n">lisp</span> <span class="o">=</span> <span class="no">Lisp</span><span class="p">.</span><span class="nf">new</span>
+<span class="n">lisp</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span> <span class="o">==</span> <span class="p">[:</span><span class="o">+</span><span class="p">,</span> <span class="p">[:</span><span class="o">*</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="mi">3</span><span class="p">],</span> <span class="mi">4</span><span class="p">]</span></code></pre></figure>
+
+<p>As you might guess, the most obvious way to fix our code is to call <code class="highlighter-rouge">parse</code> method in recursion and all array elements from <code class="highlighter-rouge">'('</code> to <code class="highlighter-rouge">')'</code>.
+We will move to a nested array.
+The code will be look loke this:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
+  <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">program</span><span class="p">)</span>
+    <span class="n">read_from_tokens</span><span class="p">(</span><span class="n">tokenize</span><span class="p">(</span><span class="n">program</span><span class="p">))</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="n">chars</span><span class="p">)</span>
+    <span class="n">chars</span>
+      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="sr">/\s\s+/</span><span class="p">,</span> <span class="s1">' '</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="s1">'('</span><span class="p">,</span> <span class="s1">' ( '</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="s1">')'</span><span class="p">,</span> <span class="s1">' ) '</span><span class="p">)</span>
+      <span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="s1">' '</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">read_from_tokens</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+    <span class="k">return</span> <span class="k">if</span> <span class="n">tokens</span><span class="p">.</span><span class="nf">empty?</span>
+
+    <span class="n">token</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">.</span><span class="nf">shift</span>
+
+    <span class="k">if</span> <span class="s1">'('</span> <span class="o">==</span> <span class="n">token</span>
+      <span class="n">list</span> <span class="o">=</span> <span class="p">[]</span>
+
+      <span class="k">while</span> <span class="n">tokens</span><span class="p">.</span><span class="nf">first</span> <span class="o">!=</span> <span class="s1">')'</span>
+        <span class="n">list</span> <span class="o">&lt;&lt;</span> <span class="n">read_from_tokens</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+      <span class="k">end</span>
+      <span class="n">tokens</span><span class="p">.</span><span class="nf">shift</span>
+
+      <span class="n">list</span>
+    <span class="k">elsif</span> <span class="s1">')'</span> <span class="o">==</span> <span class="n">token</span>
+      <span class="k">raise</span> <span class="s1">'unexpected )'</span>
+    <span class="k">else</span>
+      <span class="n">atom</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">atom</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">token</span><span class="p">[</span><span class="sr">/\.\d+/</span><span class="p">]</span>
+      <span class="n">token</span><span class="p">.</span><span class="nf">to_f</span>
+    <span class="k">elsif</span> <span class="n">token</span><span class="p">[</span><span class="sr">/\d+/</span><span class="p">]</span>
+      <span class="n">token</span><span class="p">.</span><span class="nf">to_i</span>
+    <span class="k">else</span>
+      <span class="n">token</span><span class="p">.</span><span class="nf">to_sym</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>We did it! Let’s start to make <code class="highlighter-rouge">eval</code> method.</p>
+
+<h2 id="eval-method">Eval method</h2>
+<p>As I said earlier, our interpreter consists of two parts: a parser and <code class="highlighter-rouge">eval</code> function.</p>
+
+<p>The <code class="highlighter-rouge">eval</code> function will take two arguments: an expression, <code class="highlighter-rouge">exp</code>, that we want to evaluate, and an environment, <code class="highlighter-rouge">env</code>, in which to evaluate it. An environment is a mapping from variable names to their values.
+By default, eval will use a instance value that includes the names for a bunch of standard things.</p>
+
+<p>let’s implement <code class="highlighter-rouge">@env</code> variable with <code class="highlighter-rouge">car</code>, <code class="highlighter-rouge">cdr</code> and <code class="highlighter-rouge">cons</code> functions:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">env</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="ss">:car</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">},</span>
+  <span class="ss">:cdr</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="p">.</span><span class="nf">drop</span> <span class="mi">1</span> <span class="p">},</span>
+  <span class="ss">:cons</span> <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">cell</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="o">+</span> <span class="n">cell</span> <span class="p">},</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>The next step is to make <code class="highlighter-rouge">eval</code> function which will look for a match on the first element of the input array</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">ext</span> <span class="o">=</span> <span class="p">{})</span>
+    <span class="vi">@env</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="ss">:car</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">},</span>
+      <span class="ss">:cdr</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="p">.</span><span class="nf">drop</span> <span class="mi">1</span> <span class="p">},</span>
+      <span class="ss">:cons</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">cell</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="o">+</span> <span class="n">cell</span> <span class="p">},</span>
+    <span class="p">}.</span><span class="nf">merge</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span> <span class="o">=</span> <span class="vi">@env</span><span class="p">)</span>
+    <span class="n">env</span><span class="p">[</span><span class="n">exp</span><span class="p">.</span><span class="nf">first</span><span class="p">]</span><span class="o">.</span><span class="p">(</span><span class="n">exp</span><span class="p">[</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+  <span class="k">end</span>
+
+  <span class="c1"># ...</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Now we have a problem: what will happen when the first element of the array will be not be a symbol (integer for example) and what will be happen when we have nested functions?
+I think we can add a check to the element type like this:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">class</span> <span class="nc">Lisp</span>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">ext</span> <span class="o">=</span> <span class="p">{})</span>
+    <span class="vi">@env</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="ss">:car</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">},</span>
+      <span class="ss">:cdr</span>   <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">list</span><span class="o">|</span> <span class="n">list</span><span class="p">.</span><span class="nf">drop</span> <span class="mi">1</span> <span class="p">},</span>
+      <span class="ss">:cons</span>  <span class="o">=&gt;</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">cell</span><span class="p">),</span> <span class="n">_</span><span class="o">|</span> <span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="o">+</span> <span class="n">cell</span> <span class="p">},</span>
+    <span class="p">}.</span><span class="nf">merge</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
+  <span class="k">end</span>
+
+  <span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span> <span class="o">=</span> <span class="vi">@env</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">exp</span><span class="p">.</span><span class="nf">is_a?</span> <span class="no">Numeric</span>
+      <span class="n">exp</span>
+    <span class="k">elsif</span> <span class="n">exp</span><span class="p">.</span><span class="nf">is_a?</span> <span class="no">Symbol</span>
+      <span class="n">env</span><span class="p">[</span><span class="n">exp</span><span class="p">]</span>
+    <span class="k">else</span>
+      <span class="n">code</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">env</span><span class="p">)</span>
+      <span class="n">args</span> <span class="o">=</span> <span class="n">exp</span><span class="p">[</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nf">map</span><span class="p">{</span> <span class="o">|</span><span class="n">arg</span><span class="o">|</span> <span class="nb">eval</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="p">}</span>
+      <span class="n">code</span><span class="o">.</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+
+  <span class="c1"># ...</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Some (eg arithmetic), we can easily add to <code class="highlighter-rouge">env</code> variable, and some do not.
+Therefore, we need to extend the checking in <code class="highlighter-rouge">eval</code> function. We will add a check for function name.
+For example, the code below will demonstrate <code class="highlighter-rouge">quote</code> and <code class="highlighter-rouge">if</code> functions:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+  <span class="c1"># ...</span>
+  <span class="k">elsif</span> <span class="n">exp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="ss">:quote</span>
+    <span class="n">exp</span><span class="p">[</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+  <span class="k">elsif</span> <span class="n">exp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="ss">:if</span>
+    <span class="n">_</span><span class="p">,</span> <span class="nb">test</span><span class="p">,</span> <span class="n">conseq</span><span class="p">,</span> <span class="n">alt</span> <span class="o">=</span> <span class="n">exp</span>
+    <span class="n">exp</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="nb">test</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span> <span class="p">?</span> <span class="n">conseq</span> <span class="p">:</span> <span class="n">alt</span>
+    <span class="nb">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+  <span class="c1"># ...</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>The next step is to initialize <code class="highlighter-rouge">define</code> and <code class="highlighter-rouge">lambda</code> functions.
+In scheme <code class="highlighter-rouge">define</code> function syntax is as follows:</p>
+
+<figure class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">define</span> <span class="nv">name</span>
+  <span class="p">(</span><span class="nf">expression</span><span class="p">))</span></code></pre></figure>
+
+<p>And our code must create a new key-value pair in the <code class="highlighter-rouge">env</code> hash:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+  <span class="c1"># ...</span>
+  <span class="k">elsif</span> <span class="n">exp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="ss">:define</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">e</span> <span class="o">=</span> <span class="n">exp</span>
+    <span class="n">env</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+  <span class="c1"># ...</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>The last function, <code class="highlighter-rouge">lambda</code> in scheme will have this syntax:</p>
+
+<figure class="highlight"><pre><code class="language-scheme" data-lang="scheme"><span class="p">(</span><span class="k">lambda</span> <span class="p">(</span><span class="nf">arg1,</span> <span class="nv">arg2,</span> <span class="o">...</span><span class="p">)</span>
+  <span class="p">(</span><span class="nf">block</span> <span class="nv">of</span> <span class="nv">code</span><span class="p">))</span></code></pre></figure>
+
+<p>The first thing that comes to mind is to return the new <code class="highlighter-rouge">lambda</code> object with a new value inside <code class="highlighter-rouge">env</code> that will serve our code:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">eval</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">env</span><span class="p">)</span>
+  <span class="c1"># ...</span>
+  <span class="k">elsif</span> <span class="n">exp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="ss">:lambda</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">e</span> <span class="o">=</span> <span class="n">exp</span>
+    <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|*</span><span class="n">args</span><span class="o">|</span> <span class="nb">self</span><span class="p">.</span><span class="nf">eval</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">env</span><span class="p">.</span><span class="nf">merge</span><span class="p">(</span><span class="no">Hash</span><span class="p">[</span><span class="n">params</span><span class="p">.</span><span class="nf">zip</span><span class="p">(</span><span class="n">args</span><span class="p">)]))</span> <span class="p">}</span>
+  <span class="c1"># ...</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>As you can see, we made basic functionality of the our interpreter.
+I will leave learning how to do the implement the arithmetic methods and other methods such as <code class="highlighter-rouge">true</code>, <code class="highlighter-rouge">false</code>, <code class="highlighter-rouge">list</code>, etc up to the reader.</p>
+
+<h2 id="repl">REPL</h2>
+<p>In main REPL have really simple idea repl takes single user inputs, evaluates them, and returns the result to the user.
+And all this is happens in an infinite loop:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">repl</span><span class="p">(</span><span class="n">prompt</span> <span class="o">=</span> <span class="s1">'lisp &gt;&gt; '</span><span class="p">)</span>
+  <span class="k">while</span> <span class="kp">true</span>
+    <span class="nb">print</span> <span class="n">prompt</span>
+    <span class="n">program</span> <span class="o">=</span> <span class="nb">gets</span>
+
+    <span class="nb">p</span> <span class="nb">eval</span><span class="p">(</span><span class="n">parse</span><span class="p">(</span><span class="n">program</span><span class="p">))</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>As a result, you should get something like this:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">lisp &gt;&gt; (define pi 3.14)
+3.14
+lisp &gt;&gt; (define circle-area (lambda (r) (* pi (* r r))))
+#&lt;Proc:0x007fa6140c6cc0@lib/rlisp.rb:86 (lambda)&gt;
+lisp &gt;&gt; (circle-area 11)
+379.94</code></pre></figure>
+
+<h2 id="conclusions">Conclusions</h2>
+<p>Right now, we have a simple scheme interpreter.
+It is easy to expand since we wrote a simple repl, and considered the basic idea of the interpreter.
+In this article, we did not consider such important concepts as macros, multithreading, code optimization, work with the system, and much more.
+These concepts will be discussed in future articles.</p>
+
+<h2 id="further-reading">Further reading</h2>
+<ul>
+  <li>Lisp interpreter written on python (<a href="http://norvig.com/lispy.html">http://norvig.com/lispy.html</a>)</li>
+  <li>Lisp interpreter written on C lang (<a href="http://www.buildyourownlisp.com">http://www.buildyourownlisp.com</a>)</li>
+  <li><a href="http://www.wikiwand.com/en/Scheme_(programming_language)">http://www.wikiwand.com/en/Scheme_(programming_language)</a></li>
+  <li><a href="http://www.wikiwand.com/en/S-expression">http://www.wikiwand.com/en/S-expression</a></li>
+</ul>
+
+
+    <div class="tag-cloud">
+      <ul>
+      
+        <li>
+          <a href="/tags/#lisp"><span>lisp</span></a>
+        </li>
+      
+        <li>
+          <a href="/tags/#ruby"><span>ruby</span></a>
+        </li>
+      
+        <li>
+          <a href="/tags/#interpreters"><span>interpreters</span></a>
+        </li>
+      
+      </ul>
+    </div>
+  </div>
+  
+  <div class="post">
+    <h1 class="post-title">
       <a href="/2015/10/26/get-requiest-with-custom-locale-in-your-tests/">
         Get request with custom locale in your tests
       </a>

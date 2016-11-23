@@ -3,6 +3,21 @@
   
     
     <url>
+      <loc>http://localhost:4000/2016/11/23/ruby-tips-part-two/</loc>
+      
+        <lastmod>2016-11-23T00:00:00+03:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
       <loc>http://localhost:4000/2016/11/16/ruby-tips-part-one/</loc>
       
         <lastmod>2016-11-16T00:00:00+03:00</lastmod>
@@ -265,7 +280,7 @@
     <url>
       <loc>http://localhost:4000404.html</loc>
       
-        <lastmod>2016-11-16T16:29:00+03:00</lastmod>
+        <lastmod>2016-11-23T20:26:05+03:00</lastmod>
       
       
         <changefreq>monthly</changefreq>
@@ -293,7 +308,7 @@
     <url>
       <loc>http://localhost:4000</loc>
       
-        <lastmod>2016-11-16T16:29:00+03:00</lastmod>
+        <lastmod>2016-11-23T20:26:05+03:00</lastmod>
       
       
         <changefreq>monthly</changefreq>
@@ -316,7 +331,7 @@
     <url>
       <loc>http://localhost:4000</loc>
       
-        <lastmod>2016-11-16T16:29:00+03:00</lastmod>
+        <lastmod>2016-11-23T20:26:05+03:00</lastmod>
       
       
         <changefreq>monthly</changefreq>
@@ -334,7 +349,7 @@
     <url>
       <loc>http://localhost:4000</loc>
       
-        <lastmod>2016-11-16T16:29:00+03:00</lastmod>
+        <lastmod>2016-11-23T20:26:05+03:00</lastmod>
       
       
         <changefreq>monthly</changefreq>

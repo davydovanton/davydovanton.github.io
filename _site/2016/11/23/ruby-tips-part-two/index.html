@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Ruby tips #2 &middot; Anton Davydov
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/base.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- SEO -->
+  
+    <meta name="description" content="Second part of series post about ruby tips and tricks" />
+  
+
+  <link rel="author" href="https://plus.google.com/u/0/104253015484296728880"/>
+</head>
+
+
+  <body>
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>Simple blog where I'll write about ruby, my ideas and technologies which I love<br><a href="https://twitter.com/anton_davydov" target="_blank">@anton_davydov</a></p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+    
+      
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/tags/">All tags</a>
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://github.com/davydovanton">GitHub</a>
+    <a class="sidebar-nav-item" href="https://twitter.com/anton_davydov">Twitter</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2016. All rights reserved.
+    </p>
+  </div>
+</div>
+
+    <div class="yandex_metrica">
+<!-- Yandex.Metrika counter --><script type="text/javascript">var yaParams = {/*Здесь параметры визита*/};</script><script type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter23652886 = new Ya.Metrika({id:23652886, webvisor:true, clickmap:true, trackLinks:true, accurateTrackBounce:true, trackHash:true,params:window.yaParams||{ }}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="//mc.yandex.ru/watch/23652886" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">Anton Davydov</a>
+            <small>Blog</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Ruby tips #2</h1>
+  <span class="post-date">23 Nov 2016</span>
+  <p>It’s a second part of my post series about ruby tips. Today you’ll learn more about:</p>
+
+<ul>
+  <li>Special values</li>
+  <li>Symbol</li>
+  <li>Array</li>
+  <li>Hash</li>
+  <li>Range</li>
+</ul>
+
+<p><strong>CAUTION:</strong> These tips are not equally feat to production. Lots of them are just interesting solutions which you’ll not find anywhere else. Use them at your own risk.</p>
+
+<h2 id="special-values">Special values</h2>
+
+<h3 id="safe-levels">Safe Levels</h3>
+
+<p><a href="https://ruby-hacking-guide.github.io/security.html">Full description</a></p>
+
+<p>In ruby you can find security levels for your code.
+The Ruby security level is represented by the <code class="highlighter-rouge">$SAFE</code> global variable.
+The value ranges from minimum value 0 to maximum value 4.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>$SAFE</th>
+      <th>Constraints</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>No checking of the use of externally supplied (tainted) data is performed. This is Ruby’s default mode.</td>
+    </tr>
+    <tr>
+      <td>&gt;= 1</td>
+      <td>Ruby disallows the use of tainted data by potentially dangerous operations.</td>
+    </tr>
+    <tr>
+      <td>&gt;= 2</td>
+      <td>Ruby prohibits the loading of program files from globally writable locations.</td>
+    </tr>
+    <tr>
+      <td>&gt;= 3</td>
+      <td>All newly created objects are considered tainted.</td>
+    </tr>
+    <tr>
+      <td>&gt;= 4</td>
+      <td>Ruby effectively partitions the running program in two. Nontainted objects may not be modified. Typically, this will be used to create a sandbox: the program sets up an environment using a lower$SAFE level, then resets $SAFE to 4 to prevent subsequent changes to that environment.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="email-regexp">Email Regexp</h3>
+
+<p>In ruby you can find regexp for emails. If you want to use it, you have to require <code class="highlighter-rouge">uri</code>
+library and call <code class="highlighter-rouge">URI::MailTo::EMAIL_REGEXP</code> constant.</p>
+
+<h3 id="data-object">DATA object</h3>
+
+<p>The global <code class="highlighter-rouge">DATA</code> variable in ruby allows us to access the text at the end of our file
+listed after the <code class="highlighter-rouge">__END__</code> block. This can be surprisingly useful, for instance if we
+need to extract information from a rather large data blob.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># in one file</span>
+<span class="nb">require</span> <span class="s2">"json"</span>
+
+<span class="nb">puts</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="no">DATA</span><span class="p">)</span> <span class="c1"># this DATA required text bellow __END__</span>
+
+<span class="cp">__END__
+{
+  "records": [
+    {
+      "artist":"Iggy Pop",
+      "title":"Lust for Life"
+    },
+    {
+      "artist":"Television",
+      "title":"Marquee Moon"
+    },
+    {
+      "artist":"Talking Heads",
+      "title":"Talking Heads: 77"
+    }
+  ]
+}</span></code></pre></figure>
+
+<h2 id="symbol">Symbol</h2>
+
+<h3 id="allsymbols">#all_symbols</h3>
+
+<p><a href="https://ruby-doc.org/core-2.2.0/Symbol.html#method-c-all_symbols">Documentation</a></p>
+
+<p>Return array with all symbols in env.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">Symbol</span><span class="p">.</span><span class="nf">all_symbols</span><span class="p">.</span><span class="nf">size</span> <span class="c1"># =&gt; 5675</span></code></pre></figure>
+
+<h3 id="id2name">id2name</h3>
+
+<p><a href="https://ruby-doc.org/core-2.2.0/Symbol.html#method-i-id2name">Documentation</a></p>
+
+<p>Alias for <code class="highlighter-rouge">#to_s</code> (I don’t know why you need to use this but it’s a funny method I think).</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="ss">:test</span><span class="p">.</span><span class="nf">id2name</span>   <span class="c1">#=&gt; "test"</span></code></pre></figure>
+
+<h3 id="slice">slice</h3>
+
+<p><a href="https://ruby-doc.org/core-2.2.0/Symbol.html#method-i-slice">Documentation</a></p>
+
+<p>Alias for <code class="highlighter-rouge">sym.to_s[]</code>.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="ss">:hello_world</span><span class="p">.</span><span class="nf">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="nf">.</span><span class="mi">4</span><span class="p">)</span> <span class="c1">#=&gt; "hello"</span>
+<span class="ss">:hello_world</span><span class="p">.</span><span class="nf">[</span><span class="mi">0</span><span class="p">.</span><span class="nf">.</span><span class="mi">4</span><span class="p">]</span>      <span class="c1">#=&gt; "hello"</span></code></pre></figure>
+
+<h2 id="array">Array</h2>
+
+<h3 id="bsearch">#bsearch</h3>
+
+<p><a href="http://www.ruby-doc.org/core-2.1.5/Array.html#method-i-bsearch">Documentation</a></p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">ary</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">]</span>
+<span class="n">ary</span><span class="p">.</span><span class="nf">bsearch</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">&gt;=</span>   <span class="mi">4</span> <span class="p">}</span> <span class="c1">#=&gt; 4</span>
+<span class="n">ary</span><span class="p">.</span><span class="nf">bsearch</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">&gt;=</span>   <span class="mi">6</span> <span class="p">}</span> <span class="c1">#=&gt; 7</span>
+<span class="n">ary</span><span class="p">.</span><span class="nf">bsearch</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">&gt;=</span>  <span class="o">-</span><span class="mi">1</span> <span class="p">}</span> <span class="c1">#=&gt; 0</span>
+<span class="n">ary</span><span class="p">.</span><span class="nf">bsearch</span> <span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">100</span> <span class="p">}</span> <span class="c1">#=&gt; nil</span></code></pre></figure>
+
+<h3 id="range-to-array">Range to array</h3>
+
+<p>You can use <code class="highlighter-rouge">*</code> operator for converting range to array.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">range</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">range</span><span class="p">.</span><span class="nf">to_a</span> <span class="o">==</span> <span class="p">[</span><span class="o">*</span><span class="n">range</span><span class="p">]</span> <span class="c1"># =&gt; true</span></code></pre></figure>
+
+<h2 id="hash">Hash</h2>
+
+<h3 id="method"><code class="highlighter-rouge">**</code> method</h3>
+
+<p>You probably know already how to use <code class="highlighter-rouge">*</code> in method definition argument list. But <code class="highlighter-rouge">**</code> is less known.</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">method_name</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="o">*</span><span class="kp">attr</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
+  <span class="nb">p</span> <span class="kp">attr</span>
+  <span class="nb">p</span> <span class="n">options</span>
+<span class="k">end</span>
+
+<span class="n">method_name</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">,</span> <span class="s1">'cruel'</span><span class="p">,</span> <span class="s1">'world'</span><span class="p">,</span> <span class="ss">collor: :red</span><span class="p">)</span>
+<span class="c1"># =&gt; ['cruel', 'world']</span>
+<span class="c1"># =&gt; { collor: :red }</span></code></pre></figure>
+
+<p>Also you can call this method like <code class="highlighter-rouge">[*attr]</code></p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">hash</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">a: :b</span><span class="p">,</span> <span class="ss">c: :d</span> <span class="p">}</span>
+
+<span class="p">{</span> <span class="o">**</span><span class="nb">hash</span><span class="p">,</span> <span class="ss">e: :f</span> <span class="p">}</span> <span class="c1"># =&gt; {:a=&gt;:b, :c=&gt;:d, :e=&gt;:f}</span></code></pre></figure>
+
+<h3 id="gsub-with-hash-args">#gsub with hash args</h3>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">str</span> <span class="o">=</span> <span class="s2">"Help! All parentheses have been flipped )and I am sad(!"</span>
+<span class="n">str</span><span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="sr">/[\(\)]/</span><span class="p">,</span> <span class="p">{</span><span class="s2">"("</span><span class="o">=&gt;</span><span class="s2">")"</span><span class="p">,</span> <span class="s2">")"</span><span class="o">=&gt;</span><span class="s2">"("</span><span class="p">})</span>
+<span class="c1"># =&gt; "Help! All parentheses have been flipped (and I am sad)!"</span></code></pre></figure>
+
+<h3 id="non-string-and-symbol-keys">Non string and symbol keys</h3>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">array</span> <span class="o">=</span> <span class="p">{</span> <span class="kp">false</span> <span class="o">=&gt;</span> <span class="s1">'No'</span><span class="p">,</span> <span class="ss">:to_s</span><span class="p">.</span><span class="nf">to_proc</span> <span class="o">=&gt;</span> <span class="s1">'proc'</span> <span class="p">}</span>
+
+<span class="n">array</span><span class="p">[</span><span class="mi">10</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">]</span>        <span class="c1"># =&gt; "No"</span>
+<span class="n">array</span><span class="p">[</span><span class="ss">:to_s</span><span class="p">.</span><span class="nf">to_proc</span><span class="p">]</span> <span class="c1"># =&gt; "No"</span></code></pre></figure>
+
+<h3 id="hashassoc">Hash#assoc</h3>
+
+<p>This method returns a two element array <code class="highlighter-rouge">[key, hash[key]]</code></p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="p">{</span><span class="ss">a: </span><span class="mi">1</span><span class="p">,</span> <span class="ss">b: </span><span class="mi">2</span><span class="p">}.</span><span class="nf">assoc</span><span class="p">(</span><span class="ss">:b</span><span class="p">)</span> <span class="c1"># =&gt; [:b, 2]</span></code></pre></figure>
+
+<h2 id="range">Range</h2>
+
+<h3 id="cover-and-time">#cover? and time</h3>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="p">((</span><span class="no">Time</span><span class="p">.</span><span class="nf">now</span> <span class="o">-</span> <span class="mi">1</span><span class="p">.</span><span class="nf">hour</span><span class="p">).</span><span class="nf">.</span><span class="p">(</span><span class="no">Time</span><span class="p">.</span><span class="nf">now</span> <span class="o">+</span> <span class="mi">1</span><span class="p">.</span><span class="nf">hour</span><span class="p">)).</span><span class="nf">cover?</span> <span class="p">(</span><span class="no">Time</span><span class="p">.</span><span class="nf">now</span> <span class="o">-</span> <span class="mi">1</span><span class="p">.</span><span class="nf">day</span><span class="p">)</span> <span class="c1"># =&gt; false</span>
+<span class="p">((</span><span class="no">Time</span><span class="p">.</span><span class="nf">now</span> <span class="o">-</span> <span class="mi">1</span><span class="p">.</span><span class="nf">hour</span><span class="p">).</span><span class="nf">.</span><span class="p">(</span><span class="no">Time</span><span class="p">.</span><span class="nf">now</span> <span class="o">+</span> <span class="mi">1</span><span class="p">.</span><span class="nf">hour</span><span class="p">)).</span><span class="nf">cover?</span> <span class="no">Time</span><span class="p">.</span><span class="nf">now</span>           <span class="c1"># =&gt; true</span></code></pre></figure>
+
+<h3 id="ranges-in-case-statements">Ranges in case statements</h3>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">age</span> <span class="o">=</span> <span class="mi">28</span>
+
+<span class="k">case</span> <span class="n">age</span>
+<span class="k">when</span> <span class="mo">01</span><span class="p">.</span><span class="nf">.</span><span class="mi">17</span> <span class="k">then</span> <span class="s2">"Young"</span>
+<span class="k">when</span> <span class="mi">18</span><span class="p">.</span><span class="nf">.</span><span class="mi">50</span> <span class="k">then</span> <span class="s2">"Adult"</span>
+<span class="k">when</span> <span class="mi">50</span><span class="p">.</span><span class="nf">.</span><span class="mi">99</span> <span class="k">then</span> <span class="s2">"Old"</span>
+<span class="k">end</span></code></pre></figure>
+
+<h1 id="conclusions">Conclusions</h1>
+
+<p>That’s all. I hope it’ll be useful for you. In next part we’re gonna talking about:</p>
+
+<ul>
+  <li>Tracing Ruby Code</li>
+  <li>memory usage</li>
+  <li>Enumerable</li>
+  <li>Compiler</li>
+  <li>Rspec</li>
+  <li>Rails</li>
+</ul>
+
+<p>Happy hacking! 🚀</p>
+
+
+  <div class="tag-cloud post-tags">
+    <ul>
+    
+      <li>
+        <a href="/tags/#ruby"><span>ruby</span></a>
+      </li>
+    
+      <li>
+        <a href="/tags/#tips"><span>tips</span></a>
+      </li>
+    
+    </ul>
+  </div>
+</div>
+
+<div class="share_buttons">
+  <div class='shareaholic-canvas' data-app='share_buttons' data-app-id='11548095'></div>
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2016/11/16/ruby-tips-part-one/">
+            Ruby tips #1
+            <small>16 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/09/20/adding-domain-for-your-github-project/">
+            Adding domain for your github project
+            <small>20 Sep 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/05/21/preview-hanami-emails-in-browser/">
+            Preview hanami emails in browser
+            <small>21 May 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'fikysmyblog'; // required: replace example with your forum shortname
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<script type="text/javascript">
+//<![CDATA[
+  (function() {
+    var shr = document.createElement('script');
+    shr.setAttribute('data-cfasync', 'false');
+    shr.src = '//dsms0mj1bbhn4.cloudfront.net/assets/pub/shareaholic.js';
+    shr.type = 'text/javascript'; shr.async = 'true';
+    shr.onload = shr.onreadystatechange = function() {
+      var rs = this.readyState;
+      if (rs && rs != 'complete' && rs != 'loaded') return;
+      var site_id = '9cc17325fe566a8d07d3ee25ce3fa991';
+      try { Shareaholic.init(site_id); } catch (e) {}
+    };
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(shr, s);
+  })();
+//]]>
+</script>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>
