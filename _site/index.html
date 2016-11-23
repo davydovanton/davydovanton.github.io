@@ -284,10 +284,10 @@ need to extract information from a rather large data blob.</p>
 
 <h3 id="non-string-and-symbol-keys">Non string and symbol keys</h3>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">array</span> <span class="o">=</span> <span class="p">{</span> <span class="kp">false</span> <span class="o">=&gt;</span> <span class="s1">'No'</span><span class="p">,</span> <span class="ss">:to_s</span><span class="p">.</span><span class="nf">to_proc</span> <span class="o">=&gt;</span> <span class="s1">'proc'</span> <span class="p">}</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">hash</span> <span class="o">=</span> <span class="p">{</span> <span class="kp">false</span> <span class="o">=&gt;</span> <span class="s1">'No'</span><span class="p">,</span> <span class="ss">:to_s</span><span class="p">.</span><span class="nf">to_proc</span> <span class="o">=&gt;</span> <span class="s1">'proc'</span> <span class="p">}</span>
 
-<span class="n">array</span><span class="p">[</span><span class="mi">10</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">]</span>        <span class="c1"># =&gt; "No"</span>
-<span class="n">array</span><span class="p">[</span><span class="ss">:to_s</span><span class="p">.</span><span class="nf">to_proc</span><span class="p">]</span> <span class="c1"># =&gt; "No"</span></code></pre></figure>
+<span class="nb">hash</span><span class="p">[</span><span class="mi">10</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">]</span>        <span class="c1"># =&gt; "No"</span>
+<span class="nb">hash</span><span class="p">[</span><span class="ss">:to_s</span><span class="p">.</span><span class="nf">to_proc</span><span class="p">]</span> <span class="c1"># =&gt; "proc"</span></code></pre></figure>
 
 <h3 id="hashassoc">Hash#assoc</h3>
 

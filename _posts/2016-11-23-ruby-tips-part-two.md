@@ -165,10 +165,10 @@ str.gsub(/[\(\)]/, {"("=>")", ")"=>"("})
 ### Non string and symbol keys
 
 {% highlight ruby %}
-array = { false => 'No', :to_s.to_proc => 'proc' }
+hash = { false => 'No', :to_s.to_proc => 'proc' }
 
-array[10 < 5]        # => "No"
-array[:to_s.to_proc] # => "No"
+hash[10 < 5]        # => "No"
+hash[:to_s.to_proc] # => "proc"
 {% endhighlight %}
 
 ### Hash#assoc
