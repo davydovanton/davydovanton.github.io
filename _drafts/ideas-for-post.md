@@ -13,3 +13,10 @@ rodauth wuthout rails midleware + rails
 https://github.com/saberespoder/inboundsms/pull/1070
 
 https://github.com/saberespoder/inboundsms/pull/1151
+
+
+
+ruby tips
+
+
+Benchmark: Class.new.call and Class.call

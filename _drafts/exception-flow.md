@@ -10,6 +10,8 @@ http://programmers.stackexchange.com/questions/189222/are-exceptions-as-control-
 https://www.reddit.com/r/ruby/comments/2ofr1v/alternative_to_exception_handling_for_flow_control/
 http://stackoverflow.com/questions/4734512/is-it-good-practice-to-use-exceptions-for-control-flow-in-ruby-or-ruby-on-rails
 
+### Solutions
+https://github.com/apneadiving/waterfall
 
 ``` ruby
 class TestController

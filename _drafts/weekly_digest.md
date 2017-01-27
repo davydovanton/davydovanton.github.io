@@ -24,9 +24,16 @@ https://www.sitepoint.com/ddd-for-rails-developers-part-1-layered-architecture/
 http://blog.arkency.com/2015/06/thanks-to-repositories/
 https://medium.com/@openfcsonline/be-125-more-efficient-with-git-60556a1ce971#.h1ft1qukg
 http://www.techoalien.com/2016/10/ruby-memoization-using-singleton-method.html
+http://blog.bigbinary.com/2016/11/10/ruby-2-4-adds-better-support-for-extracting-captured-data-from-regexp-match-results.html
+http://blog.bulaj.ru/2016/10/26/profile-picture-or-any-file-uploading-with-grape-trailblazer-carrierware/
+https://bogdanvlviv.github.io/posts/ruby/patterns/design-patterns-in-ruby.html
+
+
+https://en.wikipedia.org/wiki/Command_pattern
 
 
 ## gems
 https://github.com/camertron/scuttle-rb
 https://github.com/ryanb/letter_opener
 https://github.com/kwatch/rack-jet_router/
+https://github.com/piotrmurach/rspec-benchmark
