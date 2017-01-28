@@ -3,7 +3,22 @@
   
     
     <url>
-      <loc>http://localhost:4000/2016/11/23/ruby-tips-part-two/</loc>
+      <loc>http://blog.davydovanton.com/2017/01/28/profiling-your-sql-querys-in-hanami-or-rom/</loc>
+      
+        <lastmod>2017-01-28T00:00:00+03:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.5</priority>
+      
+    </url>
+    
+  
+    
+    <url>
+      <loc>http://blog.davydovanton.com/2016/11/23/ruby-tips-part-two/</loc>
       
         <lastmod>2016-11-23T00:00:00+03:00</lastmod>
       
@@ -18,7 +33,7 @@
   
     
     <url>
-      <loc>http://localhost:4000/2016/11/16/ruby-tips-part-one/</loc>
+      <loc>http://blog.davydovanton.com/2016/11/16/ruby-tips-part-one/</loc>
       
         <lastmod>2016-11-16T00:00:00+03:00</lastmod>
       
@@ -33,7 +48,7 @@
   
     
     <url>
-      <loc>http://localhost:4000/2016/09/20/adding-domain-for-your-github-project/</loc>
+      <loc>http://blog.davydovanton.com/2016/09/20/adding-domain-for-your-github-project/</loc>
       
         <lastmod>2016-09-20T00:00:00+03:00</lastmod>
       
@@ -48,7 +63,7 @@
   
     
     <url>
-      <loc>http://localhost:4000/2016/05/21/preview-hanami-emails-in-browser/</loc>
+      <loc>http://blog.davydovanton.com/2016/05/21/preview-hanami-emails-in-browser/</loc>
       
         <lastmod>2016-05-21T00:00:00+03:00</lastmod>
       
@@ -63,7 +78,7 @@
   
     
     <url>
-      <loc>http://localhost:4000/2016/05/20/develop-api-with-roda/</loc>
+      <loc>http://blog.davydovanton.com/2016/05/20/develop-api-with-roda/</loc>
       
         <lastmod>2016-05-20T00:00:00+03:00</lastmod>
       
@@ -78,7 +93,7 @@
   
     
     <url>
-      <loc>http://localhost:4000/2016/05/14/middleman-add-title-anchors/</loc>
+      <loc>http://blog.davydovanton.com/2016/05/14/middleman-add-title-anchors/</loc>
       
         <lastmod>2016-05-14T00:00:00+03:00</lastmod>
       
@@ -93,7 +108,7 @@
   
     
     <url>
-      <loc>http://localhost:4000/2016/03/16/simple-hanami-auth/</loc>
+      <loc>http://blog.davydovanton.com/2016/03/16/simple-hanami-auth/</loc>
       
         <lastmod>2016-03-16T00:00:00+03:00</lastmod>
       
@@ -108,7 +123,7 @@
   
     
     <url>
-      <loc>http://localhost:4000/2015/12/15/stackprof-with-minitest/</loc>
+      <loc>http://blog.davydovanton.com/2015/12/15/stackprof-with-minitest/</loc>
       
         <lastmod>2015-12-15T00:00:00+03:00</lastmod>
       
@@ -123,7 +138,7 @@
   
     
     <url>
-      <loc>http://localhost:4000/2015/12/13/render-ruby-block-in-layout-file/</loc>
+      <loc>http://blog.davydovanton.com/2015/12/13/render-ruby-block-in-layout-file/</loc>
       
         <lastmod>2015-12-13T00:00:00+03:00</lastmod>
       
@@ -138,7 +153,7 @@
   
     
     <url>
-      <loc>http://localhost:4000/2015/11/14/ignore-file-lines-in-git/</loc>
+      <loc>http://blog.davydovanton.com/2015/11/14/ignore-file-lines-in-git/</loc>
       
         <lastmod>2015-11-14T00:00:00+03:00</lastmod>
       
@@ -153,7 +168,7 @@
   
     
     <url>
-      <loc>http://localhost:4000/2015/11/01/write-simple-scheme-interpreter-on-ruby/</loc>
+      <loc>http://blog.davydovanton.com/2015/11/01/write-simple-scheme-interpreter-on-ruby/</loc>
       
         <lastmod>2015-11-01T00:00:00+03:00</lastmod>
       
@@ -168,7 +183,7 @@
   
     
     <url>
-      <loc>http://localhost:4000/2015/10/26/get-requiest-with-custom-locale-in-your-tests/</loc>
+      <loc>http://blog.davydovanton.com/2015/10/26/get-requiest-with-custom-locale-in-your-tests/</loc>
       
         <lastmod>2015-10-26T00:00:00+03:00</lastmod>
       
@@ -183,7 +198,7 @@
   
     
     <url>
-      <loc>http://localhost:4000/2015/04/05/ruby-memory-profiller-tools/</loc>
+      <loc>http://blog.davydovanton.com/2015/04/05/ruby-memory-profiller-tools/</loc>
       
         <lastmod>2015-04-05T00:00:00+03:00</lastmod>
       
@@ -198,7 +213,7 @@
   
     
     <url>
-      <loc>http://localhost:4000/2015/03/29/specific-color-hash/</loc>
+      <loc>http://blog.davydovanton.com/2015/03/29/specific-color-hash/</loc>
       
         <lastmod>2015-03-29T00:00:00+03:00</lastmod>
       
@@ -213,7 +228,7 @@
   
     
     <url>
-      <loc>http://localhost:4000/2014/03/16/vim-history/</loc>
+      <loc>http://blog.davydovanton.com/2014/03/16/vim-history/</loc>
       
         <lastmod>2014-03-16T00:00:00+04:00</lastmod>
       
@@ -228,7 +243,7 @@
   
     
     <url>
-      <loc>http://localhost:4000/2014/03/10/seed-and-you/</loc>
+      <loc>http://blog.davydovanton.com/2014/03/10/seed-and-you/</loc>
       
         <lastmod>2014-03-10T00:00:00+04:00</lastmod>
       
@@ -243,7 +258,7 @@
   
     
     <url>
-      <loc>http://localhost:4000/2014/02/09/irb-and-all-all-all/</loc>
+      <loc>http://blog.davydovanton.com/2014/02/09/irb-and-all-all-all/</loc>
       
         <lastmod>2014-02-09T00:00:00+04:00</lastmod>
       
@@ -258,7 +273,7 @@
   
     
     <url>
-      <loc>http://localhost:4000/2014/01/15/ruby-and-predefined-global-variables/</loc>
+      <loc>http://blog.davydovanton.com/2014/01/15/ruby-and-predefined-global-variables/</loc>
       
         <lastmod>2014-01-15T00:00:00+04:00</lastmod>
       
@@ -278,9 +293,9 @@
 
     
     <url>
-      <loc>http://localhost:4000404.html</loc>
+      <loc>http://blog.davydovanton.com404.html</loc>
       
-        <lastmod>2016-11-24T00:31:33+03:00</lastmod>
+        <lastmod>2017-01-28T22:27:28+03:00</lastmod>
       
       
         <changefreq>monthly</changefreq>
@@ -306,32 +321,9 @@
 
     
     <url>
-      <loc>http://localhost:4000</loc>
+      <loc>http://blog.davydovanton.com</loc>
       
-        <lastmod>2016-11-24T00:31:33+03:00</lastmod>
-      
-      
-        <changefreq>monthly</changefreq>
-      
-      
-        <priority>0.3</priority>
-      
-    </url>
-    
-  
-    
-    
-
-    
-  
-    
-    
-
-    
-    <url>
-      <loc>http://localhost:4000</loc>
-      
-        <lastmod>2016-11-24T00:31:33+03:00</lastmod>
+        <lastmod>2017-01-28T22:27:28+03:00</lastmod>
       
       
         <changefreq>monthly</changefreq>
@@ -346,10 +338,38 @@
     
 
     
+  
+    
+    
+
+    
+  
+    
+    
+
+    
     <url>
-      <loc>http://localhost:4000</loc>
+      <loc>http://blog.davydovanton.com</loc>
       
-        <lastmod>2016-11-24T00:31:33+03:00</lastmod>
+        <lastmod>2017-01-28T22:27:28+03:00</lastmod>
+      
+      
+        <changefreq>monthly</changefreq>
+      
+      
+        <priority>0.3</priority>
+      
+    </url>
+    
+  
+    
+    
+
+    
+    <url>
+      <loc>http://blog.davydovanton.com</loc>
+      
+        <lastmod>2017-01-28T22:27:28+03:00</lastmod>
       
       
         <changefreq>monthly</changefreq>

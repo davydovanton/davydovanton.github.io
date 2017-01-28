@@ -75,6 +75,8 @@
       
     
       
+    
+      
         
           <a class="sidebar-nav-item" href="/tags/">All tags</a>
         
@@ -87,7 +89,7 @@
 
   <div class="sidebar-item">
     <p>
-      &copy; 2016. All rights reserved.
+      &copy; 2017. All rights reserved.
     </p>
   </div>
 </div>
@@ -111,6 +113,61 @@
 
       <div class="container content">
         <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2015/11/14/ignore-file-lines-in-git/">
+        Ignore file lines in git
+      </a>
+    </h1>
+
+    <span class="post-date">14 Nov 2015</span>
+
+    <p>For example, you have this code and you want to ignore in git lines which contain <code class="highlighter-rouge">username</code> and <code class="highlighter-rouge">password</code> values:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ssh_connect</span>
+  <span class="n">username</span> <span class="o">=</span> <span class="s2">"root"</span> <span class="c1"># ignore this line</span>
+  <span class="n">password</span> <span class="o">=</span> <span class="s2">"password"</span> <span class="c1"># ignore this line too</span>
+  <span class="n">ip</span> <span class="o">=</span> <span class="s2">"192.168.1.1"</span>
+  <span class="c1"># ...</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>To ignore some special lines in git you need to:</p>
+
+<ol>
+  <li>Create a <code class="highlighter-rouge">.gitattributes</code> in your repository (remember that <code class="highlighter-rouge">.gitattributes</code> will be committed into the repository, if you don’t want that, add it to <code class="highlighter-rouge">.git/info/attributes</code>)</li>
+  <li>Add <code class="highlighter-rouge">*.rb filter=ignoreline</code> (run filter named ignoreline on all <code class="highlighter-rouge">*.rb</code> files)</li>
+  <li>Now, we need to define ignoreline filter in <code class="highlighter-rouge">.gitconfig</code></li>
+  <li><code class="highlighter-rouge">git config --global filter.ignoreline.clean "sed '/#ignoreline$/'d"</code> (delete theses lines)</li>
+  <li><code class="highlighter-rouge">git config --global filter.ignoreline.smudge cat</code> (do nothing when pulling file from the repository)</li>
+</ol>
+
+<p>And then, you can ignore some lines using <code class="highlighter-rouge">#ignoreline</code> comment:</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ssh_connect</span>
+  <span class="n">username</span> <span class="o">=</span> <span class="s2">"root"</span> <span class="c1">#ignoreline</span>
+  <span class="n">password</span> <span class="o">=</span> <span class="s2">"password"</span> <span class="c1">#ignoreline</span>
+  <span class="n">ip</span> <span class="o">=</span> <span class="s2">"192.168.1.1"</span>
+  <span class="c1"># ...</span>
+<span class="k">end</span></code></pre></figure>
+
+<p>Happy hacking!</p>
+
+
+    <div class="tag-cloud">
+      <ul>
+      
+        <li>
+          <a href="/tags/#tips"><span>tips</span></a>
+        </li>
+      
+        <li>
+          <a href="/tags/#git"><span>git</span></a>
+        </li>
+      
+      </ul>
+    </div>
+  </div>
   
   <div class="post">
     <h1 class="post-title">
@@ -465,7 +522,7 @@ for each call sidekiq <code class="highlighter-rouge">perform_async</code> metho
 (<a href="https://github.com/mperham/sidekiq/pull/2288">mperham/sidekiq#2288</a>).
 That’s why I decided to create list with tools which helps you to know all required information.</p>
 
-<h2 id="ruby-gc">1. Ruby GC</h2>
+<h2 id="1-ruby-gc">1. Ruby GC</h2>
 <p>Sam Saffron has written great post, in which he talk about ruby garbage collector and wonderful
 <code class="highlighter-rouge">GC.start</code> method which returns data hash:</p>
 
@@ -478,14 +535,14 @@ For example you can easily know general number of created objects. For this you 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="p">:</span><span class="mo">002</span> <span class="o">&gt;</span> <span class="no">ObjectSpace</span><span class="p">.</span><span class="nf">count_objects</span><span class="p">[</span><span class="ss">:TOTAL</span><span class="p">]</span>
 <span class="c1"># =&gt; 96193</span></code></pre></figure>
 
-<h2 id="ruby-memory-profiler">2. Ruby Memory Profiler</h2>
+<h2 id="2-ruby-memory-profiler">2. Ruby Memory Profiler</h2>
 <p>Also Sam wrote great tool (<a href="https://github.com/SamSaffron/memory_profiler">ruby-memory-profiler</a>) which provide
 easily display all required information for any code in block. For this you will need call something like
 this (I called this code in my sidekiq reduce allocation PR):</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="no">MemoryProfiler</span><span class="p">.</span><span class="nf">report</span><span class="p">{</span> <span class="mi">100</span><span class="p">.</span><span class="nf">times</span><span class="p">{</span> <span class="no">HardWorker</span><span class="p">.</span><span class="nf">perform_async</span> <span class="p">}</span> <span class="p">}.</span><span class="nf">pretty_print</span></code></pre></figure>
 
-<h2 id="ruby-prof">3. ruby-prof</h2>
+<h2 id="3-ruby-prof">3. ruby-prof</h2>
 <p>General features:</p>
 
 <ul>
@@ -863,8 +920,8 @@ with necessary string.</p>
 <p>Но для начала давайте посмотрим документацию, а именно откроем модуль <a href="http://www.ruby-doc.org/stdlib-2.0/libdoc/irb/rdoc/IRB.html">IRB</a> в стандартной библиотеке ruby.
 “Что интересного тут есть?”, спросите вы? Думаю стоит начать с самого начала, с запуска. Если вы просто наберете в консоли <code class="highlighter-rouge">irb</code>, то запустите шел с вашей текущей версией руби. Но  если у вас RVM(хотя, сказать по правде я не уверен, что это работает только с RVM), то вы можете выбрать среду для запуска из всех тех, что у вас установлены. Например вот так, я, при активном MRI 2.0, могу запустить у себя jruby:</p>
 
-<p><a class="lightbox" href="http://localhost:4000/images/2014/02/irb-and-all-all-all/jruby-irb.png">
-<img src="http://localhost:4000/images/2014/02/irb-and-all-all-all/jruby-irb.png" alt="jruby in irb" />
+<p><a class="lightbox" href="http://blog.davydovanton.com/images/2014/02/irb-and-all-all-all/jruby-irb.png">
+<img src="http://blog.davydovanton.com/images/2014/02/irb-and-all-all-all/jruby-irb.png" alt="jruby in irb" />
 </a></p>
 
 <p>Дальше, думаю, следует обсудить ключи. Их много, они разные. В документации они все <a href="http://www.ruby-doc.org/stdlib-2.0/libdoc/irb/rdoc/IRB.html#module-IRB-label-Command+line+options">есть</a>. Самые интересные, на мой взляд, - <code class="highlighter-rouge">-d</code> включающий дебаг мод(аналогично <code class="highlighter-rouge">ruby -d</code>) и ключ <code class="highlighter-rouge">-I path</code>, загружающий указанную директорию.</p>
@@ -891,8 +948,8 @@ with necessary string.</p>
 
 <p>Как он будет работать, спросите вы? Да все просто, берете объект и вызываете на нем данный метод:</p>
 
-<p><a class="lightbox" href="http://localhost:4000/images/2014/02/irb-and-all-all-all/irb_local_methods.png">
-<img src="http://localhost:4000/images/2014/02/irb-and-all-all-all/irb_local_methods.png" alt="Using local_mathods method in irb" />
+<p><a class="lightbox" href="http://blog.davydovanton.com/images/2014/02/irb-and-all-all-all/irb_local_methods.png">
+<img src="http://blog.davydovanton.com/images/2014/02/irb-and-all-all-all/irb_local_methods.png" alt="Using local_mathods method in irb" />
 </a></p>
 
 <p>Думаю, вы заметили цвета, которых не хватает в дефолтном irb?</p>
@@ -917,16 +974,16 @@ with necessary string.</p>
 <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> </code></pre></figure>
 
 <p>Ну а выглядеть это будет как-то так:
-<a class="lightbox" href="http://localhost:4000/images/2014/02/irb-and-all-all-all/pry.gif">
-<img src="http://localhost:4000/images/2014/02/irb-and-all-all-all/pry.gif" alt="Using pry in irb" />
+<a class="lightbox" href="http://blog.davydovanton.com/images/2014/02/irb-and-all-all-all/pry.gif">
+<img src="http://blog.davydovanton.com/images/2014/02/irb-and-all-all-all/pry.gif" alt="Using pry in irb" />
 </a></p>
 
 <p>Но самое полезное, что можно сделать, это забыть построчный ввод кода. “Как?”, спросите вы? Начну издалека: мне очень нравится vim :) Поэтому, смотря vimcasts-ы, я узнал то, что перевернуло мой мир, а именно: любой текстовый редактор можно <a href="http://vimcasts.org/episodes/running-vim-within-irb/">вызывать</a> прямо из irb.</p>
 
 <p>Делается это очень просто: нужно добавить гем <code class="highlighter-rouge">interactive_editor</code>. Данный гем позволяет вызывать любой текстовый редактор из вашего irb, например, набрав <code class="highlighter-rouge">vim</code> - откроется vim, где вы сможете набрать любой код, который выполнится после сохранения файла и закрытия редактора.</p>
 
-<p><a class="lightbox" href="http://localhost:4000/images/2014/02/irb-and-all-all-all/vim-in-irb.gif">
-<img src="http://localhost:4000/images/2014/02/irb-and-all-all-all/vim-in-irb.gif" alt="Using vim in irb" />
+<p><a class="lightbox" href="http://blog.davydovanton.com/images/2014/02/irb-and-all-all-all/vim-in-irb.gif">
+<img src="http://blog.davydovanton.com/images/2014/02/irb-and-all-all-all/vim-in-irb.gif" alt="Using vim in irb" />
 </a></p>
 
 <p>Собственно то же самое будет работать с sublime, textmate, emacs и <a href="https://github.com/jberkel/interactive_editor/blob/master/lib/interactive_editor.rb#L92">дургими</a> текстовыми редакторами.</p>
@@ -1041,17 +1098,17 @@ with necessary string.</p>
 
 <hr />
 
-<h5 id="section">$&amp;</h5>
+<h5>$&amp;</h5>
 <p>Переменная, с которой начался наш рассказ. Хранит, как вы уже догадались, результат последнего совпадения регулярного выражения.</p>
 
-<h5 id="section-1">$1 $2 $3 …</h5>
+<h5 id="1-2-3-">$1 $2 $3 …</h5>
 <p>Думаю, многим знакомая похожая переменная из регулярных выражений. Хотя, кого я обманываю? Это та же самая перменная, которая хранит совпадения из скобок:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">"test string in irb"</span><span class="p">.</span><span class="nf">match</span> <span class="sr">/(irb)/</span>
 <span class="nb">puts</span> <span class="vg">$1</span>
 <span class="c1">#=&gt; "irb"</span></code></pre></figure>
 
-<h5 id="section-2">$~</h5>
+<h5 id="-1">$~</h5>
 <p>Содержит объект класса MatchData, соответствующий последнему совпадению.</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">"test string in irb"</span><span class="p">.</span><span class="nf">match</span> <span class="sr">/(irb)/</span>
@@ -1062,7 +1119,7 @@ with necessary string.</p>
 <span class="nb">puts</span> <span class="vg">$~</span><span class="p">.</span><span class="nf">to_a</span>
 <span class="c1">#=&gt; ["irb", 'irb']</span></code></pre></figure>
 
-<h5 id="section-3">$+</h5>
+<h5 id="-2">$+</h5>
 <p>Содержит значение последней круглой скобки из последнего совпадения:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">"test string in irb"</span><span class="p">.</span><span class="nf">match</span> <span class="sr">/irb/</span>
@@ -1076,29 +1133,29 @@ with necessary string.</p>
 <span class="nb">puts</span> <span class="vg">$+</span>
 <span class="c1">#=&gt; "irb"</span></code></pre></figure>
 
-<h5 id="section-4">$`</h5>
+<h5 id="-3">$`</h5>
 <p>Содержит все то, что не совпало в последнем регулярном выражении:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">"test string in irb"</span><span class="p">.</span><span class="nf">match</span> <span class="sr">/irb/</span>
 <span class="nb">puts</span> <span class="vg">$`</span>
 <span class="c1">#=&gt; "test string in"</span></code></pre></figure>
 
-<h5 id="section-5">$!</h5>
+<h5 id="-4">$!</h5>
 <p>Содержит последнее вызванное исключение:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">1</span> <span class="o">/</span> <span class="mi">0</span> <span class="k">rescue</span> <span class="vg">$!</span>
 <span class="c1">#=&gt; #&lt;ZeroDivisionError: divided by 0&gt;</span></code></pre></figure>
 
-<h5 id="section-6">$@</h5>
+<h5 id="-5">$@</h5>
 <p>Ну а эта переменная содержит массив со всеми trace stack-ами из последнего исключения:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">1</span> <span class="o">/</span> <span class="mi">0</span> <span class="k">rescue</span> <span class="vg">$@</span>
 <span class="c1">#=&gt; ["&lt;main&gt;:4:in `/'", "&lt;main&gt;:4:in `/'", "(irb):98:in `irb_binding'", ... ]</span></code></pre></figure>
 
-<h5 id="section-7">$*</h5>
+<h5 id="-6">$*</h5>
 <p>Эта переменная равносильна переменной ARGV, думаю этим все сказанно.</p>
 
-<h5 id="section-8">$$</h5>
+<h5 id="-7">$$</h5>
 <p>Переменная возвращает номер процесса, под которым выполняется скрипт.</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="vg">$$</span>

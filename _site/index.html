@@ -75,6 +75,8 @@
       
     
       
+    
+      
         
           <a class="sidebar-nav-item" href="/tags/">All tags</a>
         
@@ -87,7 +89,7 @@
 
   <div class="sidebar-item">
     <p>
-      &copy; 2016. All rights reserved.
+      &copy; 2017. All rights reserved.
     </p>
   </div>
 </div>
@@ -111,6 +113,70 @@
 
       <div class="container content">
         <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2017/01/28/profiling-your-sql-querys-in-hanami-or-rom/">
+        Profiling your SQL querys in hanami (or ROM)
+      </a>
+    </h1>
+
+    <span class="post-date">28 Jan 2017</span>
+
+    <p>It just happened I had profile SQL query in <a href="http://www.ossboard.org">my hanami application</a>. And I want to save this knowledge that’s why I created this post.</p>
+
+<p>If you are using <a href="http://rom-rb.org">ROM</a>, this post will be helpful for you too, because hanami-module uses ROM. So, in <a href="http://hanamirb.org">hanami</a>, you have a simple ability for profiling your SQL queries.</p>
+
+<p>For that, you need to use some methods for <a href="http://www.rubydoc.info/github/evanfarrar/opensprints/Sequel/Dataset"><code class="highlighter-rouge">Sequel::Dataset</code></a> instance.</p>
+
+<p>Fox example, if you want to get pure sql sting you can use <code class="highlighter-rouge">#sql</code> method:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">&gt;&gt; puts UserRepository.new.users.where(admin: true).dataset.sql
+SELECT * FROM "users" WHERE ("admin" IS TRUE) ORDER BY "users"."id"
+=&gt; nil</code></pre></figure>
+
+<p>or if you need to call <code class="highlighter-rouge">ANALYZE</code> or <code class="highlighter-rouge">EXPLAIN</code> psql methods you can use similar methods:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">&gt;&gt; puts UserRepository.new.users.where(admin: true).dataset.analyze
+Sort  (cost=19.38..19.79 rows=165 width=213) (actual time=0.019..0.019 rows=1 loops=1)
+  Sort Key: id
+  Sort Method: quicksort  Memory: 25kB
+  -&gt;  Seq Scan on users  (cost=0.00..13.30 rows=165 width=213) (actual time=0.013..0.014 rows=1 loops=1)
+        Filter: (admin IS TRUE)
+        Rows Removed by Filter: 1
+Planning time: 4.362 ms
+Execution time: 0.039 ms
+=&gt; nil</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">&gt;&gt; puts UserRepository.new.users.where(admin: true).dataset.explain
+Sort  (cost=19.38..19.79 rows=165 width=213)
+  Sort Key: id
+  -&gt;  Seq Scan on users  (cost=0.00..13.30 rows=165 width=213)
+        Filter: (admin IS TRUE)
+=&gt; nil</code></pre></figure>
+
+<p>That’s all, happy profiling! 🚀</p>
+
+
+
+    <div class="tag-cloud">
+      <ul>
+      
+        <li>
+          <a href="/tags/#ruby"><span>ruby</span></a>
+        </li>
+      
+        <li>
+          <a href="/tags/#hanami"><span>hanami</span></a>
+        </li>
+      
+        <li>
+          <a href="/tags/#sql"><span>sql</span></a>
+        </li>
+      
+      </ul>
+    </div>
+  </div>
   
   <div class="post">
     <h1 class="post-title">
@@ -210,7 +276,7 @@ need to extract information from a rather large data blob.</p>
 
 <h2 id="symbol">Symbol</h2>
 
-<h3 id="allsymbols">#all_symbols</h3>
+<h3 id="all_symbols">#all_symbols</h3>
 
 <p><a href="https://ruby-doc.org/core-2.2.0/Symbol.html#method-c-all_symbols">Documentation</a></p>
 
@@ -257,7 +323,7 @@ need to extract information from a rather large data blob.</p>
 
 <h2 id="hash">Hash</h2>
 
-<h3 id="method"><code class="highlighter-rouge">**</code> method</h3>
+<h3 id="-method"><code class="highlighter-rouge">**</code> method</h3>
 
 <p>You probably know already how to use <code class="highlighter-rouge">*</code> in method definition argument list. But <code class="highlighter-rouge">**</code> is less known.</p>
 
@@ -512,7 +578,7 @@ Refinements provide a way to extend a class locally.</p>
 
 <p><em><strong>Note:</strong> While <code class="highlighter-rouge">Proc#curry</code> has been around since Ruby 1.9, <code class="highlighter-rouge">Method#curry</code> was only added in Ruby 2.2.0. For versions before 2.2.0, you will first need to convert your method object to a proc via <code class="highlighter-rouge">Method#to_proc</code>.</em></p>
 
-<h2 id="toproc-and-method">#to_proc and #method</h2>
+<h2 id="to_proc-and-method">#to_proc and #method</h2>
 
 <p><a href="https://ruby-doc.org/core-2.1.1/Proc.html#method-i-to_proc">Documentation</a></p>
 
@@ -1140,61 +1206,6 @@ But what will you do if you can’t use these methods or you need something easi
       
         <li>
           <a href="/tags/#bicycle"><span>bicycle</span></a>
-        </li>
-      
-      </ul>
-    </div>
-  </div>
-  
-  <div class="post">
-    <h1 class="post-title">
-      <a href="/2015/11/14/ignore-file-lines-in-git/">
-        Ignore file lines in git
-      </a>
-    </h1>
-
-    <span class="post-date">14 Nov 2015</span>
-
-    <p>For example, you have this code and you want to ignore in git lines which contain <code class="highlighter-rouge">username</code> and <code class="highlighter-rouge">password</code> values:</p>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ssh_connect</span>
-  <span class="n">username</span> <span class="o">=</span> <span class="s2">"root"</span> <span class="c1"># ignore this line</span>
-  <span class="n">password</span> <span class="o">=</span> <span class="s2">"password"</span> <span class="c1"># ignore this line too</span>
-  <span class="n">ip</span> <span class="o">=</span> <span class="s2">"192.168.1.1"</span>
-  <span class="c1"># ...</span>
-<span class="k">end</span></code></pre></figure>
-
-<p>To ignore some special lines in git you need to:</p>
-
-<ol>
-  <li>Create a <code class="highlighter-rouge">.gitattributes</code> in your repository (remember that <code class="highlighter-rouge">.gitattributes</code> will be committed into the repository, if you don’t want that, add it to <code class="highlighter-rouge">.git/info/attributes</code>)</li>
-  <li>Add <code class="highlighter-rouge">*.rb filter=ignoreline</code> (run filter named ignoreline on all <code class="highlighter-rouge">*.rb</code> files)</li>
-  <li>Now, we need to define ignoreline filter in <code class="highlighter-rouge">.gitconfig</code></li>
-  <li><code class="highlighter-rouge">git config --global filter.ignoreline.clean "sed '/#ignoreline$/'d"</code> (delete theses lines)</li>
-  <li><code class="highlighter-rouge">git config --global filter.ignoreline.smudge cat</code> (do nothing when pulling file from the repository)</li>
-</ol>
-
-<p>And then, you can ignore some lines using <code class="highlighter-rouge">#ignoreline</code> comment:</p>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">ssh_connect</span>
-  <span class="n">username</span> <span class="o">=</span> <span class="s2">"root"</span> <span class="c1">#ignoreline</span>
-  <span class="n">password</span> <span class="o">=</span> <span class="s2">"password"</span> <span class="c1">#ignoreline</span>
-  <span class="n">ip</span> <span class="o">=</span> <span class="s2">"192.168.1.1"</span>
-  <span class="c1"># ...</span>
-<span class="k">end</span></code></pre></figure>
-
-<p>Happy hacking!</p>
-
-
-    <div class="tag-cloud">
-      <ul>
-      
-        <li>
-          <a href="/tags/#tips"><span>tips</span></a>
-        </li>
-      
-        <li>
-          <a href="/tags/#git"><span>git</span></a>
         </li>
       
       </ul>
