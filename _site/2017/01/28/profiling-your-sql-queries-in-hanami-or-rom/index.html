@@ -11,7 +11,7 @@
 
   <title>
     
-      Adding anchors to your middleman project &middot; Anton Davydov
+      Profiling your SQL queries in hanami (or ROM) &middot; Anton Davydov
     
   </title>
 
@@ -31,7 +31,7 @@
 
   <!-- SEO -->
   
-    <meta name="description" content="In this post we'll add anchors authentication to your middleman project" />
+    <meta name="description" content="Profiling your SQL queries in hanami (or ROM)" />
   
 
   <link rel="author" href="https://plus.google.com/u/0/104253015484296728880"/>
@@ -115,70 +115,42 @@
 
       <div class="container content">
         <div class="post">
-  <h1 class="post-title">Adding anchors to your middleman project</h1>
-  <span class="post-date">14 May 2016</span>
-  <p>All people love anchors. It’s helpful, cool and practical. If you
-want to add anchors to you middleman project you need to follow the
-following steps.</p>
+  <h1 class="post-title">Profiling your SQL queries in hanami (or ROM)</h1>
+  <span class="post-date">28 Jan 2017</span>
+  <p>It just happened I had profile SQL query in <a href="http://www.ossboard.org">my hanami application</a>. And I want to save this knowledge that’s why I created this post.</p>
 
-<p>First: we need to create a new renderer class. In this class we’ll
-put <code class="highlighter-rouge">&lt;a&gt;</code> tag inside <code class="highlighter-rouge">&lt;h&gt;</code> tag. Also, we’ll realize anchor svg in
-guthub style:</p>
+<p>If you are using <a href="http://rom-rb.org">ROM</a>, this post will be helpful for you too, because hanami-module uses ROM. So, in <a href="http://hanamirb.org">hanami</a>, you have a simple ability for profiling your SQL queries.</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">'middleman-core/renderers/redcarpet'</span>
+<p>For that, you need to use some methods for <a href="http://www.rubydoc.info/github/evanfarrar/opensprints/Sequel/Dataset"><code class="highlighter-rouge">Sequel::Dataset</code></a> instance.</p>
 
-<span class="k">class</span> <span class="nc">GithubStyleTitles</span> <span class="o">&lt;</span> <span class="no">Middleman</span><span class="o">::</span><span class="no">Renderers</span><span class="o">::</span><span class="no">MiddlemanRedcarpetHTML</span>
-  <span class="k">def</span> <span class="nf">header</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
-    <span class="vi">@headers</span> <span class="o">||=</span> <span class="p">[]</span>
-    <span class="n">permalink</span> <span class="o">=</span> <span class="n">title</span><span class="p">.</span><span class="nf">gsub</span><span class="p">(</span><span class="sr">/\W+/</span><span class="p">,</span> <span class="s1">'-'</span><span class="p">)</span>
+<p>Fox example, if you want to get pure sql sting you can use <code class="highlighter-rouge">#sql</code> method:</p>
 
-    <span class="k">if</span> <span class="vi">@headers</span><span class="p">.</span><span class="nf">include?</span> <span class="n">permalink</span>
-      <span class="n">permalink</span> <span class="o">+=</span> <span class="s1">'_1'</span>
-      <span class="n">permalink</span> <span class="o">=</span> <span class="n">permalink</span><span class="p">.</span><span class="nf">succ</span> <span class="k">while</span> <span class="vi">@headers</span><span class="p">.</span><span class="nf">include?</span> <span class="n">permalink</span>
-    <span class="k">end</span>
-    <span class="vi">@headers</span> <span class="o">&lt;&lt;</span> <span class="n">permalink</span>
+<figure class="highlight"><pre><code class="language-text" data-lang="text">&gt;&gt; puts UserRepository.new.users.where(admin: true).dataset.sql
+SELECT * FROM "users" WHERE ("admin" IS TRUE) ORDER BY "users"."id"
+=&gt; nil</code></pre></figure>
 
-    <span class="sx">%(
-      &lt;h#{level} id=\"#{permalink}\" class="title"&gt;
-        &lt;a name="#{permalink}" class="anchor" href="##{permalink}"&gt;&lt;/a&gt;
-        #{title}
-      &lt;/h#{level}&gt;
-    )</span>
-  <span class="k">end</span>
+<p>or if you need to call <code class="highlighter-rouge">ANALYZE</code> or <code class="highlighter-rouge">EXPLAIN</code> psql methods you can use similar methods:</p>
 
-<span class="kp">private</span>
+<figure class="highlight"><pre><code class="language-text" data-lang="text">&gt;&gt; puts UserRepository.new.users.where(admin: true).dataset.analyze
+Sort  (cost=19.38..19.79 rows=165 width=213) (actual time=0.019..0.019 rows=1 loops=1)
+  Sort Key: id
+  Sort Method: quicksort  Memory: 25kB
+  -&gt;  Seq Scan on users  (cost=0.00..13.30 rows=165 width=213) (actual time=0.013..0.014 rows=1 loops=1)
+        Filter: (admin IS TRUE)
+        Rows Removed by Filter: 1
+Planning time: 4.362 ms
+Execution time: 0.039 ms
+=&gt; nil</code></pre></figure>
 
-  <span class="k">def</span> <span class="nf">anchor_svg</span>
-     <span class="o">&lt;&lt;-</span><span class="no">eos</span><span class="sh">
-       &lt;svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"&gt;
-       &lt;path d="M4 9h1v1h-1c-1.5 0-3-1.69-3-3.5s1.55-3.5 3-3.5h4c1.45 0 3 1.69 3 3.5 0 1.41-0.91 2.72-2 3.25v-1.16c0.58-0.45 1-1.27 1-2.09 0-1.28-1.02-2.5-2-2.5H4c-0.98 0-2 1.22-2 2.5s1 2.5 2 2.5z m9-3h-1v1h1c1 0 2 1.22 2 2.5s-1.02 2.5-2 2.5H9c-0.98 0-2-1.22-2-2.5 0-0.83 0.42-1.64 1-2.09v-1.16c-1.09 0.53-2 1.84-2 3.25 0 1.81 1.55 3.5 3 3.5h4c1.45 0 3-1.69 3-3.5s-1.5-3.5-3-3.5z"&gt;&lt;/path&gt;
-       &lt;/svg&gt;
-</span><span class="no">     eos</span>
-  <span class="k">end</span>
-<span class="k">end</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-text" data-lang="text">&gt;&gt; puts UserRepository.new.users.where(admin: true).dataset.explain
+Sort  (cost=19.38..19.79 rows=165 width=213)
+  Sort Key: id
+  -&gt;  Seq Scan on users  (cost=0.00..13.30 rows=165 width=213)
+        Filter: (admin IS TRUE)
+=&gt; nil</code></pre></figure>
 
-<p>After that we need to call our renderer in <code class="highlighter-rouge">:markdown</code> configuration:</p>
+<p>That’s all, happy profiling! 🚀</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">set</span> <span class="ss">:markdown</span><span class="p">,</span> <span class="ss">fenced_code_blocks: </span><span class="kp">true</span><span class="p">,</span> <span class="ss">smartypants: </span><span class="kp">true</span><span class="p">,</span> <span class="ss">renderer: </span><span class="no">GithubStyleTitles</span></code></pre></figure>
-
-<p>And the last step: we need to stylize our anchor with css:</p>
-
-<figure class="highlight"><pre><code class="language-css" data-lang="css"><span class="nc">.anchor</span> <span class="p">{</span>
-  <span class="nl">padding-right</span><span class="p">:</span> <span class="m">2px</span><span class="p">;</span>
-  <span class="nl">margin-left</span><span class="p">:</span> <span class="m">-18px</span><span class="p">;</span>
-  <span class="nl">display</span><span class="p">:</span> <span class="nb">none</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="nc">.title</span> <span class="nc">.anchor</span> <span class="p">{</span>
-  <span class="nl">display</span><span class="p">:</span> <span class="n">inline-block</span><span class="p">;</span>
-<span class="p">}</span></code></pre></figure>
-
-<p>After all this steps we’ll get something like this:</p>
-
-<p><img src="https://cloud.githubusercontent.com/assets/1147484/15233483/08d207ae-18ba-11e6-92a4-ed5bad2ab816.gif" alt="gif" /></p>
-
-<p>I hope it will be useful to you  as well as for me at one time.</p>
-
-<p>Happy hacking! 💚</p>
 
 
   <div class="tag-cloud post-tags">
@@ -189,11 +161,11 @@ guthub style:</p>
       </li>
     
       <li>
-        <a href="/tags/#blog"><span>blog</span></a>
+        <a href="/tags/#hanami"><span>hanami</span></a>
       </li>
     
       <li>
-        <a href="/tags/#middleman"><span>middleman</span></a>
+        <a href="/tags/#sql"><span>sql</span></a>
       </li>
     
     </ul>
@@ -210,15 +182,6 @@ guthub style:</p>
     
       <li>
         <h3>
-          <a href="/2017/01/28/profiling-your-sql-queries-in-hanami-or-rom/">
-            Profiling your SQL queries in hanami (or ROM)
-            <small>28 Jan 2017</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
           <a href="/2016/11/23/ruby-tips-part-two/">
             Ruby tips #2
             <small>23 Nov 2016</small>
@@ -231,6 +194,15 @@ guthub style:</p>
           <a href="/2016/11/16/ruby-tips-part-one/">
             Ruby tips #1
             <small>16 Nov 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/09/20/adding-domain-for-your-github-project/">
+            Adding domain for your github project
+            <small>20 Sep 2016</small>
           </a>
         </h3>
       </li>

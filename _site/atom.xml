@@ -4,7 +4,7 @@
  <title>Anton Davydov</title>
  <link href="http://blog.davydovanton.com/atom.xml" rel="self"/>
  <link href="http://blog.davydovanton.com/"/>
- <updated>2017-01-28T22:27:28+03:00</updated>
+ <updated>2017-01-28T22:30:54+03:00</updated>
  <id>http://blog.davydovanton.com</id>
  <author>
    <name>Anton Davydov</name>
@@ -13,10 +13,10 @@
 
  
  <entry>
-   <title>Profiling your SQL querys in hanami (or ROM)</title>
-   <link href="http://blog.davydovanton.com/2017/01/28/profiling-your-sql-querys-in-hanami-or-rom/"/>
+   <title>Profiling your SQL queries in hanami (or ROM)</title>
+   <link href="http://blog.davydovanton.com/2017/01/28/profiling-your-sql-queries-in-hanami-or-rom/"/>
    <updated>2017-01-28T00:00:00+03:00</updated>
-   <id>http://blog.davydovanton.com/2017/01/28/profiling-your-sql-querys-in-hanami-or-rom</id>
+   <id>http://blog.davydovanton.com/2017/01/28/profiling-your-sql-queries-in-hanami-or-rom</id>
    <content type="html">&lt;p&gt;It just happened I had profile SQL query in &lt;a href=&quot;http://www.ossboard.org&quot;&gt;my hanami application&lt;/a&gt;. And I want to save this knowledge that’s why I created this post.&lt;/p&gt;
 
 &lt;p&gt;If you are using &lt;a href=&quot;http://rom-rb.org&quot;&gt;ROM&lt;/a&gt;, this post will be helpful for you too, because hanami-module uses ROM. So, in &lt;a href=&quot;http://hanamirb.org&quot;&gt;hanami&lt;/a&gt;, you have a simple ability for profiling your SQL queries.&lt;/p&gt;

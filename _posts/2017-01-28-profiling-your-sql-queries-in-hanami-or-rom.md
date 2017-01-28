@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "Profiling your SQL querys in hanami (or ROM)"
-description: "Profiling your SQL querys in hanami (or ROM)"
+title: "Profiling your SQL queries in hanami (or ROM)"
+description: "Profiling your SQL queries in hanami (or ROM)"
 tags:
   - ruby
   - hanami
