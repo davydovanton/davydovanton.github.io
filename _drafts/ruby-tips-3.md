@@ -1,4 +1,19 @@
 ## Tips
+``` ruby
+def `(foo)
+  foo.upcase
+end
+
+`'foo'` # => 'FOO'
+```
+
+------------------
+
+require 'debug'
+http://ruby-doc.org/stdlib-2.0.0/libdoc/debug/rdoc/DEBUGGER__.html
+
+------------------
+
 Вместо метопрограммирования - сделать общий метод, который из каждого метода вызывать
 ``` ruby
 # Bad
