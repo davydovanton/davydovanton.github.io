@@ -86,7 +86,7 @@
 }
 .page-description {
   margin: 0;
-  font-size: 2rem;
+  font-size: 1.7rem;
   line-height: 1.5em;
   font-weight: 400;
   letter-spacing: 0.01rem;
@@ -116,7 +116,7 @@
   }
 
   .page-description {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 }
 
