@@ -4,10 +4,10 @@
 permalink:           pretty
 
 # Setup
-title:               Anton Davydov
+title:               "Anton Davydov"
 tagline:             
 description:         "Personal page with my blog where I'll write about ruby, my ideas and technologies which I love<br><a href=\"https://twitter.com/anton_davydov\" target=\"_blank\">@anton_davydov</a>"
-url:                 http://blog.davydovanton.com
+url:                 "http://blog.davydovanton.com"
 paginate:            10
 paginate_path:       "/blog/page:num/"
 
@@ -17,9 +17,9 @@ gems:
 
 # About/contact
 author:
-  name:              Anton Davydov
-  url:               https://davydovanton.com
-  email:             antondavydov.o@gmail.com
+  name:              "Anton Davydov"
+  url:               "https://davydovanton.com"
+  email:             "antondavydov.o@gmail.com"
 
 # Conversion
 markdown:            kramdown
