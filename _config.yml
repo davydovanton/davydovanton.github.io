@@ -5,7 +5,7 @@ permalink:           pretty
 
 # Setup
 title:               Anton Davydov
-tagline:             Blog
+tagline:             Personal page
 description:         "Simple blog where I'll write about ruby, my ideas and technologies which I love<br><a href=\"https://twitter.com/anton_davydov\" target=\"_blank\">@anton_davydov</a>"
 url:                 http://blog.davydovanton.com
 paginate:            10

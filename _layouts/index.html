@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="en-us">
+
+  {% include head.html %}
+
+  <body>
+    {% include sidebar.html %}
+    {% include yandex.html %}
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <header class="main-header" style="background-image: url(/images/anton_cover.jpg)">
+        <div class="">
+          <div class="main-header-content inner">
+            <h1 class="page-title">Anton Davydov</h1>
+            <h2 class="page-description">Software engineer, indie developer, Open Source, speaker, writter.</h2>
+          </div>
+        </div>
+
+        <a class="scroll-down icon-arrow-left" href="#content"><span class="hidden">▼</span></a>
+      </header>
+
+      <div class="container content" id="content">
+        {{ content }}
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

@@ -1,48 +1,35 @@
 ---
-layout: default
+layout: index
 title: Home
 ---
 
-<div class="posts">
-  {% for post in paginator.posts %}
-  <div class="post">
-    <h1 class="post-title">
-      <a href="{{ post.url }}">
-        {{ post.title }}
-      </a>
-    </h1>
+<h2>Contacts</h2>
+<ul>
+  <li><a href="mailto:mail@davydovanton.com">mail@davydovanton.com</a></li>
+  <li><a href="http://blog.davydovanton.com">Blog</a></li>
+  <li><a href="http://twitter.com/anton_davydov">Twitter</a></li>
+  <li><a href="http://github.com/davydovanton">Github</a></li>
+  <li><a href="http://linkedin.com/in/davydovanton">LinkedIn</a></li>
+</ul>
 
-    <span class="post-date">{{ post.date | date_to_string }}</span>
+<h2>Speaks</h2>
 
-    {{ post.content }}
+<h3>English</h3>
+<ul>
+  <li><a href="https://youtu.be/3L6I4UoK8xM">Viewing Ruby Blossom</a></li>
+</ul>
 
-    <div class="tag-cloud">
-      <ul>
-      {% for tag in post.tags %}
-        <li>
-          <a href="/tags/#{{ tag | downcase }}"><span>{{ tag | downcase }}</span></a>
-        </li>
-      {% endfor %}
-      </ul>
-    </div>
-  </div>
-  {% endfor %}
-</div>
+<h3>Russian</h3>
+<ul>
+  <li><a href="https://youtu.be/DCMTyddUvio">Hanami вокршоп часть 2</a></li>
+  <li><a href="https://youtu.be/KnSPR-F2nag">Hanami вокршоп часть 1</a></li>
+  <li><a href="https://youtu.be/pzrZru-oZeY">Архитектура hanami приложений</a></li>
+  <li><a href="https://youtu.be/uIxG1ONqN9k">Что нам стоит экосистему построить</a></li>
+  <li><a href="https://youtu.be/t4QJ0kB9o9E">RailsClub: Sidekiq under hood</a></li>
+  <li><a href="https://youtu.be/MZyHdGIona8">Improved sidekiq monitoring</a></li>
+  <li><a href="https://youtu.be/6ANpq13FUDE">Viewing Ruby Blossom</a></li>
+  <li><a href="https://youtu.be/UebypKR_2jk">RailsClub: Rodauth, devise and you</a></li>
+</ul>
 
-<div class="pagination">
-  {% if paginator.next_page %}
-    <a class="pagination-item older" href="/page{{paginator.next_page}}">Older</a>
-  {% else %}
-    <span class="pagination-item older">Older</span>
-  {% endif %}
-  {% if paginator.previous_page %}
-    {% if paginator.page == 2 %}
-      <a class="pagination-item newer" href="/">Newer</a>
-    {% else %}
-      <a class="pagination-item newer" href="/page{{paginator.previous_page}}">Newer</a>
-    {% endif %}
-  {% else %}
-    <span class="pagination-item newer">Newer</span>
-  {% endif %}
-</div>
-
+<h2>Link to CV</h2>
+<a href="http://davydovanton.com/cv.pdf">CV</a>
