@@ -76,7 +76,7 @@
 .scroll-down > .hidden {
 }
 
-.page-title {
+.main-title {
   margin: 10px 0 10px 0;
   font-size: 4rem;
   letter-spacing: -1px;
@@ -111,12 +111,13 @@
     padding: 10% 0;
   }
 
-    .page-title {
-      font-size: 3rem;
-    }
-    .page-description {
-      font-size: 2rem;
-    }
+  .main-title {
+    font-size: 3rem;
+  }
+
+  .page-description {
+    font-size: 2rem;
+  }
 }
 
 /* ==========================================================================
@@ -133,7 +134,7 @@
       height: 30vh;
     }
 
-    .page-title {
+    .main-title {
       font-size: 2rem;
     }
     .page-description {
