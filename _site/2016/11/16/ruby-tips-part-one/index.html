@@ -65,6 +65,8 @@
       
     
       
+    
+      
         
       
     
@@ -249,7 +251,7 @@ Refinements provide a way to extend a class locally.</p>
 
 <p>Yields x to the block, and than returns x.</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="mi">10</span><span class="p">)</span>              <span class="p">.</span><span class="nf">tap</span><span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="s2">"original: </span><span class="si">#{</span><span class="n">x</span><span class="p">.</span><span class="nf">inspect</span><span class="si">}</span><span class="s2">"</span> <span class="p">}</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="p">)</span>              <span class="p">.</span><span class="nf">tap</span><span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="s2">"original: </span><span class="si">#{</span><span class="n">x</span><span class="p">.</span><span class="nf">inspect</span><span class="si">}</span><span class="s2">"</span> <span class="p">}</span>
   <span class="p">.</span><span class="nf">to_a</span>              <span class="p">.</span><span class="nf">tap</span><span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="s2">"array:    </span><span class="si">#{</span><span class="n">x</span><span class="p">.</span><span class="nf">inspect</span><span class="si">}</span><span class="s2">"</span> <span class="p">}</span>
   <span class="p">.</span><span class="nf">select</span><span class="p">{</span><span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">%</span><span class="mi">2</span><span class="o">==</span><span class="mi">0</span><span class="p">}.</span><span class="nf">tap</span><span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="s2">"evens:    </span><span class="si">#{</span><span class="n">x</span><span class="p">.</span><span class="nf">inspect</span><span class="si">}</span><span class="s2">"</span> <span class="p">}</span>
   <span class="p">.</span><span class="nf">map</span><span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="p">}</span>  <span class="p">.</span><span class="nf">tap</span><span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="s2">"squares:  </span><span class="si">#{</span><span class="n">x</span><span class="p">.</span><span class="nf">inspect</span><span class="si">}</span><span class="s2">"</span> <span class="p">}</span></code></pre></figure>
@@ -275,7 +277,7 @@ Refinements provide a way to extend a class locally.</p>
 
 <p><em><strong>Note:</strong> While <code class="highlighter-rouge">Proc#curry</code> has been around since Ruby 1.9, <code class="highlighter-rouge">Method#curry</code> was only added in Ruby 2.2.0. For versions before 2.2.0, you will first need to convert your method object to a proc via <code class="highlighter-rouge">Method#to_proc</code>.</em></p>
 
-<h2 id="toproc-and-method">#to_proc and #method</h2>
+<h2 id="to_proc-and-method">#to_proc and #method</h2>
 
 <p><a href="https://ruby-doc.org/core-2.1.1/Proc.html#method-i-to_proc">Documentation</a></p>
 
@@ -309,11 +311,11 @@ And after that you’re just calling this object like simple proc object:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="c1"># 'method' method</span>
 <span class="n">sin_method</span> <span class="o">=</span> <span class="no">Math</span><span class="p">.</span><span class="nf">method</span><span class="p">(</span><span class="ss">:sin</span><span class="p">)</span>
-<span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="mi">10</span><span class="p">).</span><span class="nf">map</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sin_method</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="p">).</span><span class="nf">map</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sin_method</span><span class="p">)</span>
 
 <span class="c1"># lambda style</span>
 <span class="n">sin_method</span> <span class="o">=</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span> <span class="no">Math</span><span class="p">.</span><span class="nf">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">}</span>
-<span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="mi">10</span><span class="p">).</span><span class="nf">map</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sin_method</span><span class="p">)</span></code></pre></figure>
+<span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="p">).</span><span class="nf">map</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sin_method</span><span class="p">)</span></code></pre></figure>
 
 <h1 id="block">Block</h1>
 

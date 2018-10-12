@@ -63,6 +63,8 @@
       
     
       
+    
+      
         
       
     
@@ -159,17 +161,17 @@
 
 <hr />
 
-<h5 id="section">$&amp;</h5>
+<h5>$&amp;</h5>
 <p>Переменная, с которой начался наш рассказ. Хранит, как вы уже догадались, результат последнего совпадения регулярного выражения.</p>
 
-<h5 id="section-1">$1 $2 $3 …</h5>
+<h5 id="1-2-3-">$1 $2 $3 …</h5>
 <p>Думаю, многим знакомая похожая переменная из регулярных выражений. Хотя, кого я обманываю? Это та же самая перменная, которая хранит совпадения из скобок:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">"test string in irb"</span><span class="p">.</span><span class="nf">match</span> <span class="sr">/(irb)/</span>
 <span class="nb">puts</span> <span class="vg">$1</span>
 <span class="c1">#=&gt; "irb"</span></code></pre></figure>
 
-<h5 id="section-2">$~</h5>
+<h5 id="-1">$~</h5>
 <p>Содержит объект класса MatchData, соответствующий последнему совпадению.</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">"test string in irb"</span><span class="p">.</span><span class="nf">match</span> <span class="sr">/(irb)/</span>
@@ -180,7 +182,7 @@
 <span class="nb">puts</span> <span class="vg">$~</span><span class="p">.</span><span class="nf">to_a</span>
 <span class="c1">#=&gt; ["irb", 'irb']</span></code></pre></figure>
 
-<h5 id="section-3">$+</h5>
+<h5 id="-2">$+</h5>
 <p>Содержит значение последней круглой скобки из последнего совпадения:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">"test string in irb"</span><span class="p">.</span><span class="nf">match</span> <span class="sr">/irb/</span>
@@ -194,29 +196,29 @@
 <span class="nb">puts</span> <span class="vg">$+</span>
 <span class="c1">#=&gt; "irb"</span></code></pre></figure>
 
-<h5 id="section-4">$`</h5>
+<h5 id="-3">$`</h5>
 <p>Содержит все то, что не совпало в последнем регулярном выражении:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="s2">"test string in irb"</span><span class="p">.</span><span class="nf">match</span> <span class="sr">/irb/</span>
 <span class="nb">puts</span> <span class="vg">$`</span>
 <span class="c1">#=&gt; "test string in"</span></code></pre></figure>
 
-<h5 id="section-5">$!</h5>
+<h5 id="-4">$!</h5>
 <p>Содержит последнее вызванное исключение:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">1</span> <span class="o">/</span> <span class="mi">0</span> <span class="k">rescue</span> <span class="vg">$!</span>
 <span class="c1">#=&gt; #&lt;ZeroDivisionError: divided by 0&gt;</span></code></pre></figure>
 
-<h5 id="section-6">$@</h5>
+<h5 id="-5">$@</h5>
 <p>Ну а эта переменная содержит массив со всеми trace stack-ами из последнего исключения:</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">1</span> <span class="o">/</span> <span class="mi">0</span> <span class="k">rescue</span> <span class="vg">$@</span>
 <span class="c1">#=&gt; ["&lt;main&gt;:4:in `/'", "&lt;main&gt;:4:in `/'", "(irb):98:in `irb_binding'", ... ]</span></code></pre></figure>
 
-<h5 id="section-7">$*</h5>
+<h5 id="-6">$*</h5>
 <p>Эта переменная равносильна переменной ARGV, думаю этим все сказанно.</p>
 
-<h5 id="section-8">$$</h5>
+<h5 id="-7">$$</h5>
 <p>Переменная возвращает номер процесса, под которым выполняется скрипт.</p>
 
 <figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="vg">$$</span>

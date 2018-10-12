@@ -63,6 +63,8 @@
       
     
       
+    
+      
         
       
     
@@ -151,7 +153,7 @@
   <span class="p">}</span>
 
 <span class="n">rnd</span> <span class="o">=</span> <span class="no">Random</span><span class="p">.</span><span class="nf">new</span>
-<span class="n">user_count</span> <span class="o">=</span> <span class="n">rnd</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="mi">18</span><span class="p">.</span><span class="nf">.</span><span class="mi">23</span><span class="p">)</span>
+<span class="n">user_count</span> <span class="o">=</span> <span class="n">rnd</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="mi">18</span><span class="o">..</span><span class="mi">23</span><span class="p">)</span>
 <span class="no">User</span><span class="p">.</span><span class="nf">create</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
 
 <span class="n">user_count</span><span class="p">.</span><span class="nf">times</span> <span class="k">do</span>
@@ -177,7 +179,7 @@
 <span class="p">]</span>
 
 <span class="k">def</span> <span class="nf">rnd_user</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">rnd</span><span class="p">)</span>
-  <span class="n">random_user_id</span> <span class="o">=</span> <span class="n">rnd</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="p">(</span><span class="n">count</span><span class="p">))</span>
+  <span class="n">random_user_id</span> <span class="o">=</span> <span class="n">rnd</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="p">(</span><span class="n">count</span><span class="p">))</span>
   <span class="no">User</span><span class="p">.</span><span class="nf">find</span><span class="p">(</span><span class="n">random_user_id</span><span class="p">)</span>
 <span class="k">end</span>
 
@@ -205,7 +207,7 @@
   <span class="n">post</span><span class="p">[</span><span class="ss">:user_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand_user</span><span class="p">.</span><span class="nf">id</span>
   <span class="n">created_post</span> <span class="o">=</span> <span class="n">rand_user</span><span class="p">.</span><span class="nf">create_post</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
 
-  <span class="n">rnd</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">.</span><span class="nf">.</span><span class="mi">21</span><span class="p">).</span><span class="nf">times</span> <span class="k">do</span>
+  <span class="n">rnd</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="mi">10</span><span class="o">..</span><span class="mi">21</span><span class="p">).</span><span class="nf">times</span> <span class="k">do</span>
     <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
     <span class="n">comment</span> <span class="o">=</span> <span class="n">created_post</span><span class="p">.</span><span class="nf">build_comment</span><span class="p">(</span><span class="n">rand_user</span><span class="p">.</span><span class="nf">id</span><span class="p">,</span> <span class="s1">'Comment body'</span><span class="p">)</span>
     <span class="n">comment</span><span class="p">.</span><span class="nf">save!</span>
@@ -252,7 +254,7 @@
   <span class="n">post</span><span class="p">[</span><span class="ss">:user_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">rand_user</span><span class="p">.</span><span class="nf">id</span>
   <span class="n">created_post</span> <span class="o">=</span> <span class="n">rand_user</span><span class="p">.</span><span class="nf">create_post</span><span class="p">(</span><span class="n">post</span><span class="p">)</span>
 
-  <span class="n">rnd</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">.</span><span class="nf">.</span><span class="mi">21</span><span class="p">).</span><span class="nf">times</span> <span class="k">do</span>
+  <span class="n">rnd</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="mi">10</span><span class="o">..</span><span class="mi">21</span><span class="p">).</span><span class="nf">times</span> <span class="k">do</span>
     <span class="n">rand_user</span> <span class="o">=</span> <span class="n">rnd_user</span> <span class="n">user_count</span><span class="p">,</span> <span class="n">rnd</span>
     <span class="n">comment</span> <span class="o">=</span> <span class="n">created_post</span><span class="p">.</span><span class="nf">build_comment</span><span class="p">(</span><span class="n">rand_user</span><span class="p">.</span><span class="nf">id</span><span class="p">,</span> <span class="n">model</span><span class="p">.</span><span class="nf">random_sentence</span><span class="p">)</span>
     <span class="n">comment</span><span class="p">.</span><span class="nf">save!</span>
@@ -290,7 +292,7 @@
 
 <p>Ну а теперь, воспользуемся нашей новосозданной фабрикой для избавления от лишнего кода в seed файле:</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">user_count</span> <span class="o">=</span> <span class="n">rnd</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="mi">18</span><span class="p">.</span><span class="nf">.</span><span class="mi">23</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">user_count</span> <span class="o">=</span> <span class="n">rnd</span><span class="p">.</span><span class="nf">rand</span><span class="p">(</span><span class="mi">18</span><span class="o">..</span><span class="mi">23</span><span class="p">)</span>
 <span class="no">Fabricate</span><span class="p">(</span><span class="ss">:admin</span><span class="p">)</span>
 
 <span class="n">user_count</span><span class="p">.</span><span class="nf">times</span> <span class="p">{</span> <span class="no">Fabricate</span><span class="p">(</span><span class="ss">:user</span><span class="p">)</span> <span class="p">}</span></code></pre></figure>

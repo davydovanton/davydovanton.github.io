@@ -63,6 +63,8 @@
       
     
       
+    
+      
         
       
     
@@ -168,7 +170,7 @@
 <span class="nb">require</span> <span class="s1">'pry'</span>
 
 <span class="c1"># irb</span>
-<span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">015</span> <span class="o">&gt;</span> <span class="n">pry</span>
+<span class="mf">2.0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">015</span> <span class="o">&gt;</span> <span class="n">pry</span>
 <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="n">pry</span><span class="p">(</span><span class="n">main</span><span class="p">)</span><span class="o">&gt;</span> </code></pre></figure>
 
 <p>Ну а выглядеть это будет как-то так:
@@ -188,36 +190,36 @@
 
 <p>Ну и на последок стоит рассказать про сессии в irb. Если вы используете vim или когда то использовали его, то вам знакомо такое понятие как буфер, которое чем-то похоже на сессии в irb. Ну а если нет, то краткая справка: сессия - некий сеанс интерактивного шела. Для того, что бы посмотреть список всех сессий в irb, достаточно набрать <code class="highlighter-rouge">jobs</code>:</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">012</span> <span class="o">&gt;</span> <span class="n">jobs</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mf">2.0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">012</span> <span class="o">&gt;</span> <span class="n">jobs</span>
  <span class="o">=&gt;</span> <span class="c1">#0-&gt;irb on main (#&lt;Thread:0x007fcb810bcda0&gt;: running) </span></code></pre></figure>
 
 <p>Ну а если вам надо создать новую сессию, то просто наберите <code class="highlighter-rouge">irb</code>:</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">013</span> <span class="o">&gt;</span> <span class="n">irb</span>
-<span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">001</span> <span class="o">&gt;</span> <span class="n">jobs</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mf">2.0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">013</span> <span class="o">&gt;</span> <span class="n">irb</span>
+<span class="mf">2.0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">001</span> <span class="o">&gt;</span> <span class="n">jobs</span>
  <span class="o">=&gt;</span> <span class="c1">#0-&gt;irb on main (#&lt;Thread:0x007fcb810bcda0&gt;: stop)</span>
 <span class="c1">#1-&gt;irb#1 on main (#&lt;Thread:0x007fcb819b7bf8&gt;: running) </span></code></pre></figure>
 
 <p>Как видите, irb создал новую сессию и переключился в нее. Но что делать, когда вы хотите удалить или изменить сессию? Для этого есть методы <code class="highlighter-rouge">kill &lt;number_session&gt;</code> и <code class="highlighter-rouge">fg &lt;number_session&gt;</code> соответственно:</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">002</span> <span class="o">&gt;</span> <span class="n">jobs</span>
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="mf">2.0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">002</span> <span class="o">&gt;</span> <span class="n">jobs</span>
  <span class="o">=&gt;</span> <span class="c1">#0-&gt;irb on main (#&lt;Thread:0x007fcb810bcda0&gt;: stop)</span>
 <span class="c1">#1-&gt;irb#1 on main (#&lt;Thread:0x007fcb819b7bf8&gt;: stop)</span>
 <span class="c1">#2-&gt;irb#2 on main (#&lt;Thread:0x007fcb81319238&gt;: running) </span>
-<span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">003</span> <span class="o">&gt;</span> <span class="n">fg</span> <span class="mi">1</span>
+<span class="mf">2.0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">003</span> <span class="o">&gt;</span> <span class="n">fg</span> <span class="mi">1</span>
  <span class="o">=&gt;</span> <span class="c1">#&lt;IRB::Irb: @context=#&lt;IRB::Context:0x007fcb819b7a40&gt;, @signal_status=:IN_EVAL, @scanner=#&lt;RubyLex:0x007fcb819b74c8&gt;&gt; </span>
-<span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">00</span><span class="mi">9</span> <span class="o">&gt;</span> <span class="n">jobs</span>
+<span class="mf">2.0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">00</span><span class="mi">9</span> <span class="o">&gt;</span> <span class="n">jobs</span>
  <span class="o">=&gt;</span> <span class="c1">#0-&gt;irb on main (#&lt;Thread:0x007fcb810bcda0&gt;: stop)</span>
 <span class="c1">#1-&gt;irb#1 on main (#&lt;Thread:0x007fcb819b7bf8&gt;: running)</span>
 <span class="c1">#2-&gt;irb#2 on main (#&lt;Thread:0x007fcb81319238&gt;: stop) </span>
-<span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">010</span> <span class="o">&gt;</span> <span class="n">kill</span> <span class="mi">2</span>
+<span class="mf">2.0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">010</span> <span class="o">&gt;</span> <span class="n">kill</span> <span class="mi">2</span>
  <span class="o">=&gt;</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span> 
-<span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">011</span> <span class="o">&gt;</span> <span class="n">jobs</span>
+<span class="mf">2.0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">011</span> <span class="o">&gt;</span> <span class="n">jobs</span>
  <span class="o">=&gt;</span> <span class="c1">#0-&gt;irb on main (#&lt;Thread:0x007fcb810bcda0&gt;: stop)</span>
 <span class="c1">#1-&gt;irb#1 on main (#&lt;Thread:0x007fcb819b7bf8&gt;: running) </span>
-<span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">012</span> <span class="o">&gt;</span> <span class="n">kill</span> <span class="mi">1</span>
+<span class="mf">2.0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">012</span> <span class="o">&gt;</span> <span class="n">kill</span> <span class="mi">1</span>
  <span class="o">=&gt;</span> <span class="c1">#&lt;IRB::Irb: @context=#&lt;IRB::Context:0x007fcb8185b2c8&gt;, @signal_status=:IN_EVAL, @scanner=#&lt;RubyLex:0x007fcb8110d5e8&gt;&gt; </span>
-<span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">014</span> <span class="o">&gt;</span> <span class="n">jobs</span>
+<span class="mf">2.0</span><span class="o">.</span><span class="mi">0</span><span class="n">p247</span> <span class="p">:</span><span class="mo">014</span> <span class="o">&gt;</span> <span class="n">jobs</span>
  <span class="o">=&gt;</span> <span class="c1">#0-&gt;irb on main (#&lt;Thread:0x007fcb810bcda0&gt;: running) </span></code></pre></figure>
 
 
