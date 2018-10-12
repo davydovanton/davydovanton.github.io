@@ -1,5 +1,3 @@
 source 'https://rubygems.org'
 
-gem 'jekyll', '3.1.6'
-gem 'jemoji'
-gem 'jekyll-paginate'
+gem 'github-pages', group: :jekyll_plugins
