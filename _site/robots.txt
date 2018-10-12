@@ -2,4 +2,4 @@
 # www.google.com/support/webmasters/bin/answer.py?hl=en&answer=156449
 
 User-agent: *
-Sitemap: http://localhost:4000/sitemap.xml
+Sitemap: http://blog.davydovanton.com/sitemap.xml
