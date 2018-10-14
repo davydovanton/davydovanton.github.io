@@ -64,7 +64,7 @@
   position: relative;
   width: 80%;
   max-width: 710px;
-  margin: 24% auto 13%;
+  margin: 24% auto 11%;
 }
 
 .scroll-down {
@@ -91,6 +91,41 @@
   font-weight: 400;
   letter-spacing: 0.01rem;
   color: rgba(255,255,255,0.8);
+}
+
+.actions {
+  margin: 1rem 0 0;
+}
+
+.main-title-button {
+  margin: 0 0.3rem;
+  text-decoration: none;
+  border-color: #f8f9fa;
+  cursor: pointer;
+  color: #f8f9fa;
+  background-color: transparent;
+  background-image: none;
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: .25rem;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.main-title-button:hover {
+  background-color: #f8f9fa;
+  color: #000;
+  text-decoration: none;
 }
 
 @media only screen and (max-width: 900px) {
@@ -120,30 +155,26 @@
   }
 }
 
-/* ==========================================================================
-11. Media Queries - Smaller than 500px
-========================================================================== */
-
-  @media only screen and (max-width: 500px) {
-    .main-header {
-      margin-bottom: 15px;
-      height: 40vh;
-    }
-
-    .main-header {
-      height: 30vh;
-    }
-
-    .main-title {
-      font-size: 2rem;
-    }
-    .page-description {
-      font-size: 1rem;
-    }
-
-    .main-header {
-      max-height: 20vh;
-      min-height: 160px;
-      padding: 10% 0;
-    }
+@media only screen and (max-width: 500px) {
+  .main-header {
+    margin-bottom: 15px;
+    height: 40vh;
   }
+
+  .main-header {
+    height: 30vh;
+  }
+
+  .main-title {
+    font-size: 2rem;
+  }
+  .page-description {
+    font-size: 1rem;
+  }
+
+  .main-header {
+    max-height: 20vh;
+    min-height: 160px;
+    padding: 10% 0;
+  }
+}
