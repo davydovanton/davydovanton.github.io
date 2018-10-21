@@ -1,7 +1,67 @@
+.course-header {
+  margin: 15% 0;
+}
+
 .share-text {
   font-size: 0.7rem;
 }
 
 .share-buttons {
   margin: -2% 0 6%;
+}
+
+.subtitle {
+  text-align: center;
+  color: #3131314f;
+  margin-top: 3rem;
+}
+
+.subtitle span {
+  color: #313131;
+}
+
+.letters {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.letters-column {
+  flex-grow: 1;
+  flex-basis: 0;
+}
+
+.letters-column-title {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.letter {
+  font-size: 14px;
+  text-align: center;
+  margin: 0.5rem 0;
+  height: 2rem;
+}
+
+
+@media only screen and (max-width: 500px) {
+  .letters {
+    flex-wrap: wrap;
+  }
+
+  .letters-column {
+    width: 100%;
+  }
+
+  .letters-column {
+    flex-grow: 0;
+    flex-basis: auto;
+  }
+
+  .letter {
+    font-size: 12px;
+  }
+
 }
