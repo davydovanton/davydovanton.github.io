@@ -11,22 +11,12 @@
     <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
          content to avoid any CSS collisions with our real content. -->
     <div class="wrap">
-      <header class="main-header" style="background-image: url(/images/anton_cover.jpg)">
-        <div class="">
-          <div class="main-header-content inner">
-            <div class="">
-              <h1 class="main-title">Anton Davydov</h1>
-              <h2 class="page-description">Software engineer, OpenSource evangelist, indie developer, speaker, writer.</h2>
-
-              <div class="actions">
-                <a class="main-title-button" style="border-color: #f8f9fa;" href="/contacts">Contacts</a>
-                <a class="main-title-button" style="border-color: #f8f9fa;" href="/blog">Blog</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+      <div class="container content" id="content">
+        {{ content }}
+      </div>
     </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
 
     <script>
       (function(document) {
