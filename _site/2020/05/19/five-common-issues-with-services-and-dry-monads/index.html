@@ -346,6 +346,16 @@
         <span class="n">success</span><span class="p">(</span><span class="n">group</span><span class="p">.</span><span class="nf">enroll</span><span class="p">(</span><span class="n">user</span><span class="p">))</span>
       <span class="k">end</span>
 
+    <span class="kp">private</span>
+
+      <span class="k">def</span> <span class="nf">validate_raw_data</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+        <span class="c1"># don't forget to enable monads extention</span>
+        <span class="c1">#   Dry::Validation.load_extensions(:monads)</span>
+        <span class="c1">#</span>
+        <span class="c1"># https://dry-rb.org/gems/dry-validation/master/extensions/</span>
+        <span class="n">validator</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="n">payload</span><span class="p">).</span><span class="nf">to_either</span>
+      <span class="k">end</span>
+
       <span class="k">def</span> <span class="nf">group_attendee?</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span>
         <span class="n">group</span><span class="p">.</span><span class="nf">attendee?</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span> <span class="p">?</span> <span class="n">failure</span><span class="p">(:</span><span class="n">group_attendee</span><span class="p">)</span> <span class="p">:</span> <span class="n">success</span><span class="p">()</span>
       <span class="k">end</span>
@@ -440,6 +450,11 @@
   <li><a href="https://www.youtube.com/watch?v=B26rbJfRoZo">Tim’s talk</a> where he described dry-rb ideas and services with separated data and dependencies;</li>
 </ul>
 
+<h2 id="upd">UPD</h2>
+
+<ol>
+  <li>Added <code class="highlighter-rouge">validate_raw_data</code> method. Thanks mpak for mention it (from comments)</li>
+</ol>
 
 
   <div class="tag-cloud post-tags">

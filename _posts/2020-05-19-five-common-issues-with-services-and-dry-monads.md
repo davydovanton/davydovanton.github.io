@@ -265,6 +265,16 @@ module Cource
         success(group.enroll(user))
       end
 
+    private
+
+      def validate_raw_data(payload)
+        # don't forget to enable monads extention
+        #   Dry::Validation.load_extensions(:monads)
+        #
+        # https://dry-rb.org/gems/dry-validation/master/extensions/
+        validator.call(payload).to_either
+      end
+
       def group_attendee?(group, payload)
         group.attendee?(payload) ? failure(:group_attendee) : success()
       end
@@ -352,3 +362,6 @@ end
 * [Event storming](https://www.lucidchart.com/blog/ddd-event-storming) - you can try to adopt this idea to get more context and information about your system;
 * [Tim's talk](https://www.youtube.com/watch?v=B26rbJfRoZo) where he described dry-rb ideas and services with separated data and dependencies;
 
+## UPD
+
+1. Added `validate_raw_data` method. Thanks mpak for mention it (from comments)
