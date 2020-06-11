@@ -9,11 +9,11 @@ tags:
   - refactoring
 ---
 
-Today I found the source code of simple test task in GitHub. The code author used dry-monads, services, and other abstractions. I found some issues in this code and remembered that I saw same issues in other projects. That's why I'm thinking that it can be common issues and it will be a good idea to make a review and explaining how we can improve our code. Also, I expect that this blog post can be useful for "junior/middle" developers and it can be boring for "senior" developers.
+Today I found the source code of a simple test task in GitHub. The code author used dry-monads, services, and other abstractions. I found some issues in that code and recalled that I have seen the same issues in other projects. That's why I think that it's a common problem and it will be a good idea to make a review and explain how we can improve our code. Also, I expect that this blog post can be useful for "junior/middle" developers and it could be boring for "senior" developers.
 
 **Important**
 
-This blog post based only on my personal experience and I don't what to make "best" code in the world. The main point which I want to provide - share my knowledge and experience for everyone else. Also, I don't want to say that you need to use services or dry-monads. But if you use it you can potentially get issues that I tried to describe in this blog post.
+This blog post based only on my personal experience and I don't want to write the "best" code in the world. The main point which I want to provide - share my knowledge and experience for everyone else. Also, I don't want to say that you need to use services or dry-monads. But if you use it you can potentially face issues that I tried to describe in this blog post.
 
 I asked the code author about this publication and he allowed me to do it.
 
@@ -146,7 +146,7 @@ end
 
 ## Problems
 
-After reading and understanding the original code I found five places which I want to discribe:
+After reading and understanding the original code I found five places which I want to describe:
 
 * [Naming based on implementation](#naming-based-on-implementation);
 * [Redundancy of service objects](#redundancy-of-service-objects);
@@ -156,13 +156,13 @@ After reading and understanding the original code I found five places which I wa
 
 Let's discuss each part.
 
-### Naming based on implementation
+### Naming based on the implementation
 
-I think that it's a good starting point for refactoring this code is dropping "out of context" words from variables, objects, and services names.
+I think a good starting point for refactoring this code is to remove "out of context" words from variables, objects, and services names.
 
-Quick example: you can see `save(validated_params.to_h)` (`Groups::Services::JoinUser` service) line in the original code. After some time to research I understand that the original context is enrolling users on groups. I mean that from the implementation perspective this line should update something in DB. But from business logic service has absolutely different context. That's why I think that `#enrol` will be better than `#save` here.
+Quick example: you can see `save(validated_params.to_h)` (`Groups::Services::JoinUser` service) line in the original code. After some research, I realized that the original context is enrolling users in groups. I mean that from the implementation perspective this line should update something in DB. But from business logic, the service has an absolutely different context. That's why I think that `#enroll` will be better than `#save` here.
 
-If you want to use implementation details in naming you should be ready to spend more time getting the context of each method/service and thinking why we have this code here. But if you use naming based on business flow you provide a context that can answer the question "why?" and you can reduce the time for understanding the source code. I think that domain-driven design (DDD in the future) is trying to give the same idea related to naming, that's why if you want to read more about it - DDD books will be a good start (and event storming for understanding better all business events in the system).
+If you want to use implementation details in naming you should be ready to spend more time understanding the context of each method/service and thinking why we have this code here. But if you use naming based on business flow you provide a context that can answer the question "why?" and you can reduce time spent on understanding the source code. I think that domain-driven design (DDD in the future) is trying to give the same idea related to naming, that's why if you want to read more about it - DDD books will be a good start (and event storming for understanding better all business events in the system).
 
 ### Redundancy of service objects
 
