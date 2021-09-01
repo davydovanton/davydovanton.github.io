@@ -58,7 +58,7 @@
 
   <div class="sidebar-item">
     <p>
-      &copy; 2020. All rights reserved.
+      &copy; 2021. All rights reserved.
     </p>
   </div>
 </div>
@@ -84,11 +84,11 @@
         <div class="post">
   <h1 class="post-title">Five common issues with services and dry-monads</h1>
   <span class="post-date">19 May 2020</span>
-  <p>Today I found the source code of simple test task in GitHub. The code author used dry-monads, services, and other abstractions. I found some issues in this code and remembered that I saw same issues in other projects. That’s why I’m thinking that it can be common issues and it will be a good idea to make a review and explaining how we can improve our code. Also, I expect that this blog post can be useful for “junior/middle” developers and it can be boring for “senior” developers.</p>
+  <p>Today I found the source code of a simple test task in GitHub. The code author used dry-monads, services, and other abstractions. I found some issues in that code and recalled that I have seen the same issues in other projects. That’s why I think that it’s a common problem and it will be a good idea to make a review and explain how we can improve our code. Also, I expect that this blog post can be useful for “junior/middle” developers and it could be boring for “senior” developers.</p>
 
 <p><strong>Important</strong></p>
 
-<p>This blog post based only on my personal experience and I don’t what to make “best” code in the world. The main point which I want to provide - share my knowledge and experience for everyone else. Also, I don’t want to say that you need to use services or dry-monads. But if you use it you can potentially get issues that I tried to describe in this blog post.</p>
+<p>This blog post based only on my personal experience and I don’t want to write the “best” code in the world. The main point which I want to provide - share my knowledge and experience for everyone else. Also, I don’t want to say that you need to use services or dry-monads. But if you use it you can potentially face issues that I tried to describe in this blog post.</p>
 
 <p>I asked the code author about this publication and he allowed me to do it.</p>
 
@@ -220,7 +220,7 @@
 
 <h2 id="problems">Problems</h2>
 
-<p>After reading and understanding the original code I found five places which I want to discribe:</p>
+<p>After reading and understanding the original code I found five places which I want to describe:</p>
 
 <ul>
   <li><a href="#naming-based-on-implementation">Naming based on implementation</a>;</li>
@@ -232,13 +232,13 @@
 
 <p>Let’s discuss each part.</p>
 
-<h3 id="naming-based-on-implementation">Naming based on implementation</h3>
+<h3 id="naming-based-on-the-implementation">Naming based on the implementation</h3>
 
-<p>I think that it’s a good starting point for refactoring this code is dropping “out of context” words from variables, objects, and services names.</p>
+<p>I think a good starting point for refactoring this code is to remove “out of context” words from variables, objects, and services names.</p>
 
-<p>Quick example: you can see <code class="highlighter-rouge">save(validated_params.to_h)</code> (<code class="highlighter-rouge">Groups::Services::JoinUser</code> service) line in the original code. After some time to research I understand that the original context is enrolling users on groups. I mean that from the implementation perspective this line should update something in DB. But from business logic service has absolutely different context. That’s why I think that <code class="highlighter-rouge">#enrol</code> will be better than <code class="highlighter-rouge">#save</code> here.</p>
+<p>Quick example: you can see <code class="highlighter-rouge">save(validated_params.to_h)</code> (<code class="highlighter-rouge">Groups::Services::JoinUser</code> service) line in the original code. After some research, I realized that the original context is enrolling users in groups. I mean that from the implementation perspective this line should update something in DB. But from business logic, the service has an absolutely different context. That’s why I think that <code class="highlighter-rouge">#enroll</code> will be better than <code class="highlighter-rouge">#save</code> here.</p>
 
-<p>If you want to use implementation details in naming you should be ready to spend more time getting the context of each method/service and thinking why we have this code here. But if you use naming based on business flow you provide a context that can answer the question “why?” and you can reduce the time for understanding the source code. I think that domain-driven design (DDD in the future) is trying to give the same idea related to naming, that’s why if you want to read more about it - DDD books will be a good start (and event storming for understanding better all business events in the system).</p>
+<p>If you want to use implementation details in naming you should be ready to spend more time understanding the context of each method/service and thinking why we have this code here. But if you use naming based on business flow you provide a context that can answer the question “why?” and you can reduce time spent on understanding the source code. I think that domain-driven design (DDD in the future) is trying to give the same idea related to naming, that’s why if you want to read more about it - DDD books will be a good start (and event storming for understanding better all business events in the system).</p>
 
 <h3 id="redundancy-of-service-objects">Redundancy of service objects</h3>
 
